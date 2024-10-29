@@ -7,7 +7,7 @@ function drawWindow(polygon, resultMessage) {
   // Draw the clickable area for new points
   fill(255); // White color for the clickable area
   rect(10, 75, width - 20, height - 200); // Draw a rectangle for the clickable area
-  // Draw the points
+  // Draw the polygon and its points
   drawPoints(polygon);
   drawPolygon(polygon);
   // Draw the result message section
@@ -17,10 +17,10 @@ function drawWindow(polygon, resultMessage) {
 }
 
 // Draw the points and change their color if they are extreme points
-function drawPoints(polygon) {
-  for (let i = 0; i < polygon.length; i++) {
+function drawPoints(points) {
+  for (let i = 0; i < points.length; i++) {
     fill("black"); // other points are in black
-    ellipse(polygon[i].x, polygon[i].y, 10, 10);
+    ellipse(points[i].x, points[i].y, 10, 10);
   }
 }
 
