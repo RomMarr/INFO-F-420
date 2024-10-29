@@ -67,7 +67,7 @@ function checkDetCollision(a, b, c, d) {
 
 // Handle the collison check for all the edges together
 function checkCollision() {
-  let edges = getEdges(points);
+  let edges = getEdges(polygon);
   for (let i = 0; i < edges.length; i++) {
     for (let j = 0; j < edges.length; j++) {
       // if not same edge
@@ -92,11 +92,11 @@ function checkCollision() {
 }
 
 // Create a list of edges from the points
-function getEdges(points) {
+function getEdges(polygon) {
   const edges = [];
-  for (let i = 0; i < points.length; i++) {
-    const point1 = points[i];
-    const point2 = points[(i + 1) % points.length];
+  for (let i = 0; i < polygon.length; i++) {
+    const point1 = polygon[i];
+    const point2 = polygon[(i + 1) % polygon.length];
     edges.push([point1, point2]);
   }
   return edges;

@@ -4,12 +4,11 @@ class Point {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.isExtreme = true; // Mark extreme points
   }
 }
 
 // Variables
-var points = [];
+var polygon = [];
 var resetClick = false;
 var validateClick = false;
 var end = false;
@@ -33,7 +32,7 @@ function setup() {
 
 // Handle de resetButton clicked
 function resetpoints() {
-  points = [];
+  polygon = [];
   end = false;
   resetClick = true;
   validateClick = false;
@@ -53,7 +52,7 @@ function validate() {
 
 // Draw the view and the points/lines
 function draw() {
-  drawWindow(points, resultMessage);
+  drawWindow(polygon, resultMessage);
 }
 
 // Handle a click from the mouse
@@ -78,5 +77,5 @@ function mousePressed() {
 
 // Handle the adding of new points
 function addPoint() {
-  points.push(new Point(mouseX, mouseY));
+  polygon.push(new Point(mouseX, mouseY));
 }
