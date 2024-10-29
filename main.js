@@ -10,7 +10,6 @@ class Point {
 
 // Variables
 var points = [];
-var ears = []; // triangles for the triangulation
 var resetClick = false;
 var validateClick = false;
 var end = false;
@@ -24,7 +23,7 @@ function setup() {
   buttonClear.position(10, 50);
   buttonClear.mousePressed(resetpoints);
   // Create the validate button
-  const buttonValidate = createButton("Start");
+  const buttonValidate = createButton("Validate");
   buttonValidate.position(60, 50);
   buttonValidate.mousePressed(validate);
   // Set text properties
@@ -35,7 +34,6 @@ function setup() {
 // Handle de resetButton clicked
 function resetpoints() {
   points = [];
-  ears = [];
   end = false;
   resetClick = true;
   validateClick = false;
@@ -46,11 +44,7 @@ function resetpoints() {
 function validate() {
   if (checkCollision()) {
     resultMessage = "COLLISION, create a simple polygon";
-  } else {
-    pts = points.slice(); // copy the list of points
-    pts = ensureCounterClockWise(pts); // check list order
-    triangulate(pts); // find the triangulation of the polygon
-  }
+  } else resultMessage = "Polygon : simple -> ok";
   //convexHull = getExtremPoints();
   validateClick = true;
   end = true;
@@ -59,7 +53,7 @@ function validate() {
 
 // Draw the view and the points/lines
 function draw() {
-  drawWindow(points, ears, resultMessage);
+  drawWindow(points, resultMessage);
 }
 
 // Handle a click from the mouse

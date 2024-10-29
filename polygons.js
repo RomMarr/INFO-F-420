@@ -55,39 +55,59 @@ function isInTriangleLine(p1, p2, p3) {
   return true;
 }
 
-// Function that check which points are extreme points
-function getExtremPoints() {
-  for (let p of points) {
-    p.isExtreme = true;
-  } // Find extreme points
-  for (let a of points) {
-    for (let b of points) {
-      for (let c of points) {
-        for (let d of points) {
-          if (a != b && a != c && a != d && b != c && b != d && c != d) {
-            if (isInTriangle(b, c, d, a)) {
-              a.isExtreme = false; // Mark the point as not an extreme point
-            }
+// Check collision between segment a,b and segment c,d
+function checkDetCollision(a, b, c, d) {
+  let det1 = calculateDet(a, b, c);
+  let det2 = calculateDet(a, b, d);
+  let det3 = calculateDet(c, d, a);
+  let det4 = calculateDet(c, d, b);
+  if (det1 * det2 < 0 && det3 * det4 < 0) return true;
+  return false;
+}
+
+// Handle the collison check for all the edges together
+function checkCollision() {
+  let edges = getEdges(points);
+  for (let i = 0; i < edges.length; i++) {
+    for (let j = 0; j < edges.length; j++) {
+      // if not same edge
+      if (i !== j) {
+        // if they don't have the sames vertices
+        if (!compareEdges(edges[i], edges[j])) {
+          if (
+            checkDetCollision(
+              edges[i][0],
+              edges[i][1],
+              edges[j][0],
+              edges[j][1]
+            )
+          ) {
+            return true;
           }
         }
       }
     }
   }
-  return fillingConvexHull();
+  return false;
 }
 
-// Fill the convexHull with all the extreme points
-function fillingConvexHull() {
-  let convexHull = [];
-  for (p in points) {
-    if (points[p].isExtreme) {
-      if (convexHull.indexOf(points[p]) == -1) convexHull.push(points[p]);
-    }
+// Create a list of edges from the points
+function getEdges(points) {
+  const edges = [];
+  for (let i = 0; i < points.length; i++) {
+    const point1 = points[i];
+    const point2 = points[(i + 1) % points.length];
+    edges.push([point1, point2]);
   }
-  return convexHull;
+  return edges;
 }
 
-// Check if a is greater than b or not with the determinant
-function radially(a, b) {
-  return calculateDet(a, convexHull[0], b);
+// Compare two edges together and returns true if they are the same
+function compareEdges(edge1, edge2) {
+  return (
+    edge1[0].x === edge2[0].x &&
+    edge1[0].y === edge2[0].y &&
+    edge1[1].x === edge2[1].x &&
+    edge1[1].y === edge2[1].y
+  );
 }
