@@ -44,10 +44,8 @@ function validate() {
   if (checkCollision()) {
     resultMessage = "COLLISION, create a simple polygon";
   } else resultMessage = "Polygon : simple -> ok";
-  //convexHull = getExtremPoints();
   validateClick = true;
   end = true;
-  //convexHull.sort(radially);
 }
 
 // Draw the view and the points/lines
