@@ -33,18 +33,33 @@ function resetpoints() {
 }
 
 // Start -> handle triangulation & check intersections (collisions)
+// function validate() {
+//   if (checkCollision()) {
+//     resultMessage = "COLLISION, create a simple polygon";
+//   } else {
+//     pts = points.slice(); // copy the list of points
+//     pts = ensureCounterClockWise(pts); // check list order
+//     triangulate(pts); // find the triangulation of the polygon
+//   }
+//   //convexHull = getExtremPoints();
+//   validateClick = true;
+//   end = true;
+//   //convexHull.sort(radially);
+// }
+
 function validate() {
   if (checkCollision()) {
     resultMessage = "COLLISION, create a simple polygon";
   } else {
-    pts = points.slice(); // copy the list of points
-    pts = ensureCounterClockWise(pts); // check list order
-    triangulate(pts); // find the triangulation of the polygon
+    pts = points.slice(); // Copy the list of points
+    pts = ensureCounterClockWise(pts); // Check list order
+    triangulate(pts); // Find the triangulation of the polygon
+
+    // Color vertices after triangulation
+    colorVerticesFromTriangles(ears);
   }
-  //convexHull = getExtremPoints();
   validateClick = true;
   end = true;
-  //convexHull.sort(radially);
 }
 
 // Draw the view and the points/lines
