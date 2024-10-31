@@ -1,14 +1,6 @@
-/* eslint-disable no-undef, no-unused-vars */
-
-class Point {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-}
-
 // Variables
-var polygon = [];
+var points = [];
+var ears = []; // triangles for the triangulation
 var resetClick = false;
 var validateClick = false;
 var end = false;
@@ -22,7 +14,7 @@ function setup() {
   buttonClear.position(10, 50);
   buttonClear.mousePressed(resetpoints);
   // Create the validate button
-  const buttonValidate = createButton("Validate");
+  const buttonValidate = createButton("Start");
   buttonValidate.position(60, 50);
   buttonValidate.mousePressed(validate);
   // Set text properties
@@ -32,7 +24,8 @@ function setup() {
 
 // Handle de resetButton clicked
 function resetpoints() {
-  polygon = [];
+  points = [];
+  ears = [];
   end = false;
   resetClick = true;
   validateClick = false;
@@ -40,17 +33,38 @@ function resetpoints() {
 }
 
 // Start -> handle triangulation & check intersections (collisions)
+// function validate() {
+//   if (checkCollision()) {
+//     resultMessage = "COLLISION, create a simple polygon";
+//   } else {
+//     pts = points.slice(); // copy the list of points
+//     pts = ensureCounterClockWise(pts); // check list order
+//     triangulate(pts); // find the triangulation of the polygon
+//   }
+//   //convexHull = getExtremPoints();
+//   validateClick = true;
+//   end = true;
+//   //convexHull.sort(radially);
+// }
+
 function validate() {
   if (checkCollision()) {
     resultMessage = "COLLISION, create a simple polygon";
-  } else resultMessage = "Polygon : simple -> ok";
+  } else {
+    pts = points.slice(); // Copy the list of points
+    pts = ensureCounterClockWise(pts); // Check list order
+    triangulate(pts); // Find the triangulation of the polygon
+
+    // Color vertices after triangulation
+    colorVerticesFromTriangles(ears);
+  }
   validateClick = true;
   end = true;
 }
 
 // Draw the view and the points/lines
 function draw() {
-  drawWindow(polygon, resultMessage);
+  drawWindow(points, ears, resultMessage);
 }
 
 // Handle a click from the mouse
@@ -75,5 +89,5 @@ function mousePressed() {
 
 // Handle the adding of new points
 function addPoint() {
-  polygon.push(new Point(mouseX, mouseY));
+  points.push(new Point(mouseX, mouseY));
 }
