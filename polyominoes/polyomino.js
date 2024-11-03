@@ -50,23 +50,67 @@ function getDirectNeighbors(square, squares) {
 }
 
 
-
 function areSquaresConnected(squares) {
-    let nbSquares = getNbActiveSquares(squares)
-    if (nbSquares == 0) return false;
-    else if (nbSquares == 1) return true;
+    const nbActiveSquares = getNbActiveSquares(squares);
+    if (nbActiveSquares === 0) return false; // No active squares to check
+    if (nbActiveSquares === 1) return true;  // Only one square, it's trivially connected
 
-    let size = squares[0].length;
-    for (let i =0; i< squares.length; i++){
-        if (squares[i].active) {
-            let neighbors = getDirectNeighbors(squares[i], squares);
-            let atLeastOneNeighborActive = false;
-            for (let neighbor of neighbors){
-                atLeastOneNeighborActive = atLeastOneNeighborActive || neighbor.active;
-            }
-            if (!atLeastOneNeighborActive) return false;
+    // Find the first active square as the starting point
+    let startSquare = null;
+    for (let square of squares) {
+        if (square.active) {
+            startSquare = square;
+            break;
         }
-    
     }
-    return true; // All squares are connected
+
+    // If no active square is found (shouldn't happen due to previous checks)
+    if (!startSquare) return false;
+
+    // Perform BFS/DFS to count reachable active squares
+    const visited = new Set();
+    const stack = [startSquare];
+    let count = 0;
+
+    while (stack.length > 0) {
+        const square = stack.pop();
+
+        // Use stringified coordinates as a unique key for each square
+        const key = `${square.x},${square.y}`;
+        if (visited.has(key)) continue;
+        
+        visited.add(key);
+        count++;
+
+        // Get active neighbors and add them to the stack
+        const neighbors = getDirectNeighbors(square, squares);
+        for (let neighbor of neighbors) {
+            const neighborKey = `${neighbor.x},${neighbor.y}`;
+            if (neighbor.active && !visited.has(neighborKey)) {
+                stack.push(neighbor);
+            }
+        }
+    }
+
+    // If we've reached all active squares, they're connected
+    return count === nbActiveSquares;
 }
+// function areSquaresConnected(squares) {
+//     let nbSquares = getNbActiveSquares(squares)
+//     if (nbSquares == 0) return false;
+//     else if (nbSquares == 1) return true;
+
+//     let size = squares[0].length;
+//     for (let i =0; i< squares.length; i++){
+//         if (squares[i].active) {
+//             let neighbors = getDirectNeighbors(squares[i], squares);
+//             let atLeastOneNeighborActive = false;
+//             for (let neighbor of neighbors){
+//                 atLeastOneNeighborActive = atLeastOneNeighborActive || neighbor.active;
+//             }
+//             if (!atLeastOneNeighborActive) return false;
+//         }
+    
+//     }
+//     return true; // All squares are connected
+// }
