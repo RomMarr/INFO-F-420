@@ -22,23 +22,19 @@ function orient(p1, p2, p3) {
   else return Straight;
 }
 
-// Check if 4th point is in the triangle of the 3 other points
-function isInTriangle(p1, p2, p3, p4) {
-  const orient1 = orient(p1, p2, p4);
-  const orient2 = orient(p2, p3, p4);
-  const orient3 = orient(p3, p1, p4);
+// check if a point is inside a triangle
+function inTriangle(listPoints) {
+  listDets = [];
+  for (let i = 0; i < listPoints.length - 1; i++) {
+    var det = calculateDet(listPoints[i], listPoints[(i + 1) % 3], listPoints[3]);
+    listDets.push(det);
+  }
+  return isInsideTriangle(listDets);
+}
 
-  if (orient1 == orient2 && orient1 == orient3 && orient1 != Straight) {
+function isInsideTriangle(listDets) {
+  if (listDets.every((det) => det >= 0) || listDets.every((det) => det <= 0)) {
     return true;
-  }
-  if (orient1 == Straight) {
-    return isInTriangleLine(p1, p2, p4);
-  }
-  if (orient2 == Straight) {
-    return isInTriangleLine(p2, p3, p4);
-  }
-  if (orient3 == Straight) {
-    return isInTriangleLine(p3, p1, p4);
   }
   return false;
 }
@@ -154,15 +150,14 @@ function isEar(pts, i) {
   let curr = pts[i];
   let next = pts[(i + 1) % pts.length];
   // Check if they are in the right order (ccw)
-  if (!isCounterClockwise(prev, curr, next)) return false;
-  // Check if no other point is inside the triangle
+  if (orient(prev, curr, next) !== LeftTurn) return false;  // Check if no other point is inside the triangle
   for (let j = 0; j < pts.length; j++) {
     if (
       j !== i &&
       j !== (i - 1 + pts.length) % pts.length &&
       j !== (i + 1) % pts.length
     ) {
-      if (isInTriangle(prev, curr, next, pts[j])) {
+      if (inTriangle([prev, curr, next, pts[j]])) {
         return false;
       }
     }
