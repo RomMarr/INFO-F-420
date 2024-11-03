@@ -16,6 +16,17 @@ function getNextSquareActive(point, squares){
 
 }
 
+
+function getActiveSquares(squares) {
+    const activeSquares = [];
+    for (let square of squares) {
+        if (square.active) {
+            activeSquares.push(square);
+        }
+    }
+    return activeSquares;
+}
+
 function getNbActiveSquares(squares) {
     let count = 0;
     for (let square of squares) {

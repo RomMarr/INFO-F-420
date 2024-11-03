@@ -40,7 +40,7 @@ function createGrid() {
 // Handle the reset button click
 function resetPoints() {
     // Reset all squares
-    squares.forEach(square => square.active = false);
+    createGrid()
     end = false;
     resetClick = true;
     validateClick = false;
@@ -55,8 +55,10 @@ function validate() {
     end = true;
     valid = areSquaresConnected(squares);
     if (!valid) {
-        resultMessage = "Polyomino: invalid -> collision"; // Update message
-    }else resultMessage = "Polyomino: valid -> ok"; // Update message
+        resultMessage = "Polyomino: invalid "; 
+    }else resultMessage = "Polyomino: valid"; 
+    squares = getActiveSquares(squares);
+
 }
 
 // Draw the view and the grid
