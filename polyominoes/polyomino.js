@@ -1,113 +1,116 @@
-var RightTurn = "Right Turn";
-var Straight = "Straight";
-var LeftTurn = "Left Turn";
-
-// Calculate the determinant of the 3 points
-function calculateDet(p1, p2, p3) {
-  const det =
-    p1.x * p2.y -
-    p1.x * p3.y -
-    p1.y * p2.x +
-    p1.y * p3.x +
-    p2.x * p3.y -
-    p2.y * p3.x;
-  return -det; // -det because the Y-axis is inverted
-}
-
-// This determine the orientation from the determinant
-function orient(p1, p2, p3) {
-  const det = calculateDet(p1, p2, p3);
-  if (det < 0) return RightTurn;
-  else if (det > 0) return LeftTurn;
-  else return Straight;
-}
-
-// Check if 4th point is in the triangle of the 3 other points
-function isInTriangle(p1, p2, p3, p4) {
-  const orient1 = orient(p1, p2, p4);
-  const orient2 = orient(p2, p3, p4);
-  const orient3 = orient(p3, p1, p4);
-
-  if (orient1 == orient2 && orient1 == orient3 && orient1 != Straight) {
-    return true;
-  }
-  if (orient1 == Straight) {
-    return isInTriangleLine(p1, p2, p4);
-  }
-  if (orient2 == Straight) {
-    return isInTriangleLine(p2, p3, p4);
-  }
-  if (orient3 == Straight) {
-    return isInTriangleLine(p3, p1, p4);
-  }
-  return false;
-}
-
-// check if p3 is on the segment {p1, p2} or further than one of those points
-function isInTriangleLine(p1, p2, p3) {
-  const maxX = Math.max(p1.x, p2.x);
-  const maxY = Math.max(p1.y, p2.y);
-  const minX = Math.min(p1.x, p2.x);
-  const minY = Math.min(p1.y, p2.y);
-  if (p3.x > maxX || p3.x < minX || p3.y > maxY || p3.y < minY) {
-    return false;
-  }
-  return true;
-}
-
-// Check collision between segment a,b and segment c,d
-function checkDetCollision(a, b, c, d) {
-  let det1 = calculateDet(a, b, c);
-  let det2 = calculateDet(a, b, d);
-  let det3 = calculateDet(c, d, a);
-  let det4 = calculateDet(c, d, b);
-  if (det1 * det2 < 0 && det3 * det4 < 0) return true;
-  return false;
-}
-
-// Handle the collison check for all the edges together
-function checkCollision() {
-  let edges = getEdges(polygon);
-  for (let i = 0; i < edges.length; i++) {
-    for (let j = 0; j < edges.length; j++) {
-      // if not same edge
-      if (i !== j) {
-        // if they don't have the sames vertices
-        if (!compareEdges(edges[i], edges[j])) {
-          if (
-            checkDetCollision(
-              edges[i][0],
-              edges[i][1],
-              edges[j][0],
-              edges[j][1]
-            )
-          ) {
-            return true;
-          }
+function getSquareIndexAtPoint(point, squares) {
+    
+    // Loop through all squares to find one that contains the point
+    for (let i = 0; i < squares.length; i++) {
+        if (squares[i].isInside(point.x, point.y)) { // Adjusting for button area
+            return i; // Return the index of the square
         }
-      }
     }
-  }
-  return false;
+    return -1; // Return -1 if no square contains the point
+}
+function getNextSquareActive(point, squares){
+    let squareNeighbor = getSquareIndexAtPoint(point, squares);
+    if ( squareNeighbor == -1) return false;
+    return squares[squareNeighbor].active;
+    
+
 }
 
-// Create a list of edges from the points
-function getEdges(polygon) {
-  const edges = [];
-  for (let i = 0; i < polygon.length; i++) {
-    const point1 = polygon[i];
-    const point2 = polygon[(i + 1) % polygon.length];
-    edges.push([point1, point2]);
-  }
-  return edges;
+function getNbActiveSquares(squares) {
+    let count = 0;
+    for (let square of squares) {
+        if (square.active) {
+            count++;
+        }
+    }
+    return count;
 }
 
-// Compare two edges together and returns true if they are the same
-function compareEdges(edge1, edge2) {
-  return (
-    edge1[0].x === edge2[0].x &&
-    edge1[0].y === edge2[0].y &&
-    edge1[1].x === edge2[1].x &&
-    edge1[1].y === edge2[1].y
-  );
+
+function getDirectNeighbors(square, squares) {
+    const squareSize = square.size;
+    const neighbors = [];
+
+    // Loop through all squares to find those adjacent to the given square
+    for (let i = 0; i < squares.length; i++) {
+        const other = squares[i];
+
+        // Check if 'other' is to the left, right, above, or below the given square
+        if (
+            (other.x === square.x - squareSize && other.y === square.y) ||  // Left neighbor
+            (other.x === square.x + squareSize && other.y === square.y) ||  // Right neighbor
+            (other.y === square.y - squareSize && other.x === square.x) ||  // Above neighbor
+            (other.y === square.y + squareSize && other.x === square.x)     // Below neighbor
+        ) {
+            neighbors.push(other); // Add the neighbor to the list
+        }
+    }
+
+    return neighbors;
 }
+
+
+function areSquaresConnected(squares) {
+    const nbActiveSquares = getNbActiveSquares(squares);
+    if (nbActiveSquares === 0) return false; // No active squares to check
+    if (nbActiveSquares === 1) return true;  // Only one square, it's trivially connected
+
+    // Find the first active square as the starting point
+    let startSquare = null;
+    for (let square of squares) {
+        if (square.active) {
+            startSquare = square;
+            break;
+        }
+    }
+
+    // If no active square is found (shouldn't happen due to previous checks)
+    if (!startSquare) return false;
+
+    // Perform BFS/DFS to count reachable active squares
+    const visited = new Set();
+    const stack = [startSquare];
+    let count = 0;
+
+    while (stack.length > 0) {
+        const square = stack.pop();
+
+        // Use stringified coordinates as a unique key for each square
+        const key = `${square.x},${square.y}`;
+        if (visited.has(key)) continue;
+        
+        visited.add(key);
+        count++;
+
+        // Get active neighbors and add them to the stack
+        const neighbors = getDirectNeighbors(square, squares);
+        for (let neighbor of neighbors) {
+            const neighborKey = `${neighbor.x},${neighbor.y}`;
+            if (neighbor.active && !visited.has(neighborKey)) {
+                stack.push(neighbor);
+            }
+        }
+    }
+
+    // If we've reached all active squares, they're connected
+    return count === nbActiveSquares;
+}
+// function areSquaresConnected(squares) {
+//     let nbSquares = getNbActiveSquares(squares)
+//     if (nbSquares == 0) return false;
+//     else if (nbSquares == 1) return true;
+
+//     let size = squares[0].length;
+//     for (let i =0; i< squares.length; i++){
+//         if (squares[i].active) {
+//             let neighbors = getDirectNeighbors(squares[i], squares);
+//             let atLeastOneNeighborActive = false;
+//             for (let neighbor of neighbors){
+//                 atLeastOneNeighborActive = atLeastOneNeighborActive || neighbor.active;
+//             }
+//             if (!atLeastOneNeighborActive) return false;
+//         }
+    
+//     }
+//     return true; // All squares are connected
+// }
