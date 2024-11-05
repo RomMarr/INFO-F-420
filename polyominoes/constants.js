@@ -13,6 +13,8 @@ class Square {
       this.y = y;
       this.size = size;
       this.active = false; // To track if the square is active (clicked)
+      this.watched = false; // To track if the square is covered by a guard
+      this.visibility
   }
 
   draw() {
