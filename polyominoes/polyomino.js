@@ -106,22 +106,51 @@ function areSquaresConnected(squares) {
     // If we've reached all active squares, they're connected
     return count === nbActiveSquares;
 }
-// function areSquaresConnected(squares) {
-//     let nbSquares = getNbActiveSquares(squares)
-//     if (nbSquares == 0) return false;
-//     else if (nbSquares == 1) return true;
 
-//     let size = squares[0].length;
-//     for (let i =0; i< squares.length; i++){
-//         if (squares[i].active) {
-//             let neighbors = getDirectNeighbors(squares[i], squares);
-//             let atLeastOneNeighborActive = false;
-//             for (let neighbor of neighbors){
-//                 atLeastOneNeighborActive = atLeastOneNeighborActive || neighbor.active;
-//             }
-//             if (!atLeastOneNeighborActive) return false;
-//         }
-    
-//     }
-//     return true; // All squares are connected
-// }
+function get_shared_edge(square1, square2){
+    let shared_edge = [];
+    for (corner of square1.corners){
+        if (corner in square2.corners){
+            shared_edge.push(corner);
+        }
+    }
+    return shared_edge;
+}
+
+
+
+function get_boundaries(polyomino){
+    boundaries  =  [] // edges that are separating an active square from an inactive one
+    for (square of polyomino){
+        if (square.active){
+            neighbors = getDirectNeighbors(square, polyomino)
+            for (neighbor of neighbors){
+                if (!neighbor.active){
+                    boundaries.push(get_shared_edge(square, neighbor));
+                }
+            }
+        }
+    } return boundaries;
+}
+
+function get_vertices(polyomino){
+    vertices = []
+    for (edge of get_boundaries(polyomino)){
+        for (point of edge){
+            if (!vertices.includes(point)){
+                vertices.push(point);
+            }
+        }
+    } return vertices;
+}
+
+// Define the Point Class
+class Polyomino {
+    constructor(squares) {
+        this.squares = squares;
+        this.boundaries = get_boundaries(squares);
+        this.vertices = get_vertices(squares);
+        this.subPolyominoes = [];
+        
+    }
+  }

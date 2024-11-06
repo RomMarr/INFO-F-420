@@ -1,5 +1,6 @@
 // Variables
-var squares = [];
+var polyomino = [];
+var guards = [];
 var gridSize = 50; // Size of each square in the grid
 var resetClick = false;
 var validateClick = false;
@@ -14,7 +15,7 @@ function setup() {
     // Create the clear button
     const buttonClear = createButton("Clear");
     buttonClear.position(10, 50);
-    buttonClear.mousePressed(resetPoints);
+    buttonClear.mousePressed(reset);
 
     // Create the validate button
     const buttonValidate = createButton("Validate");
@@ -24,7 +25,7 @@ function setup() {
 
 // Function to create a grid of squares
 function createGrid() {
-    squares = []; // Reset the squares array
+    polyomino = []; // Reset the squares array
     const startX = 10; // Starting X position of the grid
     const startY = 75; // Starting Y position of the grid
     const cols = Math.floor((width - 20) / gridSize); // Calculate number of columns
@@ -32,15 +33,15 @@ function createGrid() {
 
     for (let col = 0; col < cols; col++) {
         for (let row = 0; row < rows; row++) {
-            squares.push(new Square(startX + col * gridSize, startY + row * gridSize, gridSize));
+            polyomino.push(new Square(startX + col * gridSize, startY + row * gridSize, gridSize));
         }
     }
 }
 
 // Handle the reset button click
-function resetPoints() {
-    // Reset all squares
-    createGrid()
+function reset() {
+    createGrid()  // Reset all squares
+    guards = [];
     end = false;
     resetClick = true;
     validateClick = false;
@@ -53,17 +54,22 @@ function validate() {
     resultMessage = "Polyomino: valid -> ok"; // Update message
     validateClick = true;
     end = true;
-    valid = areSquaresConnected(squares);
+    valid = areSquaresConnected(polyomino);
     if (!valid) {
         resultMessage = "Polyomino: invalid "; 
-    }else resultMessage = "Polyomino: valid"; 
-    squares = getActiveSquares(squares);
+    }else{ resultMessage = "Polyomino: valid"; 
+    polyomino = getActiveSquares(polyomino);
+    }
+    //const minDistance = 5 * gridSize; // Example minimum distance between guards
+    //guards = solveDispersiveArtGallery(squares, minDistance);
+    //resultMessage = guards.length > 0 ? "Polyomino: guards placed successfully" : "Polyomino: failed to place guards";
+   // }
 
 }
 
 // Draw the view and the grid
 function draw() {
-    drawWindow(squares, resultMessage);
+    drawWindow(squares, resultMessage, guards);
 }
 
 function mousePressed() {

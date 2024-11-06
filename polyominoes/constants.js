@@ -14,7 +14,11 @@ class Square {
       this.size = size;
       this.active = false; // To track if the square is active (clicked)
       this.watched = false; // To track if the square is covered by a guard
-      this.visibility
+      this.leftUpPt = new Point(x, y); // Top-left point
+      this.rightUpPt = new Point(x + size, y); // Top-right point
+      this.leftDownPt = new Point(x, y + size); // Bottom-left point
+      this.rightDownPt = new Point(x + size, y + size); // Bottom-right point
+      this.corners = [this.leftUpPt, this.rightUpPt, this.leftDownPt, this.rightDownPt]; // Array of all corners
   }
 
   draw() {
