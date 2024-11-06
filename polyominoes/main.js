@@ -69,7 +69,7 @@ function validate() {
 
 // Draw the view and the grid
 function draw() {
-    drawWindow(squares, resultMessage, guards);
+    drawWindow(polyomino, resultMessage, guards);
 }
 
 function mousePressed() {
@@ -79,7 +79,7 @@ function mousePressed() {
   }
 
   // Check if the point is inside any square
-  for (let square of squares) {
+  for (let square of polyomino) {
       // Adjust the mouse position based on the button area offset
       if (square.isInside(mouseX, mouseY)) { 
           square.toggle(); // Toggle the square's active state
