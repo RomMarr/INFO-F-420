@@ -1,5 +1,4 @@
 function getSquareIndexAtPoint(point, squares) {
-    
     // Loop through all squares to find one that contains the point
     for (let i = 0; i < squares.length; i++) {
         if (squares[i].isInside(point.x, point.y)) { // Adjusting for button area
@@ -8,14 +7,12 @@ function getSquareIndexAtPoint(point, squares) {
     }
     return -1; // Return -1 if no square contains the point
 }
+
 function getNextSquareActive(point, squares){
     let squareNeighbor = getSquareIndexAtPoint(point, squares);
     if ( squareNeighbor == -1) return false;
     return squares[squareNeighbor].active;
-    
-
 }
-
 
 function getActiveSquares(squares) {
     const activeSquares = [];
@@ -36,7 +33,6 @@ function getNbActiveSquares(squares) {
     }
     return count;
 }
-
 
 function getDirectNeighbors(square, squares) {
     const squareSize = square.size;
