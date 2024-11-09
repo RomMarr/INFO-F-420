@@ -115,38 +115,114 @@ function get_shared_edge(square1, square2){
 
 
 
-function get_boundaries(polyomino){
-    boundaries  =  [] // edges that are separating an active square from an inactive one
-    for (square of polyomino){
-        if (square.active){
-            neighbors = getDirectNeighbors(square, polyomino)
-            for (neighbor of neighbors){
-                if (!neighbor.active){
-                    boundaries.push(get_shared_edge(square, neighbor));
+
+function isRVisible(guard, targetSquare, polyomino) {
+    // Determine if the square is aligned horizontally or vertically with the guard
+    if (guard.x !== targetSquare.x && guard.y !== targetSquare.y) return false; // Only aligned squares are visible
+
+    // Check visibility along the x-axis if aligned horizontally
+    if (guard.y === targetSquare.y) {
+        const minX = Math.min(guard.x, targetSquare.x);
+        const maxX = Math.max(guard.x, targetSquare.x);
+
+        for (let square of polyomino) {
+            if (square.active) {
+                if (square.y === guard.y) {
+                    if (square.x > minX && square.x < maxX) {
+                        return false; // An active square interrupts visibility along the x-axis
+                    }
+                } else if (square.x === maxX || square.x === minX) {
+                    // Boundary interruption case
+                    if (!square.active && (square.y === guard.y)) {
+                        return false; // Stop visibility at the boundary
+                    }
                 }
             }
         }
-    } return boundaries;
-}
+    }
 
-function get_vertices(polyomino){
-    vertices = []
-    for (edge of get_boundaries(polyomino)){
-        for (point of edge){
-            if (!vertices.includes(point)){
-                vertices.push(point);
+    // Check visibility along the y-axis if aligned vertically
+    if (guard.x === targetSquare.x) {
+        const minY = Math.min(guard.y, targetSquare.y);
+        const maxY = Math.max(guard.y, targetSquare.y);
+
+        for (let square of polyomino) {
+            if (square.active) {
+                if (square.x === guard.x) {
+                    if (square.y > minY && square.y < maxY) {
+                        return false; // An active square interrupts visibility along the y-axis
+                    }
+                } else if (square.y === maxY || square.y === minY) {
+                    // Boundary interruption case
+                    if (!square.active && (square.x === guard.x)) {
+                        return false; // Stop visibility at the boundary
+                    }
+                }
             }
         }
-    } return vertices;
+    }
+
+    return true; // No obstacles or boundary interruptions found
 }
 
-// Define the Point Class
+function calculateVisibilityRegion(guard, polyomino) {
+    const visibilityRegion = [];
+
+    // Check each square to see if it is r-visible from the guard
+    for (let square of polyomino) {
+        if (square.active && isRVisible(guard, new Point(square.x, square.y), polyomino)) {
+            visibilityRegion.push(square);
+        }
+    }
+
+    return visibilityRegion;
+}
+
+// Define the Polyomino Class
 class Polyomino {
     constructor(squares) {
         this.squares = squares;
-        this.boundaries = get_boundaries(squares);
-        this.vertices = get_vertices(squares);
+        this.boundaries =[];
+        this.vertices = [];
+        this.guards = [];
         this.subPolyominoes = [];
-        
+        this.valid = isValid();
     }
-  }
+
+    isValid(){
+        if (areSquaresConnected(this.squares)){
+            this.squares = getActiveSquares(this.squares);
+            return true;
+        }return false;
+    }
+
+    start(){
+        this.get_boundaries();
+        this.get_vertices();
+    }
+
+
+    get_boundaries(){
+       for (square of squares){
+            if (square.active){
+                neighbors = getDirectNeighbors(square, polyomino)
+                for (neighbor of neighbors){
+                    if (!neighbor.active){
+                        this.boundaries.push(get_shared_edge(square, neighbor));
+                    }
+                }
+            }
+        }
+    } 
+
+
+    get_vertices(){
+        for (edge of this.boundaries){
+            for (point of edge){
+                if (!vertices.includes(point)){
+                    this.vertices.push(point);
+                }
+            }
+        }
+    } 
+}
