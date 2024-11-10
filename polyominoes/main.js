@@ -50,18 +50,15 @@ function reset() {
 
 // Start -> handle triangulation & check intersections (collisions)
 function validate() {
-    // Placeholder for collision checking
     resultMessage = ""; // Update message
     validateClick = true;
     end = true;
-    poly = new Polyomino(polyomino)
-    console.log("isValid ?", poly.isValid())
-    //valid = areSquaresConnected(polyomino);
+    poly = new Polyomino(polyomino);
     if (!poly.isValid()) {
         resultMessage = "Polyomino: invalid "; 
     }else{ resultMessage = "Polyomino: valid"; 
-    polyomino = getActiveSquares(polyomino);
-    
+    polyomino = poly.getSquares();
+    poly.start();
     }
     //const minDistance = 5 * gridSize; // Example minimum distance between guards
     //guards = solveDispersiveArtGallery(squares, minDistance);

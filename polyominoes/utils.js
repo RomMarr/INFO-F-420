@@ -111,3 +111,16 @@ function compareEdges(edge1, edge2) {
     edge1[1].y === edge2[1].y
   );
 }
+
+// Helper function to check if two arrays are equal
+function arraysEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) return false;
+  for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i].x !== arr2[i].x || arr1[i].y !== arr2[i].y) return false;
+  }
+  return true;
+}
+
+function pointExistsInArray(point, array) {
+  return array.some(p => p.x === point.x && p.y === point.y);
+}

@@ -107,7 +107,7 @@ function get_shared_edge(square1, square2){
     let shared_edge = [];
     for (corner of square1.corners){
         if (corner in square2.corners){
-            shared_edge.push(corner);
+            if (!square1.corners == square2.corners) shared_edge.push(corner);
         }
     }
     return shared_edge;
@@ -117,66 +117,43 @@ function get_shared_edge(square1, square2){
 
 
 function isRVisible(guard, targetSquare, polyomino) {
-    // Determine if the square is aligned horizontally or vertically with the guard
+    // Check if the target square is aligned horizontally or vertically with the guard
     if (guard.x !== targetSquare.x && guard.y !== targetSquare.y) return false; // Only aligned squares are visible
 
-    // Check visibility along the x-axis if aligned horizontally
+    const minX = Math.min(guard.x, targetSquare.x);
+    const maxX = Math.max(guard.x, targetSquare.x);
+    const minY = Math.min(guard.y, targetSquare.y);
+    const maxY = Math.max(guard.y, targetSquare.y);
+
+    // Traverse along x-axis if horizontally aligned
     if (guard.y === targetSquare.y) {
-        const minX = Math.min(guard.x, targetSquare.x);
-        const maxX = Math.max(guard.x, targetSquare.x);
+        for (let x = minX + guard.size; x < maxX; x += guard.size) {
+            const point = new Point(x, guard.y);
+            const index = getSquareIndexAtPoint(point, polyomino);
 
-        for (let square of polyomino) {
-            if (square.active) {
-                if (square.y === guard.y) {
-                    if (square.x > minX && square.x < maxX) {
-                        return false; // An active square interrupts visibility along the x-axis
-                    }
-                } else if (square.x === maxX || square.x === minX) {
-                    // Boundary interruption case
-                    if (!square.active && (square.y === guard.y)) {
-                        return false; // Stop visibility at the boundary
-                    }
-                }
+            if (index === -1 || !polyomino[index].active) {
+                return false; // Stops visibility at the boundary or inactive square
             }
         }
     }
 
-    // Check visibility along the y-axis if aligned vertically
+    // Traverse along y-axis if vertically aligned
     if (guard.x === targetSquare.x) {
-        const minY = Math.min(guard.y, targetSquare.y);
-        const maxY = Math.max(guard.y, targetSquare.y);
+        for (let y = minY + guard.size; y < maxY; y += guard.size) {
+            const point = new Point(guard.x, y);
+            const index = getSquareIndexAtPoint(point, polyomino);
 
-        for (let square of polyomino) {
-            if (square.active) {
-                if (square.x === guard.x) {
-                    if (square.y > minY && square.y < maxY) {
-                        return false; // An active square interrupts visibility along the y-axis
-                    }
-                } else if (square.y === maxY || square.y === minY) {
-                    // Boundary interruption case
-                    if (!square.active && (square.x === guard.x)) {
-                        return false; // Stop visibility at the boundary
-                    }
-                }
+            if (index === -1 || !polyomino[index].active) {
+                return false; // Stops visibility at the boundary or inactive square
             }
         }
     }
 
-    return true; // No obstacles or boundary interruptions found
+    return true; // No obstacles or boundaries found in the visibility path
 }
 
-function calculateVisibilityRegion(guard, polyomino) {
-    const visibilityRegion = [];
 
-    // Check each square to see if it is r-visible from the guard
-    for (let square of polyomino) {
-        if (square.active && isRVisible(guard, new Point(square.x, square.y), polyomino)) {
-            visibilityRegion.push(square);
-        }
-    }
 
-    return visibilityRegion;
-}
 
 // Define the Polyomino Class
 class Polyomino {
@@ -186,7 +163,16 @@ class Polyomino {
         this.vertices = [];
         this.guards = [];
         this.subPolyominoes = [];
-        this.valid = isValid();
+        this.valid = this.isValid();
+        this.visibility = []; // each elem is : (guard, list of squares it can see)
+    }
+
+    getSquares(){
+        return this.squares
+    }
+
+    setSquares(squares){
+        this.squares = squares;
     }
 
     isValid(){
@@ -199,30 +185,75 @@ class Polyomino {
     start(){
         this.get_boundaries();
         this.get_vertices();
+        this.place_first_guard();
+        this.calculateVisibilityRegion(this.guards[0]);
+        //this.next_steps();
     }
 
 
-    get_boundaries(){
-       for (square of squares){
-            if (square.active){
-                neighbors = getDirectNeighbors(square, polyomino)
-                for (neighbor of neighbors){
-                    if (!neighbor.active){
-                        this.boundaries.push(get_shared_edge(square, neighbor));
+    get_edges(square) {
+        let edges = [];
+        let corners = square.corners;
+        for (let i = 0; i < corners.length; i++) {
+            edges.push([corners[i], corners[(i + 1) % corners.length]]);
+        }
+        return edges;
+    }
+    
+    get_boundaries() {
+        for (let square of this.squares) {
+            if (square.active) {
+                let boundaries = this.get_edges(square); // Get edges of active square
+                let neighbors = getDirectNeighbors(square, this.squares); // Find active neighbors
+                for (let neighbor of neighbors) {
+                    if (neighbor.active) {
+                        // Get edges of neighboring active square
+                        for (let edge of this.get_edges(neighbor)) {
+                            // Find the reverse edge in boundaries
+                            let reverseEdge = [edge[1], edge[0]];
+                            let index = boundaries.findIndex(boundaryEdge => arraysEqual(boundaryEdge, reverseEdge));
+                            if (index !== -1) {
+                                // Remove the boundary edge if the reverse edge is found in the neighbor
+                                boundaries.splice(index, 1);
+                            }
+                        }
                     }
+                }
+    
+                // Add remaining boundaries to `this.boundaries`
+                for (let boundary of boundaries) {
+                    this.boundaries.push(boundary);
                 }
             }
         }
-    } 
+    }
 
 
     get_vertices(){
-        for (edge of this.boundaries){
-            for (point of edge){
-                if (!vertices.includes(point)){
+        for (let edge of this.boundaries){
+            for (let point of edge){
+                console.log(point);
+                if (!pointExistsInArray(point, this.vertices)){
                     this.vertices.push(point);
                 }
             }
         }
     } 
+
+    place_first_guard(){
+        console.log(this.boundaries);
+        this.guards.push(this.boundaries[0][0]);
+    }
+
+    calculateVisibilityRegion(guard) {
+        const visibilityRegion = [];
+        // Check each square to see if it is r-visible from the guard
+        for (let square of this.squares) {
+            if (square.active && isRVisible(guard, new Point(square.x, square.y), this.squares)) {
+                visibilityRegion.push(square);
+                square.watched = true;
+            }
+        }
+        this.visibility.push([guard,visibilityRegion]) ;
+    }
 }
