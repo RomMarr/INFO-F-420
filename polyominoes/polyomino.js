@@ -159,6 +159,7 @@ function isRVisible(guard, targetSquare, polyomino) {
 class Polyomino {
     constructor(squares) {
         this.squares = squares;
+        this.size = 0;
         this.boundaries =[];
         this.vertices = [];
         this.guards = [];
@@ -178,6 +179,7 @@ class Polyomino {
     isValid(){
         if (areSquaresConnected(this.squares)){
             this.squares = getActiveSquares(this.squares);
+            this.size = this.squares[0].size;
             return true;
         }return false;
     }
@@ -186,7 +188,8 @@ class Polyomino {
         this.get_boundaries();
         this.get_vertices();
         this.place_first_guard();
-        this.calculateVisibilityRegion(this.guards[0]);
+        this.r_visibility(this.guards[0]);
+        //this.calculateVisibilityRegion(this.guards[0]);
         //this.next_steps();
     }
 
@@ -232,7 +235,6 @@ class Polyomino {
     get_vertices(){
         for (let edge of this.boundaries){
             for (let point of edge){
-                console.log(point);
                 if (!pointExistsInArray(point, this.vertices)){
                     this.vertices.push(point);
                 }
@@ -241,7 +243,6 @@ class Polyomino {
     } 
 
     place_first_guard(){
-        console.log(this.boundaries);
         this.guards.push(this.boundaries[0][0]);
     }
 
@@ -255,5 +256,39 @@ class Polyomino {
             }
         }
         this.visibility.push([guard,visibilityRegion]) ;
+    }
+
+    is_renctangle_watched(p,q){
+        let squares_of_rectangle = [];
+        let coordinates = getRectangle(p,q);
+        let min_x = coordinates[0];
+        let min_y = coordinates[1];
+        let max_x = coordinates[2];
+        let max_y = coordinates[3];
+        for (let x = min_x; x <= max_x; x+= this.size){
+            for (let y = min_y; y <= max_y; y+= this.size){
+                let index = getSquareIndexAtPoint(new Point(x,y), this.squares); 
+                if (index == -1){
+                    return null;
+                } squares_of_rectangle.push(this.squares[index]);
+            }
+        }
+        return squares_of_rectangle;
+    }
+
+    r_visibility(guard){
+        let squares_to_check = this.squares.slice();
+        console.log("Squares to check :", squares_to_check);
+        while (squares_to_check.length != 0 ) {
+            let squares_of_rectangle = this.is_renctangle_watched(guard,squares_to_check.pop().middle);
+            console.log("Squares of rectangle", squares_of_rectangle);
+            for (let square of squares_of_rectangle){
+                let index = squares_to_check.indexOf(square);
+                if (index != -1) squares_to_check.splice(index,1);
+                if (!square.watched) {
+                    square.watched = true;
+                }
+            }
+        }
     }
 }

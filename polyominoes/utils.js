@@ -124,3 +124,11 @@ function arraysEqual(arr1, arr2) {
 function pointExistsInArray(point, array) {
   return array.some(p => p.x === point.x && p.y === point.y);
 }
+
+function getRectangle(p,q){
+  const min_x = Math.min(p.x, q.x);
+  const max_x = Math.max(p.x, q.x);
+  const min_y = Math.min(p.y, q.y);
+  const max_y = Math.max(p.y, q.y);
+  return [min_x,min_y,max_x,max_y];
+}

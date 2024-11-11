@@ -18,6 +18,7 @@ class Square {
       this.rightUpPt = new Point(x + size, y); // Top-right point
       this.leftDownPt = new Point(x, y + size); // Bottom-left point
       this.rightDownPt = new Point(x + size, y + size); // Bottom-right point
+      this.middle = new Point(x +size/2, y+size/2);
       this.corners = [this.leftUpPt, this.rightUpPt, this.rightDownPt, this.leftDownPt]; // Array of all corners
   }
 
