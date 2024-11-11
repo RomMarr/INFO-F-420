@@ -59,11 +59,8 @@ function validate() {
     }else{ resultMessage = "Polyomino: valid"; 
     polyomino = poly.getSquares();
     poly.start();
+    guards.push(poly.guards[0]);
     }
-    //const minDistance = 5 * gridSize; // Example minimum distance between guards
-    //guards = solveDispersiveArtGallery(squares, minDistance);
-    //resultMessage = guards.length > 0 ? "Polyomino: guards placed successfully" : "Polyomino: failed to place guards";
-   // }
 
 }
 

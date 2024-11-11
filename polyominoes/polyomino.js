@@ -8,11 +8,7 @@ function getSquareIndexAtPoint(point, squares) {
     return -1; // Return -1 if no square contains the point
 }
 
-function getNextSquareActive(point, squares){
-    let squareNeighbor = getSquareIndexAtPoint(point, squares);
-    if ( squareNeighbor == -1) return false;
-    return squares[squareNeighbor].active;
-}
+
 
 function getActiveSquares(squares) {
     const activeSquares = [];
@@ -35,7 +31,7 @@ function getNbActiveSquares(squares) {
 }
 
 function getDirectNeighbors(square, squares) {
-    const squareSize = square.size;
+    const squareSize = square.size; 
     const neighbors = [];
 
     // Loop through all squares to find those adjacent to the given square
@@ -54,6 +50,22 @@ function getDirectNeighbors(square, squares) {
     }
 
     return neighbors;
+}
+
+function get_connected_squares(square, squares) {
+    let stack = [square];
+    let connected_squares = [square];
+    while (stack.length != 0) {
+        console.log('stack' , stack)
+        actual_square = stack.pop();
+        console.log('actual square', actual_square);
+        for (let neighbor of getDirectNeighbors(actual_square,squares)) {
+            if (!connected_squares.includes(neighbor)) {
+                connected_squares.push(neighbor);
+                stack.push(neighbor);
+            }
+        }
+    } return connected_squares;
 }
 
 
@@ -103,55 +115,6 @@ function areSquaresConnected(squares) {
     return count === nbActiveSquares;
 }
 
-function get_shared_edge(square1, square2){
-    let shared_edge = [];
-    for (corner of square1.corners){
-        if (corner in square2.corners){
-            if (!square1.corners == square2.corners) shared_edge.push(corner);
-        }
-    }
-    return shared_edge;
-}
-
-
-
-
-function isRVisible(guard, targetSquare, polyomino) {
-    // Check if the target square is aligned horizontally or vertically with the guard
-    if (guard.x !== targetSquare.x && guard.y !== targetSquare.y) return false; // Only aligned squares are visible
-
-    const minX = Math.min(guard.x, targetSquare.x);
-    const maxX = Math.max(guard.x, targetSquare.x);
-    const minY = Math.min(guard.y, targetSquare.y);
-    const maxY = Math.max(guard.y, targetSquare.y);
-
-    // Traverse along x-axis if horizontally aligned
-    if (guard.y === targetSquare.y) {
-        for (let x = minX + guard.size; x < maxX; x += guard.size) {
-            const point = new Point(x, guard.y);
-            const index = getSquareIndexAtPoint(point, polyomino);
-
-            if (index === -1 || !polyomino[index].active) {
-                return false; // Stops visibility at the boundary or inactive square
-            }
-        }
-    }
-
-    // Traverse along y-axis if vertically aligned
-    if (guard.x === targetSquare.x) {
-        for (let y = minY + guard.size; y < maxY; y += guard.size) {
-            const point = new Point(guard.x, y);
-            const index = getSquareIndexAtPoint(point, polyomino);
-
-            if (index === -1 || !polyomino[index].active) {
-                return false; // Stops visibility at the boundary or inactive square
-            }
-        }
-    }
-
-    return true; // No obstacles or boundaries found in the visibility path
-}
-
 
 
 
@@ -189,9 +152,14 @@ class Polyomino {
         this.get_vertices();
         this.place_first_guard();
         this.r_visibility(this.guards[0]);
-        //this.calculateVisibilityRegion(this.guards[0]);
-        //this.next_steps();
+        this.generate_subpolyominoes();
+        this.next_steps();
     }
+
+    next_steps(){
+        
+    }
+
 
 
     get_edges(square) {
@@ -243,19 +211,8 @@ class Polyomino {
     } 
 
     place_first_guard(){
-        this.guards.push(this.boundaries[0][0]);
-    }
-
-    calculateVisibilityRegion(guard) {
-        const visibilityRegion = [];
-        // Check each square to see if it is r-visible from the guard
-        for (let square of this.squares) {
-            if (square.active && isRVisible(guard, new Point(square.x, square.y), this.squares)) {
-                visibilityRegion.push(square);
-                square.watched = true;
-            }
-        }
-        this.visibility.push([guard,visibilityRegion]) ;
+        let random_vertex = this.vertices[floor(Math.random() * this.vertices.length)];
+        this.guards.push(random_vertex);
     }
 
     is_renctangle_watched(p,q){
@@ -265,30 +222,50 @@ class Polyomino {
         let min_y = coordinates[1];
         let max_x = coordinates[2];
         let max_y = coordinates[3];
-        for (let x = min_x; x <= max_x; x+= this.size){
-            for (let y = min_y; y <= max_y; y+= this.size){
+        for (let x = min_x + this.size/2 - 1; x <= max_x; x+= this.size){
+            for (let y = min_y+ this.size/2 - 1; y <= max_y; y+= this.size){
                 let index = getSquareIndexAtPoint(new Point(x,y), this.squares); 
                 if (index == -1){
                     return null;
                 } squares_of_rectangle.push(this.squares[index]);
             }
+            
         }
         return squares_of_rectangle;
     }
 
     r_visibility(guard){
         let squares_to_check = this.squares.slice();
-        console.log("Squares to check :", squares_to_check);
         while (squares_to_check.length != 0 ) {
-            let squares_of_rectangle = this.is_renctangle_watched(guard,squares_to_check.pop().middle);
-            console.log("Squares of rectangle", squares_of_rectangle);
-            for (let square of squares_of_rectangle){
-                let index = squares_to_check.indexOf(square);
-                if (index != -1) squares_to_check.splice(index,1);
-                if (!square.watched) {
-                    square.watched = true;
+            let point = squares_to_check.pop().middle;
+            let squares_of_rectangle = this.is_renctangle_watched(guard,point);
+            if (squares_of_rectangle != null){
+                for (let square of squares_of_rectangle){
+                    let index = squares_to_check.indexOf(square);
+                    if (index != -1) squares_to_check.splice(index,1);
+                    if (!square.watched) square.watched = true;
                 }
             }
         }
     }
+
+    get_unwatched_squares(){
+        let unwatched_squares = []
+        for (let square of this.squares){
+            if (!square.watched) unwatched_squares.push(square);
+        }return unwatched_squares;
+    }
+
+    generate_subpolyominoes() {
+        let unwatched = this.get_unwatched_squares();
+        while (unwatched.length > 0) {
+            let squares_connected = get_connected_squares(unwatched[0], unwatched);
+            this.subPolyominoes.push(new Polyomino(squares_connected));
+            for (let square_used of squares_connected) {
+                let index = unwatched.indexOf(square_used);
+                unwatched.splice(index,1);
+            }
+        }
+    }
+    
 }

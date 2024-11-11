@@ -19,9 +19,8 @@ function drawWindow(squares, resultMessage, guards) {
    // Draw guards on the squares in blue
    if (guards.length > 0){
     for (let guard of guards) {
-      fill("blue"); // Guard color
-      noStroke();
-      ellipse(guard.x + guard.size / 2, guard.y + guard.size / 2, 10, 10); // Draw a blue dot at the center
+      fill("purple"); // Guard color
+      ellipse(guard.x, guard.y, 10, 10); // Draw a blue dot at the center
    }
    
 }
