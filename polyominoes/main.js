@@ -1,5 +1,6 @@
 // Variables
-var squares = [];
+var polyomino = [];
+var guards = [];
 var gridSize = 50; // Size of each square in the grid
 var resetClick = false;
 var validateClick = false;
@@ -14,7 +15,7 @@ function setup() {
     // Create the clear button
     const buttonClear = createButton("Clear");
     buttonClear.position(10, 50);
-    buttonClear.mousePressed(resetPoints);
+    buttonClear.mousePressed(reset);
 
     // Create the validate button
     const buttonValidate = createButton("Validate");
@@ -24,7 +25,7 @@ function setup() {
 
 // Function to create a grid of squares
 function createGrid() {
-    squares = []; // Reset the squares array
+    polyomino = []; // Reset the squares array
     const startX = 10; // Starting X position of the grid
     const startY = 75; // Starting Y position of the grid
     const cols = Math.floor((width - 20) / gridSize); // Calculate number of columns
@@ -32,15 +33,15 @@ function createGrid() {
 
     for (let col = 0; col < cols; col++) {
         for (let row = 0; row < rows; row++) {
-            squares.push(new Square(startX + col * gridSize, startY + row * gridSize, gridSize));
+            polyomino.push(new Square(startX + col * gridSize, startY + row * gridSize, gridSize));
         }
     }
 }
 
 // Handle the reset button click
-function resetPoints() {
-    // Reset all squares
-    createGrid()
+function reset() {
+    createGrid()  // Reset all squares
+    guards = [];
     end = false;
     resetClick = true;
     validateClick = false;
@@ -49,21 +50,23 @@ function resetPoints() {
 
 // Start -> handle triangulation & check intersections (collisions)
 function validate() {
-    // Placeholder for collision checking
-    resultMessage = "Polyomino: valid -> ok"; // Update message
+    resultMessage = ""; // Update message
     validateClick = true;
     end = true;
-    valid = areSquaresConnected(squares);
-    if (!valid) {
+    poly = new Polyomino(polyomino);
+    if (!poly.isValid()) {
         resultMessage = "Polyomino: invalid "; 
-    }else resultMessage = "Polyomino: valid"; 
-    squares = getActiveSquares(squares);
+    }else{ resultMessage = "Polyomino: valid"; 
+    polyomino = poly.getSquares();
+    poly.start();
+    guards.push(poly.guards[0]);
+    }
 
 }
 
 // Draw the view and the grid
 function draw() {
-    drawWindow(squares, resultMessage);
+    drawWindow(polyomino, resultMessage, guards);
 }
 
 function mousePressed() {
@@ -73,7 +76,7 @@ function mousePressed() {
   }
 
   // Check if the point is inside any square
-  for (let square of squares) {
+  for (let square of polyomino) {
       // Adjust the mouse position based on the button area offset
       if (square.isInside(mouseX, mouseY)) { 
           square.toggle(); // Toggle the square's active state
