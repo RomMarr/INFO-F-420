@@ -38,3 +38,19 @@ class Square {
       return px >= this.x && px <= this.x + this.size && py >= this.y && py <= this.y + this.size;
   }
 }
+
+
+class Gate{
+    constructor(entry){
+        this.entry = entry;  // edge(s) connecting the view of a guard and the subpolyomino
+        this.doors;  // edges next to the entry -> can be [parallel, orthogonal]
+        this.orientation; // true = clockwise and false = counter-clockwise
+    }
+
+    add_doors(doors){
+        this.doors = doors;
+    }
+    change_orientation(orientation){
+        this.orientation = orientation;
+    }
+}
