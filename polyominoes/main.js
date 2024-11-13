@@ -1,6 +1,8 @@
 // Variables
 var polyomino = [];
 var guards = [];
+var entriess = [];
+var doorss = [];
 var gridSize = 50; // Size of each square in the grid
 var resetClick = false;
 var validateClick = false;
