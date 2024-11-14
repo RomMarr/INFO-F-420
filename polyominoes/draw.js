@@ -1,5 +1,5 @@
 // Draw the view and the square
-function drawWindow(squares, resultMessage) {
+function drawWindow(squares, resultMessage, guards) {
   background(200);
 
   // Draw the title and button section
@@ -13,7 +13,40 @@ function drawWindow(squares, resultMessage) {
 
   // Draw the squares (currently only one)
   for (let square of squares) {
-      square.draw(); // Call the draw method of each square
+    square.draw(); // Call the draw method of each square
+  }
+
+  // Draw guards on the squares in blue
+  if (guards.length > 0) {
+    for (let guard of guards) {
+      guard.draw(); // Call the draw method of each guard
+    }
+  }
+
+  // Draw points for entries in orange
+  if (entriess.length > 0) {
+    //console.log("ent", entriess);
+    for (let entry of entriess) {
+      for (let p of entry){
+        fill("green");
+        ellipse(p.x, p.y,10,10);  // Draw a point at the door position
+      }
+    }
+  }
+
+  // Draw points for doors in green
+  if (doorss.length > 0) {
+    //console.log("doors", doorss);
+    for (let door of doorss) {
+      for (let p of door){
+        fill("orange");
+        ellipse(p.x, p.y,5, 5);  // Draw a point at the door position
+      }
+      
+    }
+    setTimeout(() => {
+      console.log("3 seconds have passed");
+    }, 100000);
   }
 
   // Draw the result message section
@@ -21,6 +54,3 @@ function drawWindow(squares, resultMessage) {
   textSize(20);
   text(resultMessage, 30, height - 70); // Draw the result message at the bottom
 }
-
-// Note: The square drawing logic will still be managed by the Square class.
-// You don't need to change the draw function in the Square class.
