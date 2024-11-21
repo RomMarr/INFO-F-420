@@ -86,9 +86,25 @@ class Polyomino {
                     this.boundaries.push(boundary);
                 }
             }
-        }
+        }this.sortBoundaries();
     }
 
+
+    sortBoundaries(){
+        let sorted = [];
+        let current = this.boundaries[0];
+        sorted.push(current);
+        let i = 0;
+        while (sorted.length != this.boundaries.length){
+            for (let edge of this.boundaries){
+                if (compare_points(current[1],edge[0])){
+                    sorted.push(edge);
+                    current = edge;
+                    i += 1;
+                }
+            }
+        }this.boundaries = sorted;
+    }
 
     get_vertices(){
         for (let edge of this.boundaries){
@@ -205,27 +221,36 @@ class Polyomino {
     }
 
 
-    calculate_distance_alpha(gate) {
+    calculate_distance_alpha() {
         let size_boundaries = this.boundaries.length;
-        let indice = this.find_edge_ending_with_guard();
-        let distance = 0;
+        let indice = this.find_edge_ending_with_guard() + 1;
+        let distance = 1;
         while(distance <= size_boundaries) {
-            if (is_point_in_edges(boundaries[i][1],gate.entry)) {
-                return distance;
-            }
-            indice +=1;
+            for (let sub of this.subPolyominoes){
+                let gate = sub.gate;
+                if (is_point_in_edges(this.boundaries[indice][1],gate.entry)) {
+                    return distance;
+                }
+                }
+            
+            indice =(indice +1)% size_boundaries;
             distance +=1;
         }
         return -1;
     }
 
-    calculate_distance_beta(gate) {
+    calculate_distance_beta() {
+        let size_boundaries = this.boundaries.length;
         let indice = this.find_edge_ending_with_guard();
         let distance = 1;
-        while(distance <= this.boundaries.length) {
-            if (is_point_in_edges(boundaries[i][0],gate.entry)) {
-                return distance;
-            }
+        while(distance <= size_boundaries) {
+            if (indice == -1) {indice = size_boundaries -1;}
+            for (let sub of this.subPolyominoes){
+                let gate = sub.gate;
+                if (is_point_in_edges(this.boundaries[indice][0],gate.entry)) {
+                    return distance;
+                }
+                }
             indice -=1;
             distance +=1;
         }

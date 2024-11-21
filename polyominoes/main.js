@@ -44,6 +44,8 @@ function createGrid() {
 function reset() {
     createGrid()  // Reset all squares
     guards = [];
+    entriess = [];
+    doorss = [];
     end = false;
     resetClick = true;
     validateClick = false;
@@ -62,6 +64,11 @@ function validate() {
     polyomino = poly.getSquares();
     poly.start();
     guards.push(poly.guards[0]);
+    let alpha = poly.calculate_distance_alpha();
+    let beta = poly.calculate_distance_beta();
+    console.log("alpha", alpha);
+    console.log("beta", beta);
+    console.log("Entries", entriess);
     }
 
 }
