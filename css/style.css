@@ -1,0 +1,79 @@
+/* Reset margins and paddings for consistency */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0; /* Light grey background */
+  color: #333;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Style for each sketch section */
+.sketch-section {
+  margin-bottom: 40px;
+  padding: 20px;
+  background: white; /* White background for contrast */
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Sketch title and text */
+.sketch-section h2 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.sketch-section p {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+/* Canvas and buttons container */
+.sketch-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+canvas {
+  display: block;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Text between sketches */
+.text-between {
+  text-align: center;
+  font-size: 18px;
+  color: #555;
+  margin: 20px 0;
+}
