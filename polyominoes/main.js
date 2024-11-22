@@ -3,6 +3,7 @@ var polyomino = [];
 var guards = [];
 var entriess = [];
 var doorss = [];
+var gates = [];
 var gridSize = 50; // Size of each square in the grid
 var resetClick = false;
 var validateClick = false;
@@ -46,6 +47,7 @@ function reset() {
     guards = [];
     entriess = [];
     doorss = [];
+    gates = [];
     end = false;
     resetClick = true;
     validateClick = false;
@@ -68,9 +70,14 @@ function validate() {
     let beta = poly.calculate_distance_beta();
     console.log("alpha", alpha);
     console.log("beta", beta);
-    console.log("Entries", entriess);
+    disruptive_solver(poly);
+    for (let gate of gates){
+        console.log("gate", gate);
+        console.log("orientation", gate.orientation);
+
     }
 
+}
 }
 
 // Draw the view and the grid

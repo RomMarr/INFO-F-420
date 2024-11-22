@@ -13,3 +13,18 @@
 //     }
 //     return shared_edge;
 // }
+
+
+// generate_subpolyominoes() {
+//     let unwatched = this.get_unwatched_squares();
+//     while (unwatched.length > 0) {
+//         let squares_connected = this.get_connected_squares(unwatched[0], unwatched);
+//         let sub_polyomino = new Polyomino(squares_connected);
+//         sub_polyomino.initialize();
+//         this.subPolyominoes.push(sub_polyomino);
+//         for (let square_used of squares_connected) {
+//             let index = unwatched.indexOf(square_used);
+//             unwatched.splice(index,1);
+//         }
+//     }
+// }

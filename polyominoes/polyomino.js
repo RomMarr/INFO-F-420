@@ -34,6 +34,7 @@ class Polyomino {
     start(){
         this.initialize()
         this.place_first_guard();
+        this.orderBoundariesFromGuard();
         this.r_visibility(this.guards[0]);
         this.generate_subpolyominoes();
         this.generate_gates();
@@ -46,6 +47,8 @@ class Polyomino {
             console.log("Sub :", sub);
             console.log("Doors", sub.gate);
             console.log("Entries :", sub.gate.entry);
+            console.log("gate :", sub.gate);
+            gates.push(sub.gate);
             for (let ent of sub.gate.entry){
                 entriess.push(ent);
             }
@@ -105,6 +108,18 @@ class Polyomino {
             }
         }this.boundaries = sorted;
     }
+
+    orderBoundariesFromGuard(){
+            let rotatedList = [];
+            let startIndex = this.find_edge_starting_with_guard();
+            for (let i = startIndex; i < this.boundaries.length; i++) {
+                rotatedList.push(this.boundaries[i]);
+            }
+            for (let i = 0; i < startIndex; i++) {
+                rotatedList.push(this.boundaries[i]);
+            }
+           this.boundaries = rotatedList;
+        }
 
     get_vertices(){
         for (let edge of this.boundaries){
@@ -173,17 +188,58 @@ class Polyomino {
 
     generate_subpolyominoes() {
         let unwatched = this.get_unwatched_squares();
-        while (unwatched.length > 0) {
-            let squares_connected = this.get_connected_squares(unwatched[0], unwatched);
-            let sub_polyomino = new Polyomino(squares_connected);
-            sub_polyomino.initialize();
-            this.subPolyominoes.push(sub_polyomino);
-            for (let square_used of squares_connected) {
-                let index = unwatched.indexOf(square_used);
-                unwatched.splice(index,1);
+        let remainingBoundaries = this.boundaries.slice(); // Copy of boundaries
+    
+        // Iterate over boundaries in clockwise order to find connected unwatched squares
+        while (remainingBoundaries.length > 0) {
+            let boundaryEdge = remainingBoundaries.shift(); // Take the next clockwise edge
+            let startPoint = boundaryEdge[0];
+            let endPoint = boundaryEdge[1];
+    
+            // Find any unwatched square connected to this boundary edge
+            let connectedSquare = null;
+            for (let square of unwatched) {
+                for (let corner of square.corners) {
+                    if (compare_points(startPoint, corner) || compare_points(endPoint, corner)) {
+                        connectedSquare = square;
+                        break;
+                    }
+                }
+    
+            if (connectedSquare) {
+                // Find all squares connected to this one
+                let squaresConnected = this.get_connected_squares(connectedSquare, unwatched);
+                let subPolyomino = new Polyomino(squaresConnected);
+                subPolyomino.initialize();
+                this.subPolyominoes.push(subPolyomino);
+    
+                // Remove connected squares from the unwatched list
+                for (let squareUsed of squaresConnected) {
+                    let index = unwatched.indexOf(squareUsed);
+                    if (index !== -1) unwatched.splice(index, 1);
+                }
+    
+                // Remove corresponding boundaries related to this subpolyomino
+
+                for (let square of squaresConnected) {
+                    let edges = this.get_edges(square);
+                    for (let edge of edges) {
+                        for (let boundarie of remainingBoundaries) {
+                            if (compareEdgesNonDirection(edge, boundarie)) {
+                                let index = remainingBoundaries.indexOf(boundarie);
+                                if (index !== -1) {
+                                    remainingBoundaries.splice(index, 1);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
+}
+
+    
 
     generate_gates() {
         let view_boundaries = this.guards[0].visibility.boundaries;
@@ -222,45 +278,38 @@ class Polyomino {
 
 
     calculate_distance_alpha() {
-        let size_boundaries = this.boundaries.length;
-        let indice = this.find_edge_ending_with_guard() + 1;
         let distance = 1;
-        while(distance <= size_boundaries) {
+        for (let edge of this.boundaries){
             for (let sub of this.subPolyominoes){
                 let gate = sub.gate;
-                if (is_point_in_edges(this.boundaries[indice][1],gate.entry)) {
+                if (is_point_in_edges(edge[1],gate.entry)) {
                     return distance;
                 }
                 }
             
-            indice =(indice +1)% size_boundaries;
             distance +=1;
         }
         return -1;
     }
 
     calculate_distance_beta() {
-        let size_boundaries = this.boundaries.length;
-        let indice = this.find_edge_ending_with_guard();
         let distance = 1;
-        while(distance <= size_boundaries) {
-            if (indice == -1) {indice = size_boundaries -1;}
+        for (let indice = this.boundaries.length - 1; indice >= 0; indice--) {
             for (let sub of this.subPolyominoes){
                 let gate = sub.gate;
                 if (is_point_in_edges(this.boundaries[indice][0],gate.entry)) {
                     return distance;
                 }
-                }
-            indice -=1;
+            }
             distance +=1;
         }
         return -1;
     }
 
-    find_edge_ending_with_guard() {
+    find_edge_starting_with_guard() {
         let i = 0;
         while (i <= this.boundaries.length) {
-            if (compare_points(this.guards[0].get_position(),this.boundaries[i][1])) {
+            if (compare_points(this.guards[0].get_position(),this.boundaries[i][0])) {
                 return i;
             }
             i+=1;
@@ -379,6 +428,7 @@ class Polyomino {
         // If we've reached all active squares, they're connected
         return count === nbActiveSquares;
     }
+
 }
 
 
