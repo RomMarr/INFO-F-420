@@ -20,6 +20,7 @@ class DualGraph {
         this.edges = [];
         this.constructGraph(poly.ears);
         this.caterpillar= null;
+        this.unguardedTriangles = poly.ears;
     }
 
     constructGraph(triangles) {
@@ -100,6 +101,7 @@ class DualGraph {
                     for(let vertex of triangle){
                         if(this.checkDistanceGuards(vertex, guards)){
                             guards.push(vertex);
+                            guardedTriangles.add(triangle);
                             vertex.color = "red";
                             break;
                         }
@@ -135,7 +137,55 @@ class DualGraph {
                 }
             }
         }
+        this.unguardedTriangles = this.unguardedTriangles.filter(triangle => !guardedTriangles.has(triangle));
         return guards;
+    }
+    
+    partitionSubregions(uncoveredTriangles) {
+        let visited = new Set();
+        let subregions = [];
+
+        for (let triangle of uncoveredTriangles) {
+            if (!visited.has(triangle)) {
+                let stack = [triangle];
+                let component = new Set();
+
+                while (stack.length > 0) {
+                    let current = stack.pop();
+                    if (!visited.has(current)) {
+                        visited.add(current);
+                        component.add(current);
+
+                        // Add neighbors from the dual graph
+                        let node = this.vertices.find(node => node.node == current);
+                        for (let neighbor of node.neighbors) {
+                            if (uncoveredTriangles.includes(neighbor) && !visited.has(neighbor)) {
+                                stack.push(neighbor);
+                            }
+                        }
+                    }
+                }
+                subregions.push(component);
+            }
+        }
+
+        return subregions;
+    }
+
+
+    solveSubregion(subregion) {
+        // Create a new dual graph for the subregion
+        let subregionGraph = new DualGraph(this.polygon);
+        subregionGraph.vertices = this.vertices.filter(node => subregion.has(node.node));
+
+        // Find leaves and construct a caterpillar for the subregion
+        let leaves = subregionGraph.findLeaf();
+        let trianglePath = findTrianglePath(leaves[0].node, leaves[1].node, [...subregion]);
+        subregionGraph.constructCaterpillar(trianglePath);
+
+        // Place guards for the subregion
+        let newGuards = subregionGraph.setGuards();
+        return newGuards;
     }
 
 
@@ -161,6 +211,16 @@ function solveDAGP(polygon){
         let Trianglepath = findTrianglePath(leafs[0].node, leafs[1].node, poly.ears);
         dualGraph.constructCaterpillar(Trianglepath);
         let guards= dualGraph.setGuards();
+        while (true) {
+            let uncoveredTriangles = dualGraph.unguardedTriangles;
+            if (uncoveredTriangles.length === 0) break; // All triangles are guarded
+    
+            let subregions = dualGraph.partitionSubregions(uncoveredTriangles);
+            for (let subregion of subregions) {
+                let newGuards = dualGraph.solveSubregion(subregion);
+                guards.push(...newGuards);
+            }
+        }
         console.log(guards);
       }
 
