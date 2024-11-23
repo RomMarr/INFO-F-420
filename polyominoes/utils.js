@@ -167,10 +167,23 @@ function compare_points(point1,point2){
   return point1.x == point2.x && point1.y == point2.y;
 }
 
+function additionPoints(point1, point2){
+  let x = point1.x + point2.x;
+  let y = point1.y + point2.y;
+  return new Point(x, y);
+}
+
 function is_point_in_edges(point, list_edges){
   for (let edge of list_edges){
     for (let edge_point of edge){
       if (compare_points(point, edge_point)) return true;
     }
   } return false;
+}
+
+function commonCoordonate(point, list_points){
+  for (let p of list_points){
+    if (p.x == point.x || p.y == point.y) return true;
+  } return false;
+
 }

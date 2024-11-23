@@ -74,6 +74,7 @@ function validate() {
     for (let gate of gates){
         console.log("gate", gate);
         console.log("orientation", gate.orientation);
+        console.log("Parrallel", gate.is_parrallel());
 
     }
 
