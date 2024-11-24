@@ -185,5 +185,26 @@ function commonCoordonate(point, list_points){
   for (let p of list_points){
     if (p.x == point.x || p.y == point.y) return true;
   } return false;
+}
 
+function getMinMaxX(listEdges){
+  let min = Infinity;
+  let max = -Infinity;
+  for (let edge of listEdges){
+    for (let point of edge){
+      if (point.x < min) min = point.x;
+      if (point.x > max) max = point.x;
+    }
+  } return [min,max];
+}
+
+function getMinMaxY(listEdges){
+  let min = Infinity;
+  let max = -Infinity;
+  for (let edge of listEdges){
+    for (let point of edge){
+      if (point.y < min) min = point.y;
+      if (point.y > max) max = point.y;
+    }
+  } return [min,max];
 }

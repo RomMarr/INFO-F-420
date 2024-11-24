@@ -107,13 +107,11 @@ class Polyomino {
         let sorted = [];
         let current = this.boundaries[0];
         sorted.push(current);
-        console.log("boundaries :", this.boundaries);
         while (sorted.length < this.boundaries.length){
             for (let edge of this.boundaries){
                 if (compare_points(current[1],edge[0]) ){
                     sorted.push(edge);
                     current = edge;
-                    console.log("Current :", current);
                 }
             }
         }this.boundaries = sorted;
@@ -336,7 +334,6 @@ class Polyomino {
     getSquareIndexAtPoint(point) {
         // Loop through all squares to find one that contains the point
         for (let i = 0; i < this.squares.length; i++) {
-            console.log("square :", this.squares[i]);
             if (this.squares[i].isInside(point.x, point.y)) { // Adjusting for button area
                 return i; // Return the index of the square
             }
@@ -400,6 +397,7 @@ class Polyomino {
         } return connected_squares;
     }
 
+    // function to check if all active squares are connected (from ChatGPT)
     areSquaresConnected() {
         const nbActiveSquares = this.getNbActiveSquares();
         if (nbActiveSquares === 0) return false; // No active squares to check
@@ -413,7 +411,6 @@ class Polyomino {
                 break;
             }
         }
-    
         // If no active square is found (shouldn't happen due to previous checks)
         if (!startSquare) return false;
     
@@ -485,13 +482,46 @@ class Polyomino {
         while(flag){
             sens2 = additionPoints(sens2, incr);
             console.log("avant rectangle watched", sens1);
-            rectangle= this.is_renctangle_watched(sens1,sens2);
+            rectangle = this.is_renctangle_watched(sens1,sens2);
             console.log("après rectangle watched", sens2);
+            console.log("Rectangle :", rectangle);
             if (rectangle == null) flag = false;
             else maxRectangle = rectangle;
             }
         console.log("MaxRectangle :", maxRectangle);
         return [maxRectangle, incr];
+    }
+
+    calculateEndPoint(){
+        let gate = this.gate;
+        let direction;
+        let current;
+        if (gate.needs_end_point()){
+            if (gate.verticalEntries.length >1){
+                let [min, max] = getMinMaxY(gate.verticalEntries);
+                if (min == gate.horizontalEntries[0][0].y || min == gate.horizontalEntries[0][1].y){
+                    direction = new Point(0,this.size);
+                    current = new Point(gate.verticalEntries[0][0].x, min);
+                }else {
+                    direction = new Point(0,-this.size);
+                    current = new Point(gate.verticalEntries[0][0].x, max);
+                }
+                
+            }else {
+                let [min, max] = getMinMaxX(gate.horizontalEntries);
+                if (min == gate.verticalEntries[0][0].x || min == gate.verticalEntries[0][1].x){
+                    direction = new Point(this.size,0);
+                    current = new Point(min, gate.horizontalEntries[0][0].y);
+                }else {
+                    direction = new Point(-this.size,0);
+                    current = new Point(max, gate.horizontalEntries[0][0].y);
+                }
+            }let previous;
+            while (this.getSquareIndexAtPoint(current) != -1){
+                previous = current;
+                current = additionPoints(current, direction);
+            }return previous;
+        }return null;
     }
 
 }

@@ -66,15 +66,11 @@ function validate() {
     polyomino = poly.getSquares();
     poly.start();
     guards.push(poly.guards[0]);
-    let alpha = poly.calculate_distance_alpha();
-    let beta = poly.calculate_distance_beta();
-    console.log("alpha", alpha);
-    console.log("beta", beta);
     disruptive_solver(poly);
     for (let gate of gates){
         console.log("gate", gate);
         console.log("orientation", gate.orientation);
-        console.log("Parrallel", gate.is_parrallel());
+        console.log("Parrallel", gate.are_doors_parallel());
 
     }
 
