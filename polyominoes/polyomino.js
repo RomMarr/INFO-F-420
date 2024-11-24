@@ -40,6 +40,15 @@ class Polyomino {
         this.generate_gates();
         this.test();
     }
+
+    start2(){
+        this.initialize()
+        this.orderBoundariesFromGuard();
+        this.r_visibility(this.guards[0]);
+        this.generate_subpolyominoes();
+        this.generate_gates();
+        this.test();
+    }
     
     test(){
         console.log("Poly :", this.squares);
@@ -89,7 +98,8 @@ class Polyomino {
                     this.boundaries.push(boundary);
                 }
             }
-        }this.sortBoundaries();
+        }
+        this.sortBoundaries();
     }
 
 
@@ -97,13 +107,13 @@ class Polyomino {
         let sorted = [];
         let current = this.boundaries[0];
         sorted.push(current);
-        let i = 0;
-        while (sorted.length != this.boundaries.length){
+        console.log("boundaries :", this.boundaries);
+        while (sorted.length < this.boundaries.length){
             for (let edge of this.boundaries){
-                if (compare_points(current[1],edge[0])){
+                if (compare_points(current[1],edge[0]) ){
                     sorted.push(edge);
                     current = edge;
-                    i += 1;
+                    console.log("Current :", current);
                 }
             }
         }this.boundaries = sorted;
@@ -138,15 +148,19 @@ class Polyomino {
     }
 
 
-    is_renctangle_watched(p,q){
+    is_renctangle_watched(p,q, adapted){
         let squares_of_rectangle = [];
         let coordinates = getRectangle(p,q);
-        let min_x = coordinates[0];
-        let min_y = coordinates[1];
+        let min_x = coordinates[0] + this.size/2 - 1;
+        let min_y = coordinates[1] +this.size/2 - 1;
         let max_x = coordinates[2];
         let max_y = coordinates[3];
-        for (let x = min_x + this.size/2 - 1; x <= max_x; x+= this.size){
-            for (let y = min_y+ this.size/2 - 1; y <= max_y; y+= this.size){
+        if (!adapted){
+            min_x = coordinates[0];
+            min_y = coordinates[1];
+        }
+        for (let x = min_x; x <= max_x; x+= this.size){
+            for (let y = min_y; y <= max_y; y+= this.size){
                 let index = this.getSquareIndexAtPoint(new Point(x,y)); 
                 if (index == -1){
                     return null;
@@ -162,7 +176,7 @@ class Polyomino {
         let squares_to_check = this.squares.slice();
         while (squares_to_check.length != 0 ) {
             let point = squares_to_check.pop().middle;
-            let squares_of_rectangle = this.is_renctangle_watched(guard.get_position(),point);
+            let squares_of_rectangle = this.is_renctangle_watched(guard.get_position(),point, true);
             if (squares_of_rectangle != null){  // the rectangle is composed of squares that are in the polyomino
                 for (let square of squares_of_rectangle){
                     let index = squares_to_check.indexOf(square);
@@ -247,12 +261,11 @@ class Polyomino {
         for (let sub_polyomino of this.subPolyominoes) {
             let list_edge = [];
             for (let edge of sub_polyomino.boundaries){
-                if (compare_edge_list(edge, view_boundaries )) {
+                if (compare_edge_list(edge, view_boundaries)) {
                     list_edge.push(edge);
                 }
             }
             i += 1;
-            console.log("NUMLER3?", i);
             sub_polyomino.gate = new Gate(list_edge); 
             this.generate_doors(sub_polyomino);
         }
@@ -323,6 +336,7 @@ class Polyomino {
     getSquareIndexAtPoint(point) {
         // Loop through all squares to find one that contains the point
         for (let i = 0; i < this.squares.length; i++) {
+            console.log("square :", this.squares[i]);
             if (this.squares[i].isInside(point.x, point.y)) { // Adjusting for button area
                 return i; // Return the index of the square
             }
@@ -433,22 +447,21 @@ class Polyomino {
     }
 
 
-    getBaseRectangle(){
+    getBaseRectangle(gatePoints){
         let sens1, sens2, incr, maxRectangle;
-        let gatePoints = this.gate.giveIntervalEntry();
-        if (this.gate.isHorizontal()){
+        if (this.gate.isHorizontal){
             sens1 = new Point(gatePoints[0] + 1, gatePoints[2] + 1);
             sens2 = new Point(gatePoints[1] - 1, gatePoints[2] + this.size/2);
-            maxRectangle = this.is_renctangle_watched(sens1,sens2)
+            maxRectangle = this.is_renctangle_watched(sens1,sens2,false)
             if (maxRectangle != null) incr = new Point(0, this.size);
             else {
                 sens1 = new Point(gatePoints[0] + 1,gatePoints[2] - 1);
                 sens2 = new Point(gatePoints[1] - 1,gatePoints[2] - this.size/2);
                 incr = new Point(0, -this.size);
-                maxRectangle = this.is_renctangle_watched(sens1,sens2);
+                maxRectangle = this.is_renctangle_watched(sens1,sens2,false);
             }
         }
-        else {
+        else { 
             sens1 = new Point(gatePoints[2] + 1,gatePoints[0] + 1);
             sens2 = new Point(gatePoints[2] + this.size/2,gatePoints[1] - 1);
             maxRectangle = this.is_renctangle_watched(sens1,sens2)
@@ -457,23 +470,28 @@ class Polyomino {
                 sens1 = new Point(gatePoints[2] - 1, gatePoints[0] + 1);
                 sens2 = new Point(gatePoints[2] - this.size/2,gatePoints[1] - 1);
                 incr = new Point(-this.size, 0);   
-                maxRectangle = this.is_renctangle_watched(sens1,sens2);
+                maxRectangle = this.is_renctangle_watched(sens1,sens2, false);
             }
-            
-        }return sens1, sens2, incr, maxRectangle;
+        }return [sens1, sens2, incr, maxRectangle];
     }
 
-    biggestRectangleAdjacentToGate(){
-        let [sens1, sens2, incr, maxRectangle] = getBaseRectangle();
+    biggestRectangleAdjacentToGate(gatePoints){
+        console.log("Intervals :", gatePoints);
+        if (gatePoints[2] == null) return null;
+        let [sens1, sens2, incr, maxRectangle] = this.getBaseRectangle(gatePoints);
+        console.log("IN biggestRectangleAdjacentToGate :  Sens1 :", sens1, "Sens2 :",sens2, "Incr :", incr, "maxRectangle:", maxRectangle);
         let flag = true;
         let rectangle;
         while(flag){
             sens2 = additionPoints(sens2, incr);
+            console.log("avant rectangle watched", sens1);
             rectangle= this.is_renctangle_watched(sens1,sens2);
+            console.log("après rectangle watched", sens2);
             if (rectangle == null) flag = false;
             else maxRectangle = rectangle;
             }
-        return maxRectangle, incr;
+        console.log("MaxRectangle :", maxRectangle);
+        return [maxRectangle, incr];
     }
 
 }

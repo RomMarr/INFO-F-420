@@ -14,6 +14,6 @@ class Guard{
 
     draw(){
         fill("purple"); // Guard color
-        ellipse(this.position.x, this.position.y, 10, 10); // Draw a blue dot at the center
+        ellipse(this.position.x, this.position.y, 20, 20); // Draw a blue dot at the center
     }
 }
