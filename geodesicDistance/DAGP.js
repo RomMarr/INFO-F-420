@@ -205,14 +205,18 @@ function solveDAGP(polygon){
             if (uncoveredTriangles.length === 0) break; // All triangles are guarded
     
             let subregions = dualGraph.partitionSubregions(uncoveredTriangles);
-            console.log(subregions);
             let guards = [];
             for (let subregion of subregions) {
-                console.log(subregion);
-                let leaves = dualGraph.findTwoLeaves(subregion);
-                let localTriangles = [...subregion].map(node => node.triangle);
-                let Trianglepath = findTrianglePath(leaves[0].triangle, leaves[1].triangle, localTriangles);
-                let caterpillar = dualGraph.constructCaterpillar(Trianglepath, subregion);
+                let trianglePath = [];
+                if (subregion.size == 1) {
+                    trianglePath = [...subregion].map(node => node.triangle);
+                }
+                else{
+                    let leaves = dualGraph.findTwoLeaves(subregion);
+                    let localTriangles = [...subregion].map(node => node.triangle);
+                    trianglePath = findTrianglePath(leaves[0].triangle, leaves[1].triangle, localTriangles);
+                }
+                let caterpillar = dualGraph.constructCaterpillar(trianglePath, subregion);
                 guards = dualGraph.setGuards(caterpillar, guards);
             }
         }
