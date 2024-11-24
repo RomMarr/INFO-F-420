@@ -1,15 +1,16 @@
 class Node{
     constructor(triangle, neighbors) {
-        this.node = triangle;
+        this.triangle = triangle;
         this.neighbors = neighbors;
     }
+    
+    addNeighbor(neighbor){
+        this.neighbors.push(neighbor);
+    }
+
 }
 
-class Edge{
-    constructor(triangle1, triangle2) {
-        this.edge = [triangle1, triangle2];
-    }
-}
+
 
 
 
@@ -17,54 +18,61 @@ class DualGraph {
     constructor(poly) {
         this.polygon = poly;
         this.vertices = [];
-        this.edges = [];
         this.constructGraph(poly.ears);
-        this.caterpillar= null;
-        this.unguardedTriangles = poly.ears;
+        this.unguardedNodes =this.vertices;
     }
 
     constructGraph(triangles) {
+        "Create a list of Node with the triangles and their neighbors"
+        const triangleToNodeMap = new Map(); // dictionnary to map triangle to node
+
         for (let triangle of triangles) {
-            let neighbors = getAdjacentTriangles(triangle, triangles);
-            let node = new Node(triangle, neighbors);
-            neighbors.forEach(neighbor => {this.edges.push(new Edge(triangle, neighbor))});
+            // create the node
+            let node = new Node(triangle, []);
+            triangleToNodeMap.set(triangle, node);
             this.vertices.push(node);
         }
-    }
 
-    findLeaf(){
-        let leafs = [];
-        for(let node of this.vertices){
-            if(node.neighbors.length == 1) leafs.push(node);
+        for (let triangle of triangles) {
+            let neighbors = getAdjacentTriangles(triangle, triangles);
+            let node = triangleToNodeMap.get(triangle);
+            for(let neighbor of neighbors){
+                let neighborNode = triangleToNodeMap.get(neighbor);
+                node.addNeighbor(neighborNode);
+            }
         }
-        return [leafs[0], leafs[1]];
     }
 
-    constructCaterpillar(trianglePath){
+    findTwoLeaves(subregion){
+        let leaves = [];
+        for(let node of subregion){
+            let localNeighbors = node.neighbors.filter(neighbor => subregion.has(neighbor));
+            if(localNeighbors.length == 1) leaves.push(node);
+        }
+        return [leaves[0], leaves[1]];
+    }
+
+    constructCaterpillar(trianglePath, subregion){
         let caterpillar = {
-            path: [], // Triangles du chemin principal
-            feet: new Set(), // Triangles adjacents au chemin
+            path: [],  // path between the two leafs
+            feet: new Set(), // ajacent triangles to the path
         };
         for (let triangle of trianglePath) {
-            let node = this.vertices.find(node => node.node == triangle);
+            let node = this.vertices.find(node => node.triangle == triangle);
             caterpillar.path.push(node);
             for (let neighbor of node.neighbors) {
-                if (!trianglePath.includes(neighbor)) {
+                if (!trianglePath.includes(neighbor.triangle) && subregion.has(neighbor)) {
                     caterpillar.feet.add(neighbor);
                 }
             }
         }
-        this.caterpillar = caterpillar;
+        return caterpillar;
     }
 
 
 
     addVertex(vertex) {
         this.vertices.push(vertex);
-    }
-
-    addEdge(edge) {
-        this.edges.push(edge);
     }
 
     
@@ -82,13 +90,12 @@ class DualGraph {
         return this.polygon.seeEachOther(triangle[0], guard) && this.polygon.seeEachOther(triangle[1], guard) && this.polygon.seeEachOther(triangle[2], guard)
     }
 
-    setGuards(){
-        let guards = [];
+    setGuards(caterpillar, guards){
         let guardedTriangles = new Set();
-        let path = this.caterpillar.path;
+        let path = caterpillar.path;
         for(let node of path){
-            let triangle = node.node;
-            if(!guardedTriangles.has(triangle)){
+            let triangle = node.triangle;
+            if(!guardedTriangles.has(node)){
                 let isGuarded = false;
                 for(let guard of guards){
                     if(this.isGuarded(triangle, guard)){
@@ -101,14 +108,14 @@ class DualGraph {
                     for(let vertex of triangle){
                         if(this.checkDistanceGuards(vertex, guards)){
                             guards.push(vertex);
-                            guardedTriangles.add(triangle);
+                            guardedTriangles.add(node);
                             vertex.color = "red";
                             break;
                         }
                     }
                     for(let neighbor of node.neighbors){
                         if(!guardedTriangles.has(neighbor)){
-                            if(this.isGuarded(neighbor, guards[guards.length-1])){
+                            if(this.isGuarded(neighbor.triangle, guards[guards.length-1])){
                                 guardedTriangles.add(neighbor);
                             }
                         }
@@ -116,18 +123,19 @@ class DualGraph {
                 }
             }
         }
-        for(let foot of this.caterpillar.feet){
+        for(let foot of caterpillar.feet){
             if(!guardedTriangles.has(foot)){
                 let isGuarded = false;
                 for(let guard of guards){
-                    if(this.isGuarded(foot, guard)){
+                    if(this.isGuarded(foot.triangle, guard)){
                         guardedTriangles.add(foot);
                         isGuarded = true;
                         break;
                     }
                 }
                 if(!isGuarded){
-                    for(let vertex of foot){
+                    let triangle = foot.triangle;
+                    for(let vertex of triangle){
                         if(this.checkDistanceGuards(vertex, guards)){
                             guards.push(vertex);
                             vertex.color = "red";
@@ -137,7 +145,7 @@ class DualGraph {
                 }
             }
         }
-        this.unguardedTriangles = this.unguardedTriangles.filter(triangle => !guardedTriangles.has(triangle));
+        this.unguardedNodes = this.unguardedNodes.filter(node => !guardedTriangles.has(node));
         return guards;
     }
     
@@ -145,9 +153,9 @@ class DualGraph {
         let visited = new Set();
         let subregions = [];
 
-        for (let triangle of uncoveredTriangles) {
-            if (!visited.has(triangle)) {
-                let stack = [triangle];
+        for (let node of uncoveredTriangles) {
+            if (!visited.has(node)) {
+                let stack = [node];
                 let component = new Set();
 
                 while (stack.length > 0) {
@@ -156,9 +164,7 @@ class DualGraph {
                         visited.add(current);
                         component.add(current);
 
-                        // Add neighbors from the dual graph
-                        let node = this.vertices.find(node => node.node == current);
-                        for (let neighbor of node.neighbors) {
+                        for (let neighbor of current.neighbors) {
                             if (uncoveredTriangles.includes(neighbor) && !visited.has(neighbor)) {
                                 stack.push(neighbor);
                             }
@@ -173,20 +179,6 @@ class DualGraph {
     }
 
 
-    solveSubregion(subregion) {
-        // Create a new dual graph for the subregion
-        let subregionGraph = new DualGraph(this.polygon);
-        subregionGraph.vertices = this.vertices.filter(node => subregion.has(node.node));
-
-        // Find leaves and construct a caterpillar for the subregion
-        let leaves = subregionGraph.findLeaf();
-        let trianglePath = findTrianglePath(leaves[0].node, leaves[1].node, [...subregion]);
-        subregionGraph.constructCaterpillar(trianglePath);
-
-        // Place guards for the subregion
-        let newGuards = subregionGraph.setGuards();
-        return newGuards;
-    }
 
 
 }
@@ -207,18 +199,21 @@ function solveDAGP(polygon){
             return;
         }
         let dualGraph = new DualGraph(poly);
-        let leafs = dualGraph.findLeaf();
-        let Trianglepath = findTrianglePath(leafs[0].node, leafs[1].node, poly.ears);
-        dualGraph.constructCaterpillar(Trianglepath);
-        let guards= dualGraph.setGuards();
+        let guards = [];
         while (true) {
-            let uncoveredTriangles = dualGraph.unguardedTriangles;
+            let uncoveredTriangles = dualGraph.unguardedNodes;
             if (uncoveredTriangles.length === 0) break; // All triangles are guarded
     
             let subregions = dualGraph.partitionSubregions(uncoveredTriangles);
+            console.log(subregions);
+            let guards = [];
             for (let subregion of subregions) {
-                let newGuards = dualGraph.solveSubregion(subregion);
-                guards.push(...newGuards);
+                console.log(subregion);
+                let leaves = dualGraph.findTwoLeaves(subregion);
+                let localTriangles = [...subregion].map(node => node.triangle);
+                let Trianglepath = findTrianglePath(leaves[0].triangle, leaves[1].triangle, localTriangles);
+                let caterpillar = dualGraph.constructCaterpillar(Trianglepath, subregion);
+                guards = dualGraph.setGuards(caterpillar, guards);
             }
         }
         console.log(guards);
