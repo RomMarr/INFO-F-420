@@ -112,6 +112,20 @@ function compareEdges(edge1, edge2) {
   );
 }
 
+// Compare two edges together and returns true if they are the same
+function compareEdgesNonDirection(edge1, edge2) {
+  return (
+    edge1[0].x === edge2[0].x &&
+    edge1[0].y === edge2[0].y &&
+    edge1[1].x === edge2[1].x &&
+    edge1[1].y === edge2[1].y ||
+    edge1[0].x === edge2[1].x &&
+    edge1[0].y === edge2[1].y &&
+    edge1[1].x === edge2[0].x &&
+    edge1[1].y === edge2[0].y
+  );
+}
+
 function compare_edge_list(edge,list){
   let reverse_edge = [edge[1],edge[0]];
   for (let edge_l of list){
