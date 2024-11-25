@@ -19,7 +19,6 @@ class Gate{
     }
 
     add_doors(doors){
-        console.log('we are in add doors, list of doors :', doors);
         this.doors = doors;
     }
     
@@ -30,7 +29,6 @@ class Gate{
 
     // return true if the entry is horizontal and false if it is vertical and set the isHorizontal attribute
     is_parallel_entry_horizontal(){  
-        console.log("Check is_parallel_entry_horizontal :",this.verticalEntries.length==0 && this.horizontalEntries.length>=1, this.entry);
         if (this.verticalEntries.length==0 && this.horizontalEntries.length>=1) return this.isHorizontal = true;
         return this.isHorizontal = false;
     }
@@ -116,16 +114,6 @@ class Gate{
         }
         this.intervals = [new Point(min,y), new Point(max, y)];
         return [min,max,y];
-    }
-
-    getPoint(incr){
-        if (this.isHorizontal){
-            if (incr.y < 0) {
-                for (let edge of this.entry){
-                    if (edge[0].y == this.intervals[0].y) return edge[0];
-                }
-            }
-        }
     }
 
 

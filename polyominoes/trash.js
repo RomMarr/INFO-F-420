@@ -161,3 +161,13 @@
     
     //     return [min, max, constantValue];
     // }
+
+    // getPoint(incr){
+    //     if (this.isHorizontal){
+    //         if (incr.y < 0) {
+    //             for (let edge of this.entry){
+    //                 if (edge[0].y == this.intervals[0].y) return edge[0];
+    //             }
+    //         }
+    //     }
+    // }

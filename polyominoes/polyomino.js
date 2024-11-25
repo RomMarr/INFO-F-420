@@ -42,7 +42,6 @@ class Polyomino {
     }
 
     start2(){
-        this.initialize()
         this.orderBoundariesFromGuard();
         this.r_visibility(this.guards[0]);
         this.generate_subpolyominoes();
@@ -51,12 +50,7 @@ class Polyomino {
     }
     
     test(){
-        console.log("Poly :", this.squares);
         for (let sub of this.subPolyominoes) {
-            console.log("Sub :", sub);
-            console.log("Doors", sub.gate);
-            console.log("Entries :", sub.gate.entry);
-            console.log("gate :", sub.gate);
             gates.push(sub.gate);
             for (let ent of sub.gate.entry){
                 entriess.push(ent);
@@ -198,7 +192,7 @@ class Polyomino {
     }
 
     generate_subpolyominoes() {
-        let unwatched = this.get_unwatched_squares();
+        let unwatched = this.get_unwatched_squares().slice();
         let remainingBoundaries = this.boundaries.slice(); // Copy of boundaries
     
         // Iterate over boundaries in clockwise order to find connected unwatched squares
@@ -473,22 +467,16 @@ class Polyomino {
 
     // function to get the biggest rectangle adjacent to the gate -> gatepPoints : [min, max, x or y]
     biggestRectangleAdjacentToGate(gatePoints){
-        console.log("Intervals :", gatePoints);
         if (gatePoints[2] == null) return null;
         let [sens1, sens2, incr, maxRectangle] = this.getBaseRectangle(gatePoints);
-        console.log("IN biggestRectangleAdjacentToGate :  Sens1 :", sens1, "Sens2 :",sens2, "Incr :", incr, "maxRectangle:", maxRectangle);
         let flag = true;
         let rectangle;
         while(flag){
             sens2 = additionPoints(sens2, incr);
-            console.log("avant rectangle watched", sens1);
             rectangle = this.is_renctangle_watched(sens1,sens2, false);
-            console.log("après rectangle watched", sens2);
-            console.log("Rectangle :", rectangle);
             if (rectangle == null) flag = false;
             else maxRectangle = rectangle;
             }
-        console.log("MaxRectangle :", maxRectangle);
         return [maxRectangle, incr];
     }
 
@@ -499,23 +487,32 @@ class Polyomino {
         if (gate.needs_end_point()){
             if (gate.verticalEntries.length >=1){
                 let [min, max] = getMinMaxY(gate.verticalEntries);
-                if (min == gate.horizontalEntries[0][0].y || min == gate.horizontalEntries[0][1].y){
-                    direction = new Point(0,this.size);
-                    current = new Point(gate.verticalEntries[0][0].x, min);
-                }else {
-                    direction = new Point(0,-this.size);
-                    current = new Point(gate.verticalEntries[0][0].x, max);
-                }         
-            }else {
-                let [min, max] = getMinMaxX(gate.horizontalEntries);
-                if (min == gate.verticalEntries[0][0].x || min == gate.verticalEntries[0][1].x){
-                    direction = new Point(this.size,0);
-                    current = new Point(min, gate.horizontalEntries[0][0].y);
-                }else {
-                    direction = new Point(-this.size,0);
-                    current = new Point(max, gate.horizontalEntries[0][0].y);
+                for (let door of gate.doors){
+                    if (!(door[0].x == door[1].x)){
+                        if (min == door[0].y){
+                            direction = new Point(0,-this.size);
+                            current = new Point(door[0].x, min);
+                        }else {
+                            direction = new Point(0,this.size);
+                            current = new Point(door[0].x, max);
+                        }   
+                    }
                 }
-            }let previous;
+            }else {
+                let [min, max] = getMinMaxY(gate.verticalEntries);
+                for (let door of gate.doors){
+                    if (!(door[0].y == door[1].y)){
+                        if (min == door[0].x){
+                            direction = new Point(0,-this.size);
+                            current = new Point(min, door[0].y);
+                        }else {
+                            direction = new Point(0,this.size);
+                            current = new Point(max, door[0].y);
+                        }   
+                    }
+                }
+            }
+            let previous;
             while (this.getSquareIndexAtPoint(current) != -1){
                 previous = current;
                 current = additionPoints(current, direction);

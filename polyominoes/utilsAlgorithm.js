@@ -215,11 +215,8 @@ return possibleGuardPos;
 
 
 function getPossibleGuardPos(vertices, rectangleT, increment,gate) {
-    console.log("Vertices :", vertices, "rectangleT :", rectangleT, "Increment :", increment);
     let commonVertices = getCommonVertices(rectangleT, vertices);
-    console.log("CommonVertices :", commonVertices);
-    let unCommonVertices = getUnCommonVertices(vertices, gate.entry);
-    console.log("UncommonVertices :", unCommonVertices);
+    let unCommonVertices = getUnCommonVertices(commonVertices, gate.entry);
     let maximalVertices = getMaximalVertices(unCommonVertices, increment);
     let g = findGuardParallel(maximalVertices, rectangleT,increment, gate);
     //console.log("MaximalVertices :", maximalVertices);    
@@ -236,6 +233,9 @@ function getEndPoint(subPolyomino, gate){
 
 function getLSegment(gate){
     gate.isHorizontal = gate.orientation;
-    if (gate.orientation) return gate.getHorizontal();
+    if (gate.needs_end_point()){
+        gate.isHorizontal = !gate.orientation;
+    } 
+    if (gate.isHorizontal) return gate.getHorizontal();
     else return gate.getVertical();
 }
