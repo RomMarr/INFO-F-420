@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="css/style.css">
+    <title>Dispersive Art Gallery Problem</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.min.js"></script>
+
+  </head>
+  <body>
+    <header>
+        <h1>Dispersive Art Gallery Problem</h1>
+    </header>
+
+    <nav class="navbar">
+        <a class="widget" href="index.html">Report</a>
+
+      </nav>
+
+      
+      <section id="introduction">
+        <h3>Introduction</h3>
+        <p>The art gallery problem is a well known problem in computational geometry. The problem is described as follows : An art gallery wants to hire guardians to keep the gallery safe.
+             They want to hire the smallest number of guards possible but be sure that together they can observe the whole gallery. There must be no blind spot.
+            In a more formal way we can express it in this way : given a polygon \textbf{P} and an integer \textit{n}, give a set of k guards that sees every point of the polygon if it exists.
+            We will address the original problem but our main focus will be on a modified version of it. In this problem we don’t try to minimize the amount of guards but we want to maximize the distance between each guard. Maximizing the distance can be more 
+            efficient for the security of the gallery. In a more formal way, we obtain : given a polygon P and a distance l, give a set of any numbers of guards 
+            such that the distance between each guard is at least l and they see every point of the polygon if it exists. We will also consider that guards are restricted 
+            to being placed only at the vertices of the polygon. This means that while the entire interior must be visible, guards cannot be positioned arbitrarily within the polygon or along its edges. 
+            This limitation focuses the problem on vertex-based visibility.</p>
+      </section>
+      
+
+      <section id= "Art Gallery Problem">
+        <h4> Art Gallery Problem</h4>
+        As mentioned previously, the Art Gallery Problem is a problem where we must find the minimum number of guards that need to be placed in an n-vertex simple polygon such that all points
+of the interior are visible. Two points are visible to each other if the line between them is always inside the polygon. 
+
+This problem is NP-Hard, meaning that it is difficult to find a solution but easy to verify one. It is challenging to find a solution because we need to consider all possible combinations 
+of guard placements to ensure that every point in the polygon is visible. As the number of vertices increases, the number of possible configurations grows exponentially.
+ However, verifying a solution is relatively easy, as it only involves checking that every point is visible to at least one guard.
+In 1973, Václav Chvátal demonstrated in a complicated proof that to guard a simple polygon with n vertices, $\lfloor\frac{n}{3}\rfloor$ guards are always sufficient and sometimes necessary. 
+Later, Steve Fisk offered a simpler proof by using the triangulation of a polygon. Every simple polygon can be triangulated. Then, we can use the vertices from the triangulation to 3-color the graph. Every triangle must have all three colors. 
+The color used the fewest vertices defines a valid set of guards with at most $\lfloor\frac{n}{3}\rfloor$ because the n vertices of the polygon are partitioned with 3 colors.
+Bellow, we have implemented the algorithm that find a set of guards such that all the points are visible using the proof above. Draw a polygon and it will show where and how many guards you need to guard the gallery.
+It has been implemented in the folder polygons. To run it, right click on the index.html file (in your file handler) and open in your browser.
+      </section>
+
+      <section id="Geodistic Distance">
+        <h5>Geodistic Distance </h5> 
+        To run the unfinished version, right click on the index.html file from the geodesicDistance folder (in your file handler) and open in your browser. 
+        %idée : peut etre faire un glossaire pour les mots suivant (sauf si on part du principe que c'est un public informé)?
+
+
+      <section id= "Definition">
+        <h6> Definition</h6>
+        Given two points p,q in a polygon P of n vertices, the geodesic distance is the length of the shortest path between p and q within the polygon. Unlike the Euclidean distance, the geodesic distance doesn't have to be straight. It can be broken lines.\cite{bose_funnel_algorithm_2015}
+
+        If a polygon is convex, then the geodesic distance is equal to the euclidean distance because there are no obstacle to avoid. \cite{cortesi_geodesic_distances_2020}
+
+There are two important concepts in geodesic distances.
+\begin{itemize}[label=\textbullet]
+    \item The Geodesic Center : the Geodesic Center is a point in the polygon that minimizes the maximum geodesic distance to any other point.
+    \item The Geodesic Diameter: It is the maximum geodesic distance between any two points in the polygon.\cite{Abrahamsen2016}
+\end{itemize}
+      </section>
+      <section id="Properties"> 
+        <h6>Properties</h6>
+        \begin{itemize}[label=\textbullet] 
+    \item Given two points p,q in a polygon P, if P is a simple polygon, then it exists a geodesic path between them and it is unique.
+    \item Given two points p,q in a polygon P, the geodesic path between p and q is always a polygonal chain whose vertices (other than the endpoints) are reflex vertices of P
+    \item Given two points p,q in a polygon P, if the geodesic path between p and q is a straight line segment, we say that the points can "see" each other.\cite{aichholzer_geodesic_polygon_2013}
+\end{itemize}
+      </section>
+      </section>
+
+      
+  </body>
+</html>

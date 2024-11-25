@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="css/style.css">
+    <title>Dispersive Art Gallery Problem</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.min.js"></script>
+
+  </head>
+  <body>
+
+    <nav class="navbar">
+        <a class="widget" href="index.html">Introduction</a>
+        <a class="widget" href="ArtGalleryProblem.html">Art Gallery Problem</a>
+        <a class="widget" href="GeodisticDis.html">Geodistic Distance</a>
+        <a class="widget" href="DAGPpolygon.html">Dispersive Art Gallery Distance in polygon</a>
+        <a class="widget" href="DAGPpolimonies.html">Disruptive art gallery problem in polyominoes</a>   
+        <a class="widget" href="WorstCase.html">WorstCase</a>
+        <a class="widget" href="Contributors.html">Contributors</a>
+        <a class="widget" href="Bibliography.html">Bibliography</a>
+
+        
+      </nav>
+
+    <header>
+        <h1>Dispersive Art Gallery Problem</h1>
+    </header>
+
+      
+    <section id= "Art Gallery Problem">
+        <h2> Art Gallery Problem</h2>
+        <p> As mentioned previously, <strong> Art Gallery Problem </strong> is a problem where we must find the minimum number of guards that need to be placed in an n-vertex simple polygon such that all points
+        of the interior are visible. Two points are visible to each other if the line between them is always inside the polygon. </p>
+
+        <p>This problem is NP-Hard, meaning that it is difficult to find a solution but easy to verify one. It is challenging to find a solution because we need to consider all possible combinations 
+        of guard placements to ensure that every point in the polygon is visible. As the number of vertices increases, the number of possible configurations grows exponentially.
+        However, verifying a solution is relatively easy, as it only involves checking that every point is visible to at least one guard.</p>
+
+    <p>In 1973, Václav Chvátal demonstrated in a complicated proof that to guard a simple polygon with n vertices, &lfloor; n / 3 &rfloor; guards are always sufficient and sometimes necessary. 
+    Later, Steve Fisk offered a simpler proof by using the triangulation of a polygon. Every simple polygon can be triangulated. Then, we can use the vertices from the triangulation to 3-color the graph. Every triangle must have all three colors. </p>
+    <p>The color used the fewest vertices defines a valid set of guards with at most &lfloor; n / 3 &rfloor; because the n vertices of the polygon are partitioned with 3 colors.</p>
+    <p>Bellow, we have implemented the algorithm that find a set of guards such that all the points are visible using the proof above. Draw a polygon and it will show where and how many guards you need to guard the gallery.</p>
+    <p>It has been implemented in the folder polygons. To run it, right click on the index.html file (in your file handler) and open in your browser. </p>
+      </section>
+  </body>
+</html>

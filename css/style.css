@@ -1,0 +1,254 @@
+:root {
+    --canvas-width: 750px;
+    --text-width: calc(var(--canvas-width) - 5px);
+    --image-max-width: 100%; /* Maximum width of images */
+    --image-max-height: 400px; /* Optional max height for images */
+  }
+  
+  button{
+    align-items: center;
+    text-align: justify;
+    text-justify: inter-word;
+    appearance: none;
+    background-color: #fff;
+    border: 1px solid #dbdbdb;
+    border-radius: .375em;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: #363636;
+    cursor: pointer;
+    display: inline-flex;
+    font-family: "Computer Modern Serif",BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 1rem;
+    height: 2.5em;
+    justify-content: center;
+    line-height: 1.5;
+    padding: calc(.5em - 1px) 1em;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: top;
+    white-space: nowrap;
+  
+  
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  button:hover {
+    background-color: #3a4146;
+    color: #fff;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    line-height: 1.6;
+    background-color: #63a8c9; /* Bleu clair */
+    animation: glow 3s infinite; /* Animation appliquée */
+  }
+  
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 10px #3a86ff, 0 0 20px #3a86ff;
+    }
+    50% {
+      box-shadow: 0 0 20px #8338ec, 0 0 40px #8338ec;
+    }
+    100% {
+      box-shadow: 0 0 10px #3a86ff, 0 0 20px #3a86ff;
+    }
+  }
+  
+
+  .navbar {
+    display: flex;
+    justify-content: center; /* Centre les widgets */
+    align-items: center;
+    gap: 20px; /* Espace entre les widgets */
+    padding: 10px 20px;
+    background-color: #14213d; /* Couleur de la barre */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Légère ombre */
+    margin-bottom: 20px;
+  }
+  .widget {
+    padding: 10px 20px;
+    background-color: #e5e5e5; /* Fond clair */
+    color: #000000; /* Texte sombre */
+    border-radius: 10px; /* Coins arrondis */
+    text-decoration: none; /* Supprime le soulignement */
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Ombre douce */
+    transition: background-color 0.3s, color 0.3s; /* Effet de transition */
+  }
+
+  .widget:hover {
+    background-color: #fca311; /* Couleur au survol */
+    color: #ffffff; /* Texte clair au survol */
+  }
+  
+  
+  h2, h3, h4, h5, h6{
+    text-decoration: underline;
+    text-decoration-color: #d3b9b9;
+  }
+
+  section h6{
+    margin-left: 20px;
+    margin-bottom: 5px; /* Réduit l'espace sous le titre */
+    text-decoration: underline;
+    text-decoration-color: #0c0c0c;
+    font-size: 1.2em; /* Augmenter la taille de la police */
+  
+
+  }
+
+  section h6 ~ * {
+    margin-left: 60px; /* Décale le texte sous le titre */
+  }
+
+
+  
+  
+  header, footer {
+    margin-top: 20px; /* Espace au-dessus du header */
+    margin-bottom: 20px; /* Espace en dessous du header */
+    width: var(--canvas-width);
+    max-width: 1200px;
+    text-align: center;
+    padding: 10px;
+    background-color: #948aa3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for separation */
+  }
+  
+  #Authors, #References {
+    font-size: 0.9em; /* Slightly smaller font size */
+    line-height: 1.5; /* Adjusted line height for readability */
+  }
+  
+  canvas {
+    border: 2px solid #ccc; /* Add a subtle border */
+    background-color: #f9f9f9; /* Light background for contrast */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Drop shadow for depth */
+    display: block; /* Prevent inline styling issues */
+    margin: 20px auto; /* Center canvas with spacing */
+  }
+  
+  main {
+    flex: 1;
+    width: var(--text-width); /* Match canvas width */
+    padding: 20px;
+    box-sizing: border-box; /* Ensures padding doesn't overflow the width */
+  }
+  
+  section {
+    width: 100%;
+    max-width: var(--canvas-width);
+    margin: 10px auto; /* Center sections and add spacing */
+    padding: 10px;
+    box-sizing: border-box; /* Include padding in width calculation */
+  }
+  
+  h1 {
+    margin: 10px 0;
+  }
+  
+  h2 {
+    margin: 10px 0;
+    text-align: left; /* Align section titles to the left */
+  }
+  
+  ul {
+    margin: 10px 20px; /* Add space around lists */
+    padding: 0;
+    list-style-position: inside; /* Keep list items aligned with text */
+  }
+  
+  li {
+    margin-bottom: 8px; /* Add spacing between list items */
+  }
+  
+  p {
+    margin: 20px 0;
+    text-align: justify;
+    max-width: var(--text-width);
+    word-wrap: break-word; /* Prevent text from overflowing */
+  }
+  
+  img {
+    max-width: var(--image-max-width); /* Images scale to fit container */
+    max-height: var(--image-max-height); /* Restrict height (optional) */
+    width: auto; /* Maintain aspect ratio */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Center block images by default */
+    margin: 20px auto; /* Add space around images */
+    border: 2px solid #ccc; /* Optional border for images */
+    border-radius: 8px; /* Optional rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for images */
+  }
+  
+  figcaption {
+    background-color: white;
+    color: black;
+    font-style: italic;
+    padding: 2px;
+    text-align: center;
+  }
+  
+  #zone-one, #zone-two, #zone-three {
+    width: var(--canvas-width);
+    margin: 20px auto;
+  }
+  
+  
+
+  
+  @media (max-width: 600px) {
+    :root {
+      --canvas-width: 95%; /* Reduce width for smaller screens */
+      --text-width: calc(var(--canvas-width) - 10px);
+    }
+  
+    main {
+      width: 100%;
+      padding: 10px;
+    }
+  
+    p, ul, section {
+      width: 100%;
+      padding: 0 5%; /* Add padding inside sections for small screens */
+    }
+  
+    h2 {
+      font-size: 1.2em; /* Adjust heading sizes for smaller screens */
+      text-align: left; /* Maintain left alignment for smaller screens */
+    }
+  
+    img {
+      max-height: 300px; /* Adjust image height for smaller screens */
+    }
+  
+    button {
+      font-size: 1.125rem;
+      padding: 1rem 2rem;
+    }
+  
+  }
+
+ 
+
+  .toc h1, h2,  h3, h4, h5{
+    text-align: center;
+  }
+
+ 
+

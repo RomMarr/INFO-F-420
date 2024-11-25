@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="css/style.css">
+    <title>Dispersive Art Gallery Problem</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.min.js"></script>
+
+  </head>
+  <body>
+
+    <nav class="navbar">
+        <a class="widget" href="index.html">Introduction</a>
+        <a class="widget" href="ArtGalleryProblem.html">Art Gallery Problem</a>
+        <a class="widget" href="GeodisticDis.html">Geodistic Distance</a>
+        <a class="widget" href="DAGPpolygon.html">Dispersive Art Gallery Distance in polygon</a>
+        <a class="widget" href="DAGPpolimonies.html">Disruptive art gallery problem in polyominoes</a>   
+        <a class="widget" href="WorstCase.html">WorstCase</a>
+        <a class="widget" href="Contributors.html">Contributors</a>
+        <a class="widget" href="Bibliography.html">Bibliography</a>
+
+        
+      </nav>
+
+    <header>
+        <h1>Dispersive Art Gallery Problem</h1>
+    </header>
+
+
+    <section id="Geodistic Distance">
+        <h2>Geodistic Distance </h2> 
+
+
+      <section id= "Definition">
+        <h6> Definition: </h6>
+        <p>Given two points p,q in a polygon P of n vertices, the geodesic distance is the length of the shortest path between p and q within the polygon. 
+            Unlike the Euclidean distance, the geodesic distance doesn't have to be straight. It can be broken lines.</p>
+            
+        <p>If a polygon is convex, then the geodesic distance is equal to the euclidean distance because there are no obstacle to avoid.</p>
+
+
+
+        <p><i>There are two important concepts in geodesic distances:</i> </p>
+        <ol>
+        <li> <strong> Geodesic Center</strong> : the Geodesic Center is a point in the polygon that minimizes the maximum geodesic distance to any other point.</li>
+      <li><strong> Geodesic Diameter</strong>: It is the maximum geodesic distance between any two points in the polygon.</li>
+      </ol>
+      </section>
+
+      <section id="Properties"> 
+        <h6>Properties: </h6>
+        <ol>
+            <li> Given two points p,q in a polygon P, if P is a simple polygon, then it exists a geodesic path between them and it is unique.</li>
+          <li>Given two points p,q in a polygon P, the geodesic path between p and q is always a polygonal chain whose vertices (other than the endpoints) are reflex vertices of P.</li>
+            <li>Given two points p,q in a polygon P, if the geodesic path between p and q is a straight line segment, we say that the points can "see" each other. </li>
+          </ol>
+      </section>
+
+      <section id="The funnel algorithm"> 
+        <h6>The funnel algorithm: </h6>
+        <p>The Funnel Algorithm is an linear algorithm that finds the shortest path between p and q in a polygon by computing the funnel between them. </p>
+
+    <p><i>Here are the step of the algorithm :</i> </p>
+        <ol>
+        <li> Triangulate the polygon. It can be done in linear tine.</li>
+      <li> Find the &tau;(p) et &tau;(q)(the triangle in which p and q are contained).</li>
+      <li> Find the &tau;(&pi;(p,q)) (the set of diagonals that is crossed by the path between p and q) and sort them. (the i-th diagonal is the i-th diagonal we encounter on the path.)</li>
+      <li> Initialize the funnel the first F_1 = \(&alpha;_1, p, &beta;_1\)  where &alpha;_1 and &beta;_1 are the vertices of the first diagonal intersected by the path. This funnel represents the shortest path from p to the first diagonal.</li>
+      <li> For each subsequent triangle i along the path, form F_i by adjusting the vertices to keep the shortest path from p to the current diagonal. </li>
+      <li> Iterate until we reach q.</li>
+      </ol>
+      <p>It also exists approximation algorithms but we won't discuss them. </p>
+      </section>
+      </section>
+
+      
+  </body>
+</html>
