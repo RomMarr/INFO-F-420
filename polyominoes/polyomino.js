@@ -192,11 +192,12 @@ class Polyomino {
     }
 
     generate_subpolyominoes() {
-        let unwatched = this.get_unwatched_squares().slice();
+        let unwatched = this.get_unwatched_squares();
         let remainingBoundaries = this.boundaries.slice(); // Copy of boundaries
     
         // Iterate over boundaries in clockwise order to find connected unwatched squares
         while (remainingBoundaries.length > 0) {
+            console.log("Unwatched squares", unwatched);
             let boundaryEdge = remainingBoundaries.shift(); // Take the next clockwise edge
             let startPoint = boundaryEdge[0];
             let endPoint = boundaryEdge[1];
@@ -209,7 +210,7 @@ class Polyomino {
                         connectedSquare = square;
                         break;
                     }
-                }
+                }}
     
             if (connectedSquare) {
                 // Find all squares connected to this one
@@ -221,7 +222,7 @@ class Polyomino {
                 // Remove connected squares from the unwatched list
                 for (let squareUsed of squaresConnected) {
                     let index = unwatched.indexOf(squareUsed);
-                    if (index !== -1) unwatched.splice(index, 1);
+                    if (index != -1) unwatched.splice(index, 1);
                 }
     
                 // Remove corresponding boundaries related to this subpolyomino
@@ -242,7 +243,6 @@ class Polyomino {
             }
         }
     }
-}
 
     
 
