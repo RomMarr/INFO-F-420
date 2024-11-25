@@ -1,6 +1,13 @@
-function l1geodesicDistance(p1, p2, polyomino) {
-    let path = bfsL1GeodesicDistance(p1, p2, polyomino);
-    let distance = path.length;
+function l1geodesicDistance() {
+    resultMessage = ""; // Update message
+    validateClick = true;
+    end = true;
+    polyominoObject = new Polyomino(polyomino);
+    if (!polyominoObject.isValid()) {
+        resultMessage = "Polyomino: invalid "; 
+    }else{ resultMessage = "Polyomino: valid"; }
+    polyomino = polyominoObject.getSquares();
+    calculateClick = true;
 }
 
 
@@ -29,7 +36,7 @@ function bfsL1GeodesicDistance(p1, p2, polyomino) {
         for (let neighbor of neighbors) {
             if (!visited.has(neighbor)) {
                 visited.add(neighbor);
-                queue.push({ s: neighbor, path: path.push(neighbor) });
+                queue.push({ s: neighbor, path:[...path, neighbor] });
             }
         }
     }
