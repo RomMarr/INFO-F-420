@@ -22,6 +22,7 @@ class Square {
         this.corners = [this.leftUpPt, this.rightUpPt, this.rightDownPt, this.leftDownPt]; // Array of all corners
     }
 
+    // Draw the square
   draw() {
       // Draw the square with default color white and black edges
       fill(this.active ? 'red' : 'white'); // Fill color changes to red when active
@@ -30,10 +31,12 @@ class Square {
       rect(this.x, this.y, this.size, this.size);
   }
 
+  // Change the active state of the square
   toggle() {
       this.active = !this.active; // Toggle the active state
   }
 
+  // Check if a point is inside the
   isInside(px, py) {
       return px >= this.x && px <= this.x + this.size && py >= this.y && py <= this.y + this.size;
   }

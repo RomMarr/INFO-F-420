@@ -1,55 +1,62 @@
 // Define the Polyomino Class
 class Polyomino {
     constructor(squares) {
-        this.squares = squares;
+        this.squares = squares; // squares composing the polyomino
         this.size = 0;
-        this.boundaries =[]; 
-        this.vertices = [];
-        this.guards = [];
+        this.boundaries =[]; // edges of the boundaries of the polyomino
+        this.vertices = [];  // vertices of edges of the polyomino
+        this.guards = [];  // guards of the polyomino
         this.subPolyominoes = [];
         this.valid = this.isValid();
         this.gate;
     }
 
+    // Getter of the squares
     getSquares(){
         return this.squares
     }
 
+    // Setter of the squares
     setSquares(squares){
         this.squares = squares;
     }
 
-    get_nb_sub_polyominoes(){
+    // Getter of the number of subPolyominoes
+    getNbSubPolyominoes(){
         return this.subPolyominoes.length;
     }
     
+    // Check if the polyomino is valid
     isValid(){
-        if (this.areSquaresConnected()){
-            this.squares = this.getActiveSquares();
+        if (this.areSquaresConnected()){ // Check if the squares are connected
+            this.squares = this.getActiveSquares(); 
             this.size = this.squares[0].size;
             return true;
         }return false;
     }
 
+    // Function to start the polyomino and generate its information
     start(){
-        this.initialize()
+        this.initialize() // Get the boundaries and the vertices
         this.place_first_guard();
-        this.orderBoundariesFromGuard();
-        this.r_visibility(this.guards[0]);
+        this.orderBoundariesFromGuard(); // Order the boundaries from the guard
+        this.r_visibility(this.guards[0]); // Get the R-visibility of the guard
         this.generate_subpolyominoes();
         this.generate_gates();
-        this.test();
+        this.toDraw();
     }
 
+    // Function to start the subPolyomino and generate its information (first guard is not applicable here)
     start2(){
         this.orderBoundariesFromGuard();
         this.r_visibility(this.guards[0]);
         this.generate_subpolyominoes();
         this.generate_gates();
-        this.test();
+        this.toDraw();
     }
     
-    test(){
+    // set the mandatory elements to draw the polyomino and the gates
+    toDraw(){
         for (let sub of this.subPolyominoes) {
             gates.push(sub.gate);
             for (let ent of sub.gate.entry){
@@ -61,12 +68,13 @@ class Polyomino {
         }
     }
     
+    // Initialize the polyomino by getting the boundaries and the vertices
     initialize(){
         this.get_boundaries();
         this.get_vertices();
     }
 
-    
+    // Get the boundaries of the polyomino
     get_boundaries() {
         for (let square of this.squares) {
             if (square.active) {
@@ -96,14 +104,14 @@ class Polyomino {
         this.sortBoundaries();
     }
 
-
+    // Sort the boundaries of the polyomino
     sortBoundaries(){
         let sorted = [];
         let current = this.boundaries[0];
         sorted.push(current);
-        while (sorted.length < this.boundaries.length){
+        while (sorted.length < this.boundaries.length){ // Sort the boundaries in clockwise order
             for (let edge of this.boundaries){
-                if (compare_points(current[1],edge[0]) ){
+                if (comparePoints(current[1],edge[0]) ){
                     sorted.push(edge);
                     current = edge;
                 }
@@ -111,18 +119,20 @@ class Polyomino {
         }this.boundaries = sorted;
     }
 
+    // Order the boundaries from the guard position 
     orderBoundariesFromGuard(){
             let rotatedList = [];
             let startIndex = this.find_edge_starting_with_guard();
-            for (let i = startIndex; i < this.boundaries.length; i++) {
+            for (let i = startIndex; i < this.boundaries.length; i++) { // Order the boundaries from the guard
                 rotatedList.push(this.boundaries[i]);
             }
-            for (let i = 0; i < startIndex; i++) {
+            for (let i = 0; i < startIndex; i++) { // Order the boundaries from the guard
                 rotatedList.push(this.boundaries[i]);
             }
-           this.boundaries = rotatedList;
+           this.boundaries = rotatedList; // Update the boundaries
         }
 
+    // Get the vertices of the polyomino
     get_vertices(){
         for (let edge of this.boundaries){
             for (let point of edge){
@@ -133,6 +143,7 @@ class Polyomino {
         }
     } 
 
+    // Place the first guard randomly on one of the vertices
     place_first_guard(){
         let random_vertex = this.vertices[floor(Math.random() * this.vertices.length)];
         let guard = new Guard(random_vertex);
@@ -167,7 +178,7 @@ class Polyomino {
         let squares_to_check = this.squares.slice();
         while (squares_to_check.length != 0 ) {
             let point = squares_to_check.pop().middle;
-            let squares_of_rectangle = this.is_renctangle_watched(guard.get_position(),point, true);
+            let squares_of_rectangle = this.is_renctangle_watched(guard.getPosition(),point, true);
             if (squares_of_rectangle != null){  // the rectangle is composed of squares that are in the polyomino
                 for (let square of squares_of_rectangle){
                     let index = squares_to_check.indexOf(square);
@@ -181,7 +192,7 @@ class Polyomino {
         }
         let guard_Rview = new Polyomino(guard_visibility)
         guard_Rview.initialize();
-        guard.add_visibility(guard_Rview);
+        guard.addVisibility(guard_Rview);
     }
 
     get_unwatched_squares(){
@@ -197,7 +208,6 @@ class Polyomino {
     
         // Iterate over boundaries in clockwise order to find connected unwatched squares
         while (remainingBoundaries.length > 0) {
-            console.log("Unwatched squares", unwatched);
             let boundaryEdge = remainingBoundaries.shift(); // Take the next clockwise edge
             let startPoint = boundaryEdge[0];
             let endPoint = boundaryEdge[1];
@@ -206,7 +216,7 @@ class Polyomino {
             let connectedSquare = null;
             for (let square of unwatched) {
                 for (let corner of square.corners) {
-                    if (compare_points(startPoint, corner) || compare_points(endPoint, corner)) {
+                    if (comparePoints(startPoint, corner) || comparePoints(endPoint, corner)) {
                         connectedSquare = square;
                         break;
                     }
@@ -252,7 +262,7 @@ class Polyomino {
         for (let sub_polyomino of this.subPolyominoes) {
             let list_edge = [];
             for (let edge of sub_polyomino.boundaries){
-                if (compare_edge_list(edge, view_boundaries)) {
+                if (compareEdgeList(edge, view_boundaries)) {
                     list_edge.push(edge);
                 }
             }
@@ -266,12 +276,12 @@ class Polyomino {
         let doors = [];
         for (let edge_polyomino of this.boundaries) {
             for (let edge_entry of sub_polyomino.gate.entry) {
-                if (edge_adjacent(edge_polyomino,edge_entry) && !compare_edge_list(edge_polyomino,sub_polyomino.boundaries)) {
+                if (edgeAdjacent(edge_polyomino,edge_entry) && !compareEdgeList(edge_polyomino,sub_polyomino.boundaries)) {
                     doors.push(edge_polyomino);
                 }
             }
         }
-        sub_polyomino.gate.add_doors(doors);
+        sub_polyomino.gate.addDoors(doors);
     }
 
     get_edges(square) {
@@ -289,7 +299,7 @@ class Polyomino {
         for (let edge of this.boundaries){
             for (let sub of this.subPolyominoes){
                 let gate = sub.gate;
-                if (is_point_in_edges(edge[1],gate.entry)) {
+                if (isPointInEdges(edge[1],gate.entry)) {
                     return distance;
                 }
                 }
@@ -304,7 +314,7 @@ class Polyomino {
         for (let indice = this.boundaries.length - 1; indice >= 0; indice--) {
             for (let sub of this.subPolyominoes){
                 let gate = sub.gate;
-                if (is_point_in_edges(this.boundaries[indice][0],gate.entry)) {
+                if (isPointInEdges(this.boundaries[indice][0],gate.entry)) {
                     return distance;
                 }
             }
@@ -316,7 +326,7 @@ class Polyomino {
     find_edge_starting_with_guard() {
         let i = 0;
         while (i <= this.boundaries.length) {
-            if (compare_points(this.guards[0].get_position(),this.boundaries[i][0])) {
+            if (comparePoints(this.guards[0].getPosition(),this.boundaries[i][0])) {
                 return i;
             }
             i+=1;
@@ -395,7 +405,6 @@ class Polyomino {
         const nbActiveSquares = this.getNbActiveSquares();
         if (nbActiveSquares === 0) return false; // No active squares to check
         if (nbActiveSquares === 1) return true;  // Only one square, it's trivially connected
-    
         // Find the first active square as the starting point
         let startSquare = null;
         for (let square of this.squares) {
@@ -406,22 +415,17 @@ class Polyomino {
         }
         // If no active square is found (shouldn't happen due to previous checks)
         if (!startSquare) return false;
-    
         // Perform BFS/DFS to count reachable active squares
         const visited = new Set();
         const stack = [startSquare];
         let count = 0;
-    
         while (stack.length > 0) {
             const square = stack.pop();
-    
             // Use stringified coordinates as a unique key for each square
             const key = `${square.x},${square.y}`;
             if (visited.has(key)) continue;
-            
             visited.add(key);
             count++;
-    
             // Get active neighbors and add them to the stack
             const neighbors = this.getDirectNeighbors(square, this.squares);
             for (let neighbor of neighbors) {
@@ -431,9 +435,7 @@ class Polyomino {
                 }
             }
         }
-    
-        // If we've reached all active squares, they're connected
-        return count === nbActiveSquares;
+        return count === nbActiveSquares;  // If we've reached all active squares, they're connected
     }
 
 
@@ -479,50 +481,4 @@ class Polyomino {
             }
         return [maxRectangle, incr];
     }
-
-    calculateEndPoint(){
-        let gate = this.gate;
-        let direction;
-        let current;
-        if (gate.needs_end_point()){
-            if (gate.verticalEntries.length >=1){
-                let [min, max] = getMinMaxY(gate.verticalEntries);
-                for (let door of gate.doors){
-                    if (!(door[0].x == door[1].x)){
-                        if (min == door[0].y){
-                            direction = new Point(0,-this.size);
-                            current = new Point(door[0].x, min);
-                        }else {
-                            direction = new Point(0,this.size);
-                            current = new Point(door[0].x, max);
-                        }   
-                    }
-                }
-            }else {
-                let [min, max] = getMinMaxY(gate.verticalEntries);
-                for (let door of gate.doors){
-                    if (!(door[0].y == door[1].y)){
-                        if (min == door[0].x){
-                            direction = new Point(0,-this.size);
-                            current = new Point(min, door[0].y);
-                        }else {
-                            direction = new Point(0,this.size);
-                            current = new Point(max, door[0].y);
-                        }   
-                    }
-                }
-            }
-            let previous;
-            while (this.getSquareIndexAtPoint(current) != -1){
-                previous = current;
-                current = additionPoints(current, direction);
-            }return previous;
-        }return null;
-    }
-
 }
-
-
-
-
-
