@@ -2,7 +2,7 @@
 function compute_gates_orientation(polyomino) {
     let k = polyomino.get_nb_sub_polyominoes();
     if (k == 0){
-        return polyomino.guards;
+        return true;
     }
     else if (k==1){
         console.log("k=1");
@@ -64,9 +64,7 @@ function compute_gates_orientation(polyomino) {
             gate.change_orientation(false);
             indice += 1;
         }
-    }
-
-
+    }return false;
 }
 
 function getCommonVertices(squares, vertices){
@@ -97,6 +95,60 @@ function getUnCommonVertices(vertices, edges) {
     return unCommonVertices;
 }
 
+
+function findGuardParallel(unCommonVertices, rectangleT, increment, gate) {
+    let entry = gate.entry;
+    let isClockwise = gate.orientation;
+
+    // Calculate boundaries of rectangleT
+    const bottom = Math.min(...rectangleT.map(square => square.y));
+    const top = Math.max(...rectangleT.map(square => square.y + square.size));
+    const left = Math.min(...rectangleT.map(square => square.x));
+    const right = Math.max(...rectangleT.map(square => square.x + square.size));
+    // Adjust boundaries based on the increment direction
+    let g = null;
+
+    // Determine Gi's orientation (horizontal or vertical entry)
+    let isHorizontal = gate.is_parallel_entry_horizontal();
+
+    if (isHorizontal) {
+        // If the entry is horizontal, we check the x-coordinate (left-right comparison)
+        if (increment.y < 0) {
+            // Moving left, so reverse the comparison for x (we'll check if x < adjustedLeft)
+            g = unCommonVertices.find(vertex =>
+                !is_point_in_edges(vertex, entry) && // Ensure the vertex is not on entry
+                (isClockwise ? vertex.x > left : vertex.x < right)
+            );
+        } else {
+            // Moving right, so we check the normal comparison for x (vertex.x > adjustedLeft)
+            g = unCommonVertices.find(vertex =>
+                !is_point_in_edges(vertex, entry) && // Ensure the vertex is not on entry
+                (isClockwise ? vertex.x < right : vertex.x > left)
+            );
+        }
+    } else {
+        // If the entry is vertical, we check the y-coordinate (top-bottom comparison)
+        if (increment.x < 0) {
+            // Moving downward, reverse the comparison for y (we'll check if y < adjustedTop)
+            g = unCommonVertices.find(vertex =>
+                !is_point_in_edges(vertex, entry) && // Ensure the vertex is not on entry
+                (isClockwise ? vertex.y < top : vertex.y > bottom)
+            );
+        } else {
+            // Moving upward, check the normal comparison for y (vertex.y > adjustedBottom)
+            g = unCommonVertices.find(vertex =>
+                !is_point_in_edges(vertex, entry) && // Ensure the vertex is not on entry
+                (isClockwise ? vertex.y > bottom : vertex.y < top)
+            );
+        }
+    }
+
+    // If no valid guard is found, throw an error
+    if (!g) {
+        throw new Error("No valid guard found!");
+    }
+    return g;
+}
 function getMaximalVertices(vertices, increment) {
     let verticesOfMax =[];
     let max = -Infinity;
@@ -158,16 +210,32 @@ function calculatePossibleGuardPos(vertices,increment,gate) {
 
         }
 }
-return possibleGuardPos;}
+return possibleGuardPos;
+}
 
 
-function getPossibleGuardPos(vertices, rectangle, increment,gate) {
-    console.log("Vertices :", vertices);
-    let commonVertices = getCommonVertices(rectangle, vertices);
+function getPossibleGuardPos(vertices, rectangleT, increment,gate) {
+    console.log("Vertices :", vertices, "rectangleT :", rectangleT, "Increment :", increment);
+    let commonVertices = getCommonVertices(rectangleT, vertices);
     console.log("CommonVertices :", commonVertices);
-    let unCommonVertices = getUnCommonVertices(commonVertices, gate.entry);
+    let unCommonVertices = getUnCommonVertices(vertices, gate.entry);
     console.log("UncommonVertices :", unCommonVertices);
     let maximalVertices = getMaximalVertices(unCommonVertices, increment);
-    console.log("MaximalVertices :", maximalVertices);    
-    return calculatePossibleGuardPos(maximalVertices,increment, gate);
+    let g = findGuardParallel(maximalVertices, rectangleT,increment, gate);
+    //console.log("MaximalVertices :", maximalVertices);    
+    return g;//calculatePossibleGuardPos(maximalVertices,increment, gate);
+}
+
+
+function getEndPoint(subPolyomino, gate){
+    if (gate.needs_end_point()){
+        endPoint = subPolyomino.calculateEndPoint();
+        return endPoint;
+    } return null;
+}
+
+function getLSegment(gate){
+    gate.isHorizontal = gate.orientation;
+    if (gate.orientation) return gate.getHorizontal();
+    else return gate.getVertical();
 }

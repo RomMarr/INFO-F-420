@@ -1,23 +1,45 @@
 function disruptive_solver(polyomino){
-    compute_gates_orientation(polyomino);
+    if (compute_gates_orientation(polyomino)) return polyomino.guards;
     for (let sub of polyomino.subPolyominoes){
         console.log("Sub : ",sub);
         let gate = sub.gate;
         if (gate.are_doors_parallel()){ 
+            console.log("gate are parallel");
             gate.is_parallel_entry_horizontal(); // define if the entry is horizontal or vertical
             let [rectangleT, increment] = sub.biggestRectangleAdjacentToGate(gate.giveIntervalEntry());
-            let possibleGuardPos = getPossibleGuardPos(sub.vertices, rectangleT, increment,sub.gate)
-            console.log("PossibleGuardPos :", possibleGuardPos);
-            sub.guards.push( new Guard(possibleGuardPos[0]));
-            guards.push(new Guard(possibleGuardPos[0]));
+            let guardPos = getPossibleGuardPos(sub.vertices, rectangleT, increment,gate);
+            sub.guards.push( new Guard(guardPos));
+            guards.push(new Guard(guardPos));
+            sub.start2();
+            disruptive_solver(sub);
+        }else { // gates are orthogonals
+            console.log("gate are parallel");
+            let guardPos = getEndPoint(sub, gate);
+            if (guardPos == null){
+                let [rectangleT, increment] = sub.biggestRectangleAdjacentToGate(getLSegment(gate));
+                guardPos = getPossibleGuardPos(sub.vertices, rectangleT, increment,gate);
+            }            
+            sub.guards.push( new Guard(guardPos));
+            guards.push(new Guard(guardPos));
             //sub.start2();
-            console.log("disruptive_solver(sub)");
-        }else { // gates are orthogonals 
+            //disruptive_solver(sub);
+
+        }
+        //sub.guards.push( new Guard(guardPos));
+        // guards.push(new Guard(guardPos));
+        // sub.start2();
+        // disruptive_solver(sub);
+    }
+}
+
+/**
+ *  // gates are orthogonals 
+            console.log("gate are orthogonals");
             let guardOfSub;
             if (!sub.gate.orientation){ // gate is counter-clockwise
                 gate.ishorizontal = false;
                 if (gate.getVertical()[2] == null) { 
-                    console.log("gate Vertical == null");
+                    //console.log("gate Vertical == null");
                     let guardPos;
                     let startPoint = gate.entry[0][0];
                     let flag = true;
@@ -102,7 +124,5 @@ function disruptive_solver(polyomino){
             guards.push(guardOfSub);
             //sub.start2();
             console.log("disruptive_solver(sub)");
-        }
-    }
-}
-
+        
+ */

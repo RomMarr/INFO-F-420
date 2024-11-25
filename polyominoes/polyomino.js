@@ -164,7 +164,6 @@ class Polyomino {
                     return null;
                 } squares_of_rectangle.push(this.squares[index]);
             }
-            
         }
         return squares_of_rectangle;
     }
@@ -472,6 +471,7 @@ class Polyomino {
         }return [sens1, sens2, incr, maxRectangle];
     }
 
+    // function to get the biggest rectangle adjacent to the gate -> gatepPoints : [min, max, x or y]
     biggestRectangleAdjacentToGate(gatePoints){
         console.log("Intervals :", gatePoints);
         if (gatePoints[2] == null) return null;
@@ -482,7 +482,7 @@ class Polyomino {
         while(flag){
             sens2 = additionPoints(sens2, incr);
             console.log("avant rectangle watched", sens1);
-            rectangle = this.is_renctangle_watched(sens1,sens2);
+            rectangle = this.is_renctangle_watched(sens1,sens2, false);
             console.log("après rectangle watched", sens2);
             console.log("Rectangle :", rectangle);
             if (rectangle == null) flag = false;
@@ -497,7 +497,7 @@ class Polyomino {
         let direction;
         let current;
         if (gate.needs_end_point()){
-            if (gate.verticalEntries.length >1){
+            if (gate.verticalEntries.length >=1){
                 let [min, max] = getMinMaxY(gate.verticalEntries);
                 if (min == gate.horizontalEntries[0][0].y || min == gate.horizontalEntries[0][1].y){
                     direction = new Point(0,this.size);
@@ -505,8 +505,7 @@ class Polyomino {
                 }else {
                     direction = new Point(0,-this.size);
                     current = new Point(gate.verticalEntries[0][0].x, max);
-                }
-                
+                }         
             }else {
                 let [min, max] = getMinMaxX(gate.horizontalEntries);
                 if (min == gate.verticalEntries[0][0].x || min == gate.verticalEntries[0][1].x){

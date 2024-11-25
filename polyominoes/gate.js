@@ -3,10 +3,19 @@ class Gate{
         this.entry = entry;  // edge(s) connecting the view of a guard and the subpolyomino
         this.doors;  // edges next to the entry -> can be [parallel, orthogonal]
         this.orientation; // true = clockwise and false = counter-clockwise
-        this.intervals = [];
+        this.intervals = []; 
         this.isHorizontal;
         this.verticalEntries = [];
         this.horizontalEntries = [];
+        this.setEntries(entry);
+        
+    }
+
+    setEntries(entries){
+        for (let edge of entries){
+            if (edge[0].x == edge[1].x) this.verticalEntries.push(edge);
+            if (edge[0].y == edge[1].y) this.horizontalEntries.push(edge);
+        }
     }
 
     add_doors(doors){
@@ -21,14 +30,14 @@ class Gate{
 
     // return true if the entry is horizontal and false if it is vertical and set the isHorizontal attribute
     is_parallel_entry_horizontal(){  
-        console.log("Check constCoooordinatesIsHorizontal :", this.entry[0], "bool :", this.entry[0][0].y  == this.entry[0][1].y);
-        if (this.entry[0][0].y  == this.entry[0][1].y) return this.isHorizontal = true;
+        console.log("Check is_parallel_entry_horizontal :",this.verticalEntries.length==0 && this.horizontalEntries.length>=1, this.entry);
+        if (this.verticalEntries.length==0 && this.horizontalEntries.length>=1) return this.isHorizontal = true;
         return this.isHorizontal = false;
     }
 
     giveIntervalEntry(){
-        let min = 9999;
-        let max = -9999;
+        let min = Infinity;
+        let max = -Infinity;
         let isHorizontal = this.is_parallel_entry_horizontal();
         for (let edge of this.entry){
             console.log("edge in giveInterval :", edge);
@@ -54,9 +63,9 @@ class Gate{
             return [min,max,x]; 
         }
     }
-        
+
+     // Return true if the doors are parallels (if all the points of the doors have the same x or y coordinates).
     are_doors_parallel(){
-        // Return true if the doors are parallels (if all the points of the doors have the same x or y coordinates).
         if ((this.doors[0][0].x == this.doors[0][1].x && this.doors[1][0].x == this.doors[1][1].x )||
             (this.doors[0][0].y == this.doors[0][1].y && this.doors[1][0].y == this.doors[1][1].y)){
                 return true;}
@@ -112,30 +121,18 @@ class Gate{
     getPoint(incr){
         if (this.isHorizontal){
             if (incr.y < 0) {
-                min = 9999;
                 for (let edge of this.entry){
                     if (edge[0].y == this.intervals[0].y) return edge[0];
                 }
             }
-    }}
+        }
+    }
 
 
     // Check if the orthogonal doors are the special case needing an endpoint
     needs_end_point(){
-        let count_vertical = 0;
-        let count_horizontal = 0;
-        for (let entry of this.entry){
-            if (entry[0].x == entry[1].x){
-                count_vertical += 1;
-                this.verticalEntries.push(entry);
-            } 
-            else {
-                count_horizontal += 1;
-                this.horizontalEntries.push(entry);
-            }
-        }
-        if (count_vertical > 1 && count_horizontal == 1) return true;
-        else if (count_horizontal >1 && count_vertical == 1) return true;
-        else return false;
+        if (this.orientation && this.horizontalEntries.length == 0 ) return true;
+        else if (!this.orientation && this.verticalEntries.length == 0) return true;
+        return false;
     }
 }
