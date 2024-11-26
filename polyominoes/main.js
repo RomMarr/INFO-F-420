@@ -27,7 +27,7 @@ function setup() {
 
     // Create the show details button -> show the gates
     const buttonShowDetails = createButton("Details");
-    buttonShowDetails.position(110, 50);
+    buttonShowDetails.position(130, 50);
     buttonShowDetails.mousePressed(changeDetails);
 }
 
