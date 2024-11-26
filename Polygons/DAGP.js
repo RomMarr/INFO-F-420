@@ -228,9 +228,9 @@ function solveDAGP(){
                 }
                 let caterpillar = dualGraph.constructCaterpillar(trianglePath, subregion);
                 guards = dualGraph.setGuards(caterpillar, guards);
+                console.log(guards);
             }
         }
-        console.log(guards);
       }
 
 }
@@ -244,7 +244,6 @@ class Polygon{
         this.points = points;
         let pts = points.slice();
         this.ears = triangulate(pts);
-        console.log(this.ears);
         this.distances = this.calculateDistances();
     }
 
