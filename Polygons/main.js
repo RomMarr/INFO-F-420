@@ -73,7 +73,7 @@ function validate() {
   } else {
     pts = points.slice(); // Copy the list of points
     pts = ensureCounterClockWise(pts); // Check list order
-    triangulate(pts); // Find the triangulation of the polygon
+    ears = triangulate(pts); // Find the triangulation of the polygon
 
     // Color vertices after triangulation
     colorVerticesFromTriangles(ears);
