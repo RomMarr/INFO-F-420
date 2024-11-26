@@ -75,7 +75,7 @@
           <li><strong>The boundaries :</strong> we calculate the boundaries (edges separating an active square from a not active one). </li>
           <li><strong>The vertices :</strong> we get all the vertices from the boundaries. As they are from the boundaries, they will always be on a limit of the polyomino. 
             They will be all the possible positions for the guards. </li>
-          <li><strong>First guard :</strong>  we randomly (or arbitrarily) place the first guard on any vertex from the vertices.  </li>
+          <li><strong>First guard :</strong>  we randomly (or arbitrarily) place the first guard(All the guard are purples circles) on any vertex from the vertices.  </li>
           <li><strong>Calculate r-visibility of the first guard :</strong> Once the first guard is placed we need to calculate its r-visibility(in blue in the pictures below). 
             It starts by determining all squares in the polyomino that are visible from the guard's position. 
             The function iterates through each square, checking if a rectangular area (bounded by the guard’s position and the current square’s center point) is entirely contained within the polyomino. 
