@@ -20,7 +20,7 @@ function setup() {
   // Create the validate button
   const buttonPolygon = createButton("Create");
   buttonPolygon.position(60, 50);
-  buttonPolygon.mousePressed(solveDAGP);
+  buttonPolygon.mousePressed(validate);
   // Set text properties
   textSize(40);
   fill("black");
