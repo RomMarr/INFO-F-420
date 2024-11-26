@@ -1,18 +1,23 @@
-function calculateGeodesicDistance(p, q) {
-    path = funnelAlgorithm(p, q);
+function calculateGeodesicDistance(p, q, ears) {
+    path = funnelAlgorithm(p, q, ears);
     let distance = 0;
     for (let i = 0; i < path.length - 1; i++) {
         distance += sqrt(pow(path[i].x - path[i + 1].x, 2) + pow(path[i].y - path[i + 1].y, 2));
     }
     console.log("Geodesic distance between points: " + distance);
+    return new Distance(p, q, path, distance);
+}
+
+function trianglePathFromPoints(p, q, ears) {
+    let triangleP = getTriangle(p, ears);
+    let triangleQ = getTriangle(q, ears);
+    if (!triangleP || !triangleQ) return [];
+    return findTrianglePath(triangleP, triangleQ, ears);
+
 }
 
 
-function findTrianglePath(p, q) {
-    let triangleP = getTriangle(p);
-    let triangleQ = getTriangle(q);
-    if (!triangleP || !triangleQ) return [];
-
+function findTrianglePath(triangleP, triangleQ, ears) {
     let visited = new Set();
     let queue = [[triangleP]];
     visited.add(triangleP);
@@ -33,10 +38,14 @@ function findTrianglePath(p, q) {
     return [];
 }
 
+function isVertex(p, triangle) {
+    return triangle.includes(p);
+}
 
-function getTriangle(p) {
+
+function getTriangle(p, ears) {
     for (const ear of ears) {
-        if (inTriangle([ear[0], ear[1], ear[2], p])) {
+        if (inTriangle([ear[0], ear[1], ear[2], p]) || isVertex(p, ear)) {
             return ear;
         }
     }
@@ -71,108 +80,94 @@ function findDiagonals(trianglePath) {
 }
 
 
-function funnelAlgorithm(p, q) {
-    // Recherche du chemin de triangles
-    let trianglePath = findTrianglePath(p, q);
-    let diagonals = findDiagonals(trianglePath);
-
-    // Initialisation des variables
-    let path = [p];
-    let apex = p;
-    let leftPath = [p];
-    let rightPath = [p];
-
-
-    // Parcours des diagonales restantes
-    for (let i = 0; i < diagonals.length; i++) {
-        if (leftPath.length == 1) {
-            console.log("DANS LE CAS OU LENGTH = 1")
-            // Définir les premiers points du chemin gauche et droit
-            if (isCounterClockwise(apex, diagonals[i][0], diagonals[i][1])) {
-                let tempB = rightPath.slice();
-                console.log(" AVANT rightPath: ", tempB);
-                rightPath.push(diagonals[i][0]);
-                let tempA = rightPath.slice();
-                console.log(" APRES  rightPath: ", tempA);
-                diagonals[i][0].color = "red";
-                let TempL = leftPath.slice();
-                console.log("AVANT leftPath: ", TempL);
-                leftPath.push(diagonals[i][1]);
-                diagonals[i][1].color = "blue";
-                let TempL2 = leftPath.slice();
-                console.log(" APRES leftPath: ", TempL2);
-            } else {
-                let tempB = rightPath.slice();
-                console.log(" AVANT rightPath: ", tempB);
-                rightPath.push(diagonals[i][1]);
-                let tempA = rightPath.slice();
-                diagonals[i][1].color = "red";
-                console.log(" APRES  rightPath: ", tempA);
-                let TempL = leftPath.slice();
-                console.log("AVANT leftPath: ", TempL);
-                leftPath.push(diagonals[i][0]);    
-                diagonals[i][0].color = "blue";
-                let TempL2 = leftPath.slice();
-                console.log(" APRES leftPath: ", TempL2);
-            }
-            console.log("END")
-        }
-        else{  
-            console.log("LENGTH PAS EGAL 1")
-            let TempL = leftPath.slice();
-            console.log("AVANT leftPath: ", TempL);
-            let nextPoint = diagonals[i].filter(point => point != leftPath[leftPath.length - 1] && point != rightPath[rightPath.length - 1]);
-            console.log("NEXT POINT: ", nextPoint);
-            if ((!diagonals[i].includes(leftPath[leftPath.length - 1]))) {
-                console.log("RENTRER DANS IF LEFT: ");
-                nextPoint.forEach(point => {
-                    if (isCounterClockwise(apex, point, leftPath[leftPath.length - 1])) {
-                        leftPath.push(point);
-                        point.color = "yellow";
-                        console.log("AJOUTER UN POUNT point: ", point);
-                    } 
-                });
-            }
-            let leftPathTemp = leftPath.slice();
-            console.log(" APRES leftPath: ", leftPathTemp);
-            let tempB = rightPath.slice();
-            console.log(" AVANT rightPath: ", tempB);
-
-            if ((!diagonals[i].includes(rightPath[rightPath.length - 1]))) {
-                console.log("RENTRER DANS IF rightPath: ");
-                nextPoint.forEach(point => {
-                    if (!isCounterClockwise(apex, point, rightPath[rightPath.length - 1])) {
-                        rightPath.push(point);
-                        point.color = "green";
-                        console.log("AJOUTER UN POUNT point: ", point);
-                    }});
-            }
-            let rightPathTemp = rightPath.slice();
-            console.log("APRES rightPath: ", rightPathTemp);
-            console.log("FIN LEGTH PAS 2GALE 1")
-        }
-        if (!isCounterClockwise(leftPath[leftPath.length - 1], apex, rightPath[rightPath.length - 1])) {
-            console.log("RENTRER DANS IF POUR LAPEX");
-            console.log(calculateDet(leftPath[leftPath.length - 1], apex, rightPath[rightPath.length - 1]));
-            if(isCounterClockwise(rightPath[rightPath.length - 1], apex, leftPath[leftPath.length - 1])) {
-                console.log("CHOISIR LE POINT GAUCHE");
-                apex = leftPath[leftPath.length - 1];
-                path.push(leftPath[leftPath.length - 1]);
-                leftPath = [leftPath[leftPath.length - 1]];
-                rightPath = [leftPath[leftPath.length - 1]];
-            }
-            else{
-                console.log("CHOISIR LE POINT DROIT");
-                apex = rightPath[rightPath.length - 1];
-                path.push(rightPath[rightPath.length - 1]);
-                leftPath = [rightPath[rightPath.length - 1]];
-                rightPath = [rightPath[rightPath.length - 1]];
-            }
-        }
-    }
-    // Ajouter le point d'arrivée au chemin final
-    path.push(q);
-    return path;
+function ccw(A, B, C) {
+    // Teste si les points A, B, C forment un angle dans le sens antihoraire (ccw)
+    return (B.x - A.x) * (C.y - A.y) < (B.y - A.y) * (C.x - A.x);
 }
 
 
+
+function funnelAlgorithm(p, q, ears) {
+    // Recherche du chemin de triangles
+    let trianglePath = trianglePathFromPoints(p, q, ears);
+    let diagonals = findDiagonals(trianglePath);
+
+    const tail = [p];
+    let left = [];
+    let right = [];
+    let lastEdgeL = null;
+    let lastEdgeR = null;
+
+    for (let i = 0; i < diagonals.length; i++) {
+        let [p1, p2] = [diagonals[i][0], diagonals[i][1]];
+
+        if (p2 === lastEdgeL || p1 === lastEdgeR || 
+            (lastEdgeR === null && lastEdgeL === null && ccw(tail[tail.length - 1], p2, p1))) {
+            [p1, p2] = [p2, p1];
+        }
+
+        if (left.length === 0 && p1 !== tail[tail.length - 1]) {
+            left = [p1];
+        } else if (left.length > 0 && left[left.length - 1] !== p1) {
+            if (!ccw(tail[tail.length - 1], p1, left[left.length - 1])) {
+                let lastCollision = -1;
+                for (let j = 0; j < right.length; j++) {
+                    if (ccw(tail[tail.length - 1], right[j], p1)) {
+                        tail.push(right[j]);
+                        lastCollision = j;
+                    }
+                }
+                if (lastCollision >= 0) {
+                    left = [p1];
+                    right = right.slice(lastCollision + 1);
+                } else {
+                    left[left.length - 1] = p1;
+                }
+            } else {
+                left.push(p1);
+            }
+        }
+
+        if (right.length === 0 && p2 !== tail[tail.length - 1]) {
+            right = [p2];
+        } else if (right.length > 0 && right[right.length - 1] !== p2) {
+            if (!ccw(tail[tail.length - 1], right[right.length - 1], p2)) {
+                let lastCollision = -1;
+                for (let j = 0; j < left.length; j++) {
+                    if (ccw(tail[tail.length - 1], p2, left[j])) {
+                        tail.push(left[j]);
+                        lastCollision = j;
+                    }
+                }
+                if (lastCollision >= 0) {
+                    right = [p2];
+                    left = left.slice(lastCollision + 1);
+                } else {
+                    right[right.length - 1] = p2;
+                }
+            } else {
+                right.push(p2);
+            }
+        }
+
+        lastEdgeL = p1;
+        lastEdgeR = p2;
+    }
+
+    const apex = tail[tail.length - 1];
+    for (let i = 0; i < right.length; i++) {
+        if (ccw(apex, right[i], q)) {
+            tail.push(right[i]);
+        }
+    }
+
+    for (let i = 0; i < left.length; i++) {
+        if (ccw(apex, q, left[i])) {
+            tail.push(left[i]);
+        }
+    }
+    tail.push(q);
+    return tail;
+}
+
+    

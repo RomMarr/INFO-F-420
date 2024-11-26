@@ -166,13 +166,13 @@ function isEar(pts, i) {
   return true;
 }
 
-// Recursive function to triangulate the polygon
-function triangulate(pts) {
+function triangulate(pts, triangles = []) {
   if (pts.length == 3) {
-    // Base case : the remaining vertices form the last triangle
-    ears.push([pts[0], pts[1], pts[2]]);
-    return;
+    // Base case : Add the last triangle
+    triangles.push([pts[0], pts[1], pts[2]]);
+    return triangles; // Return the final list of triangles
   }
+
   // Find an ear
   for (let i = 0; i < pts.length; i++) {
     if (isEar(pts, i)) {
@@ -180,15 +180,14 @@ function triangulate(pts) {
       let curr = pts[i];
       let next = pts[(i + 1) % pts.length];
 
-      // Add the ear triangle to the triangles list
-      ears.push([prev, curr, next]);
+      // Add the ear triangle to the list
+      triangles.push([prev, curr, next]);
 
       // Remove the current vertex (ear) from the polygon
       pts.splice(i, 1);
 
       // Recursively continue triangulation
-      triangulate(pts);
-      return;
+      return triangulate(pts, triangles); // Pass the updated ears list
     }
   }
 }
