@@ -35,6 +35,12 @@
         <p> As mentioned previously, <strong> Art Gallery Problem </strong> is a problem where we must find the minimum number of guards that need to be placed in an n-vertex simple polygon such that all points
         of the interior are visible. Two points are visible to each other if the line between them is always inside the polygon. </p>
 
+
+        <figure>
+          <img src="images/AGP.png" alt="Portalgon embedding"/>
+          <figcaption>Figure 1. Art Gallery Problem Illustration</figcaption>
+        </figure>
+
         <p>This problem is NP-Hard, meaning that it is difficult to find a solution but easy to verify one. It is challenging to find a solution because we need to consider all possible combinations 
         of guard placements to ensure that every point in the polygon is visible. As the number of vertices increases, the number of possible configurations grows exponentially.
         However, verifying a solution is relatively easy, as it only involves checking that every point is visible to at least one guard.</p>
@@ -43,19 +49,23 @@
     Later, Steve Fisk offered a simpler proof by using the triangulation of a polygon. Every simple polygon can be triangulated. Then, we can use the vertices from the triangulation to 3-color the graph. Every triangle must have all three colors. </p>
     <p>The color used the fewest vertices defines a valid set of guards with at most &lfloor; n / 3 &rfloor; because the n vertices of the polygon are partitioned with 3 colors.</p>
     <p>Bellow, we have implemented the algorithm that find a set of guards such that all the points are visible using the proof above. Draw a polygon and it will show where and how many guards you need to guard the gallery.</p>
-    <p>It has been implemented in the folder polygons. To run it, right click on the index.html file (in your file handler) and open in your browser. </p>
       </section>
       <section id="AGP test">
         <h2>ArtGalleryProblem algorithm</h2>
+        <p>To test it, right click on the button :  
+          <div class="button-container">
+            <button class="open-modal-btn">Toggle Illustration</button>
+          </div>
+         </p>
 <!-- Structure du Modal avec iframe -->
-<button class="open-modal-btn">Toggle Illustration</button>
+
 
 <!-- Modal structure -->
 <div class="backdrop" id="modalBackdrop"></div>
 <div class="modal" id="modalWindow">
   <button class="close-modal-btn" id="closeModalBtn">X</button>
   <h2>Illustration</h2>
-  <iframe src="Polygons/index.html" width="80%" height="60vh" style="border: none;"></iframe>
+  <iframe src="Polygons/indexAGP.html" width="80%" height="60vh" style="border: none;"></iframe>
 
 
 </div>

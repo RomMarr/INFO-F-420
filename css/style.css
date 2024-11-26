@@ -96,7 +96,7 @@
   }
   
   
-  h2, h3, h4, h5, h6{
+  h2, h3, h6, h7{
     text-decoration: underline;
     text-decoration-color: #d3b9b9;
   }
@@ -115,7 +115,31 @@
     margin-left: 60px; /* Décale le texte sous le titre */
   }
 
+  section h7{
+    margin-bottom: 5px; /* Réduit l'espace sous le titre */
+    text-decoration: underline;
+    text-decoration-color: #0c0c0c;
+    font-size: 1.2em; /* Augmenter la taille de la police */
   
+
+  }
+
+  section h7 ~ * {
+    margin-left: 60px; /* Décale le texte sous le titre */
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;  /* Center the button horizontally */
+    align-items: center;      /* Center the button vertically */
+    height: 100px;            /* Adjust the height of the container */
+  }
+  
+  /* Optional: Adjust the button style */
+  .open-modal-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
   
   header, footer {
     margin-top: 20px; /* Espace au-dessus du header */
@@ -190,13 +214,13 @@
     height: auto; /* Maintain aspect ratio */
     display: block; /* Center block images by default */
     margin: 20px auto; /* Add space around images */
-    border: 2px solid #ccc; /* Optional border for images */
+    border: 2px solid rgba(129, 129, 129); /* Optional border for images */
     border-radius: 8px; /* Optional rounded corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for images */
   }
   
   figcaption {
-    background-color: white;
+    background-color: #63a8c9;
     color: black;
     font-style: italic;
     padding: 2px;
@@ -295,5 +319,41 @@
     text-align: center;
   }
 
+
+  #Abstract {
+    font-size: 12px;
+    margin: 20px auto;
+    padding: 20px;
+    max-width: var(--canvas-width); /* Limit width for readability */
+    background-color: #948aa3; /* Light background for emphasis */
+    border: 1px solid #cccccc; /* Subtle border */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    border-radius: 8px; /* Rounded corners */
+  }
+  
+  /* Title styling */
+  #Abstract h3 {
+    font-size: 1.8em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+    text-transform: uppercase; /* Make the title uppercase */
+    color: #333333; /* Darker text for contrast */
+  }
+  
+  /* Paragraph styling */
+  #Abstract p {
+    font-size: 1.6em;
+    line-height: 1.6;
+    text-align: justify;
+    margin: 0;
+    padding: 10px 0;
+    color: #555555; /* Softer text color for readability */
+  }
+  
+  /* Emphasize the first line of the paragraph */
+  #Abstract p:first-child {
+    font-weight: bold;
+  }
  
 

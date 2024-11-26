@@ -29,12 +29,69 @@
         <h1>Dispersive Art Gallery Problem</h1>
     </header>
 
-    <section id="Dispersive Art Gallery Problem">
-        <h2>Dispersive Art Gallery Problem</h2>
-
-
+    <section id="Abstract">
+        <h3>notitiae supplementariae</h3>
+        <p> This part is based from  and the implementation of the problem will be based on Theorem 10 from .</p>
+        <p>For every simple polygon <em>P</em> with a pairwise geodesic distance between vertices of at least 1, there exists a guard set with a dispersion distance of at least 2.</p>
     </section>
 
+    <section id="Dispersive Art Gallery Problem">
+      <h2>The DAGP Algorithm </h2>
+    </section>
+
+
+    <p>To test it, right click on the button :  
+      
+      <div class="button-container">
+        <button class="open-modal-btn">Toggle Illustration</button>
+      </div>
+     </p>
+<!-- Structure du Modal avec iframe -->
+
+
+<!-- Modal structure -->
+<div class="backdrop" id="modalBackdrop"></div>
+<div class="modal" id="modalWindow">
+<button class="close-modal-btn" id="closeModalBtn">X</button>
+<h2>Illustration</h2>
+<iframe src="Polygons/indexDAGP.html" width="80%" height="60vh" style="border: none;"></iframe>
+
+
+</div>
+
+<script>
+// Get modal elements
+const modal = document.getElementById("modalWindow");
+const backdrop = document.getElementById("modalBackdrop");
+const openModalBtn = document.querySelector(".open-modal-btn");
+const closeModalBtn = document.getElementById("closeModalBtn");
+const iframeContent = document.getElementById("iframeContent");
+
+// Adjust iframe size dynamically based on modal size
+function adjustIframeSize() {
+iframeContent.style.width = "100%"; // Width of iframe takes full modal space
+iframeContent.style.height = "80%"; // Set iframe height to 80% of modal
+}
+
+// Show the modal when button is clicked
+openModalBtn.addEventListener("click", () => {
+modal.style.display = "block";
+backdrop.style.display = "block";
+adjustIframeSize(); // Ensure iframe adjusts when modal is opened
+});
+
+// Close the modal
+closeModalBtn.addEventListener("click", () => {
+modal.style.display = "none";
+backdrop.style.display = "none";
+});
+
+// Close modal when clicking on the backdrop
+backdrop.addEventListener("click", () => {
+modal.style.display = "none";
+backdrop.style.display = "none";
+});
+</script>
 
     </body>
 </html>
