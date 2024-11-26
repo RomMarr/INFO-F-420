@@ -1,18 +1,17 @@
 // Variables
-var polyomino = [];
+var polyomino = [];  // squares showed on the screen
 var polyominoObject = null;
-var guards = [];
-var entriess = [];
-var doorss = [];
-var gates = [];
+var guards = [];    // guards to draw
+var entriess = [];  // entries to draw
+var doorss = [];    // doors to draw
 var pointDistance = [];
 var gridSize = 50; // Size of each square in the grid
-var resetClick = false;
-var validateClick = false;
-var end = false;
-var calculateClick = false;
-var showDetails = false;
-var resultMessage = ""; // Variable to hold the result message
+var resetClick = false;     // true if the reset button is clicked
+var validateClick = false;  // true if the validate button is clicked
+var end = false;            // true if the program is done
+var calculateClick = false; // true if the calculate distance button is clicked
+var showDetails = false;    // true if the show details button is clicked
+var resultMessage = ""; // Variable that holds the result message
 
 // Set up the window and its buttons
 function setup() {
@@ -61,7 +60,6 @@ function reset() {
     guards = [];
     entriess = [];
     doorss = [];
-    gates = [];
     end = false;
     resetClick = true;
     validateClick = false;
