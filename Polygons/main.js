@@ -12,23 +12,32 @@ var createPolygon = false;
 var showPath = false;
 var resultMessage = ""; // Variable to hold the result message
 
+
 // Set up the window and its button
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  // Create the clear button
+  // On calcule la position pour centrer le canvas
+  let canvasWidth = windowWidth * 0.8; // largeur du canvas (80% de la fenêtre)
+  let canvasHeight = windowHeight * 0.8; // hauteur du canvas (80% de la fenêtre)
+
+  // Créer le canvas et le positionner au centre
+  let canvas = createCanvas(canvasWidth, canvasHeight);
+  background(255);
+  canvas.position((windowWidth - canvasWidth) / 2, (windowHeight - canvasHeight) / 2);
+  windowResized();
+
+  // Création des boutons comme précédemment
   const buttonClear = createButton("Clear");
   buttonClear.position(10, 50);
   buttonClear.mousePressed(resetpoints);
-// Create the validate button AGP
+
   const buttonAGP = createButton("AGP");
   buttonAGP.position(60, 50);
   buttonAGP.mousePressed(validate);
-  // Create the validate button for DAGP
+
   const buttonDAGP = createButton("DAGP");
   buttonDAGP.position(110, 50);
   buttonDAGP.mousePressed(solveDAGP);
 
-  // Create the validate button for DAGP
   const buttonGeodesicDist = createButton("Geodesic Distance");
   buttonGeodesicDist.position(170, 50);
   buttonGeodesicDist.mousePressed(creatingPolygon);
@@ -73,7 +82,7 @@ function validate() {
   } else {
     pts = points.slice(); // Copy the list of points
     pts = ensureCounterClockWise(pts); // Check list order
-    triangulate(pts); // Find the triangulation of the polygon
+    ears = triangulate(pts); // Find the triangulation of the polygon
 
     // Color vertices after triangulation
     colorVerticesFromTriangles(ears);
@@ -118,4 +127,8 @@ function mousePressed() {
 // Handle the adding of new points
 function addPoint() {
   points.push(new Point(mouseX, mouseY));
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight); // Redimensionne le canvas à la taille de la fenêtre
 }

@@ -1,6 +1,6 @@
 // Draw the view and the points/lines
 function drawWindow(points, ears, resultMessage) {
-  background(200);
+  background(129);
   // Draw the title and button section
   fill("black");
   text("Triangulation on simple polygon", 10, 40);

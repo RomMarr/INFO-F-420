@@ -115,7 +115,6 @@
     margin-left: 60px; /* Décale le texte sous le titre */
   }
 
-
   
   
   header, footer {
@@ -153,7 +152,7 @@
   section {
     width: 100%;
     max-width: var(--canvas-width);
-    margin: 10px auto; /* Center sections and add spacing */
+    margin: 20px auto; /* Center sections and add spacing */
     padding: 10px;
     box-sizing: border-box; /* Include padding in width calculation */
   }
@@ -244,14 +243,54 @@
   
   }
 
-  iframe {
-    border: none;
-    width: 100%; /* Ajuste selon tes besoins */
-    height: 500px; /* Ajuste selon tes besoins */
+  .backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none; /* Hidden by default */
+    z-index: 1000;
   }
 
- 
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(129, 129, 129);
+    padding: 20px;
+    width: 60%;
+    height: 85%;
+    display: none;
+    z-index: 1001;}
 
+
+  iframe {
+    max-width: 100%;
+    height: 80vh; /* Ajuste la hauteur */
+    border: none;
+  }
+
+  .close-modal-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .open-modal-btn {
+    padding: 10px;
+    background-color: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
   .toc h1, h2,  h3, h4, h5{
     text-align: center;
   }

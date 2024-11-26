@@ -47,8 +47,53 @@
       </section>
       <section id="AGP test">
         <h2>ArtGalleryProblem algorithm</h2>
-      </section>
+<!-- Structure du Modal avec iframe -->
+<button class="open-modal-btn">Toggle Illustration</button>
 
-      <iframe src="Polygons/index.html"></iframe>
+<!-- Modal structure -->
+<div class="backdrop" id="modalBackdrop"></div>
+<div class="modal" id="modalWindow">
+  <button class="close-modal-btn" id="closeModalBtn">X</button>
+  <h2>Illustration</h2>
+  <iframe src="Polygons/index.html" width="80%" height="60vh" style="border: none;"></iframe>
+
+
+</div>
+
+<script>
+  // Get modal elements
+  const modal = document.getElementById("modalWindow");
+  const backdrop = document.getElementById("modalBackdrop");
+  const openModalBtn = document.querySelector(".open-modal-btn");
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  const iframeContent = document.getElementById("iframeContent");
+
+  // Adjust iframe size dynamically based on modal size
+  function adjustIframeSize() {
+    iframeContent.style.width = "100%"; // Width of iframe takes full modal space
+    iframeContent.style.height = "80%"; // Set iframe height to 80% of modal
+  }
+
+  // Show the modal when button is clicked
+  openModalBtn.addEventListener("click", () => {
+    modal.style.display = "block";
+    backdrop.style.display = "block";
+    adjustIframeSize(); // Ensure iframe adjusts when modal is opened
+  });
+
+  // Close the modal
+  closeModalBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+    backdrop.style.display = "none";
+  });
+
+  // Close modal when clicking on the backdrop
+  backdrop.addEventListener("click", () => {
+    modal.style.display = "none";
+    backdrop.style.display = "none";
+  });
+</script>
+
+      </section>
   </body>
 </html>
