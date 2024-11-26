@@ -5,7 +5,7 @@ function drawWindow(squares, resultMessage, guards, showDetails) {
   // Draw the title and button section
   fill("black");
   textSize(24);
-  text("Clickable Square Example", 10, 30); // Title of the window
+  text("Dispersive Art Gallery in polyominoes", 10, 30); // Title of the window
 
   // Draw the clickable area for the square
   fill(255); // White color for the clickable area
@@ -63,3 +63,5 @@ function resetStroke(){
   strokeWeight(1); // Reset to default thickness
   stroke("black"); // Reset to default color
 }
+
+

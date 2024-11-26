@@ -56,12 +56,19 @@ function reset() {
 
 // Draw the view and the grid
 function draw() {
-    drawBase(polyomino);
-    drawPath(path);
+    background(200);
+
+    // Draw the title and button section
+    fill("black");
+    textSize(24);
+    text("L1 geodesic distance", 10, 30); // Title of the window
+
+    drawGrid(polyomino); // Draw the grid of squares
     for (let i = 0; i < pointDistance.length; i++) {
         fill("black");
         ellipse(pointDistance[i].x, pointDistance[i].y, 10, 10);
     }
+    resultMessage = "Choose two points to calculate the distance";
 }
 
 
