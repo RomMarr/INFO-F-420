@@ -60,7 +60,8 @@ function reset() {
 }
 
 function changeDetails() {
-    showDetails = !showDetails;
+    if (guards.length > 1) showDetails = !showDetails;
+    else resultMessage = "Details needs at least 2 guards to be shown";
 }
 
 // Start -> launch the disruptive solver and check if the polyomino is valid
