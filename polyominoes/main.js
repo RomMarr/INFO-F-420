@@ -62,43 +62,32 @@ function reset() {
     resultMessage = ""; // Clear the result message when resetting
 }
 
-// Start -> handle triangulation & check intersections (collisions)
+// Start -> launch the disruptive solver and check if the polyomino is valid
 function validate() {
     resultMessage = ""; // Update message
     validateClick = true;
     end = true;
     poly = new Polyomino(polyomino);
-    if (!poly.isValid()) {
-        resultMessage = "Polyomino: invalid "; 
-    }else{ resultMessage = "Polyomino: valid"; 
+    if (!poly.isValid()) {  // check if the polyomino is valid
+        resultMessage = "The polyomino is invalid"; 
+    }else{ resultMessage = ""; 
     polyomino = poly.getSquares();
-    poly.start();
-    guards.push(poly.guards[0]);
-    let alpha = poly.calculate_distance_alpha();
-    let beta = poly.calculate_distance_beta();
-    console.log("alpha", alpha);
-    console.log("beta", beta);
-    disruptive_solver(poly);
-    for (let gate of gates){
-        console.log("gate", gate);
-        console.log("orientation", gate.orientation);
-
+    poly.start(true); // Prepare the main polyomino
+    guards.push(poly.guards[0]); // Add the first guard
+    disruptiveSolver(poly);
     }
-
-}
 }
 
 // Draw the view and the grid
 function draw() {
     drawWindow(polyomino, resultMessage, guards);
 }
-
+// Action when the mouse is pressed
 function mousePressed() {
   if (resetClick) {
       resetClick = false;
       return;
   }
-
     if (calculateClick && mouseX > 10 && mouseY > 75 && mouseX < width - 20 && mouseY < height - 200) {
         console.log("calculateClick");
         pointDistance.push({ x: mouseX, y: mouseY });
@@ -108,7 +97,6 @@ function mousePressed() {
             console.log("distance", distance);
         }
     }
-
   // Check if the point is inside any square
   for (let square of polyomino) {
       // Adjust the mouse position based on the button area offset

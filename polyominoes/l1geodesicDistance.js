@@ -6,13 +6,14 @@ function l1geodesicDistance() {
     if (!polyominoObject.isValid()) {
         resultMessage = "Polyomino: invalid "; 
     }else{ resultMessage = "Polyomino: valid"; }
-    polyomino = polyominoObject.getSquares();
+    polyomino = polyominoObject.getSquares();  // for the drawing
     calculateClick = true;
 }
 
 
 function bfsL1GeodesicDistance(p1, p2, polyomino) {
     const squares = polyomino.getSquares();
+    // find the squares of the points
     const squareP1 = squares[polyomino.getSquareIndexAtPoint(p1)];
     const squareP2 = squares[polyomino.getSquareIndexAtPoint(p2)];
 
@@ -26,13 +27,13 @@ function bfsL1GeodesicDistance(p1, p2, polyomino) {
     while (queue.length > 0) {
         const {s, path} = queue.shift();
 
-        if (s === squareP2) {
+        if (s === squareP2) { // if found the destination
             return path;
         }
 
         const neighbors = polyomino.getDirectNeighbors(s, squares);
 
-        // Ajouter les voisins non visités à la file
+        // Add all theneighbors to the queue
         for (let neighbor of neighbors) {
             if (!visited.has(neighbor)) {
                 visited.add(neighbor);

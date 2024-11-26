@@ -25,7 +25,6 @@ function drawWindow(squares, resultMessage, guards) {
 
   // Draw points for entries in orange
   if (entriess.length > 0) {
-    //console.log("ent", entriess);
     for (let entry of entriess) {
       for (let p of entry){
         fill("green");
@@ -36,7 +35,6 @@ function drawWindow(squares, resultMessage, guards) {
 
   // Draw points for doors in green
   if (doorss.length > 0) {
-    //console.log("doors", doorss);
     for (let door of doorss) {
       for (let p of door){
         fill("orange");
@@ -44,9 +42,6 @@ function drawWindow(squares, resultMessage, guards) {
       }
       
     }
-    setTimeout(() => {
-      console.log("3 seconds have passed");
-    }, 100000);
   }
 
   // Draw the result message section
