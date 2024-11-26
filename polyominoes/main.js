@@ -11,6 +11,7 @@ var resetClick = false;
 var validateClick = false;
 var end = false;
 var calculateClick = false;
+var showDetails = false;
 var resultMessage = ""; // Variable to hold the result message
 
 // Set up the window and its buttons
@@ -28,9 +29,14 @@ function setup() {
     buttonValidate.position(60, 50);
     buttonValidate.mousePressed(validate);
 
+    // Create the show details button -> show the gates
+    const buttonShowDetails = createButton("Details");
+    buttonShowDetails.position(250, 50);
+    buttonShowDetails.mousePressed(changeDetails);
 
+    // Create the calculate distance button
     const buttonDistance = createButton("calculate distance");
-    buttonDistance.position(130, 50);
+    buttonDistance.position(125, 50);
     buttonDistance.mousePressed(l1geodesicDistance);
 }
 
@@ -59,11 +65,17 @@ function reset() {
     end = false;
     resetClick = true;
     validateClick = false;
+    showDetails = false;
     resultMessage = ""; // Clear the result message when resetting
+}
+
+function changeDetails() {
+    showDetails = !showDetails;
 }
 
 // Start -> launch the disruptive solver and check if the polyomino is valid
 function validate() {
+    if (validateClick) return;
     resultMessage = ""; // Update message
     validateClick = true;
     end = true;
@@ -73,14 +85,14 @@ function validate() {
     }else{ resultMessage = ""; 
     polyomino = poly.getSquares();
     poly.start(true); // Prepare the main polyomino
-    guards.push(poly.guards[0]); // Add the first guard
+    guards.push(poly.guards[0]); // Add the first guard to guards to draw
     disruptiveSolver(poly);
     }
 }
 
 // Draw the view and the grid
 function draw() {
-    drawWindow(polyomino, resultMessage, guards);
+    drawWindow(polyomino, resultMessage, guards, showDetails);
 }
 // Action when the mouse is pressed
 function mousePressed() {
