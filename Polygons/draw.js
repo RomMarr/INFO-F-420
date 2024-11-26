@@ -3,7 +3,7 @@ function drawWindow(points, ears, resultMessage) {
   background(129);
   // Draw the title and button section
   fill("black");
-  text("Triangulation on simple polygon", 10, 40);
+  text(TitleMessage, 10, 40);
   // Draw the clickable area for new points
   fill(255); // White color for the clickable area
   rect(10, 75, width - 20, height - 200); // Draw a rectangle for the clickable area
@@ -11,8 +11,6 @@ function drawWindow(points, ears, resultMessage) {
   drawPoints(points);
   drawPolygon(points);
   drawEars(ears);
-  drawPath();
-  drawPointForDistance(pointDist);
   // Draw the result message section
   fill("black");
   textSize(20);

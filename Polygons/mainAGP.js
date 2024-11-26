@@ -1,16 +1,11 @@
 // Variables
 var points = [];
 var ears = []; // triangles for the triangulation
-// arrays for the geodesic distance
-var path = [];
-var pointDist = [];
 // boolean variables
 var resetClick = false;
 var validateClick = false;
 var end = false;
-var createPolygon = false;
-var showPath = false;
-var TitleMessage = "Geodesic Distance";
+var TitleMessage = "Art Gallery Problem";
 var resultMessage = ""; // Variable to hold the result message
 
 
@@ -31,17 +26,9 @@ function setup() {
   buttonClear.position(10, 50);
   buttonClear.mousePressed(resetpoints);
 
-  const buttonAGP = createButton("AGP");
+  const buttonAGP = createButton("Solve");
   buttonAGP.position(60, 50);
   buttonAGP.mousePressed(validate);
-
-  const buttonDAGP = createButton("DAGP");
-  buttonDAGP.position(110, 50);
-  buttonDAGP.mousePressed(solveDAGP);
-
-  const buttonGeodesicDist = createButton("Geodesic Distance");
-  buttonGeodesicDist.position(170, 50);
-  buttonGeodesicDist.mousePressed(creatingPolygon);
 
   // Set text properties
   textSize(40);
@@ -55,25 +42,7 @@ function resetpoints() {
   end = false;
   resetClick = true;
   validateClick = false;
-  path = [];
-  pointDist = [];
-  createPolygon = false;
-  showPath = false;
   resultMessage = ""; // Clear the result message when resetting
-}
-
-function creatingPolygon() {
-  if (checkCollision()) {
-    resultMessage = "COLLISION, create a simple polygon";
-  } else {
-    createPolygon = true;
-    console.log("Creating polygon");
-    let pts = points.slice(); // Copie de la liste de points
-    pts = ensureCounterClockWise(pts); // Vérification de l'ordre
-    ears = triangulate(pts); // Calcul de la triangulation
-    resultMessage = "Choose two points to calculate the geodesic distance";
-
-  }
 }
 
 
@@ -110,15 +79,8 @@ function mousePressed() {
     mouseX >= 10 &&
     mouseX <= width - 20
   ) {
-    if (createPolygon == true) {
-      pointDist.push(new Point(mouseX, mouseY));
-      if (pointDist.length!=0 && (pointDist.length % 2)==0) {
-          calculateGeodesicDistance(pointDist[pointDist.length - 2], pointDist[pointDist.length - 1], ears);
-          showPath = true;
-      }
-  }
     // if polygon has been confirmed
-    else if (validateClick == true) {
+    if (validateClick == true) {
       return;
     } 
     else addPoint(); // add normal point
