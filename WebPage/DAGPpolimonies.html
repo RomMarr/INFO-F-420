@@ -75,8 +75,8 @@
           <li><strong>The boundaries :</strong> we calculate the boundaries (edges separating an active square from a not active one). </li>
           <li><strong>The vertices :</strong> we get all the vertices from the boundaries. As they are from the boundaries, they will always be on a limit of the polyomino. 
             They will be all the possible positions for the guards. </li>
-          <li><strong>First guard :</strong>  we randomly (or arbitrarily) place the first guard(All the guard are purples circles) on any vertex from the vertices.  </li>
-          <li><strong>Calculate r-visibility of the first guard :</strong> Once the first guard is placed we need to calculate its r-visibility(in blue in the pictures below). 
+          <li><strong>First guard :</strong>  we randomly (or arbitrarily) place the first guard on any vertex from the vertices.  All the guard are represented by purple circles in the pictures. </li>
+          <li><strong>Calculate r-visibility of the first guard :</strong> Once the first guard is placed we need to calculate its r-visibility (in blue in the pictures below). 
             It starts by determining all squares in the polyomino that are visible from the guard's position. 
             The function iterates through each square, checking if a rectangular area (bounded by the guard’s position and the current square’s center point) is entirely contained within the polyomino. 
             If so, the squares within this rectangle are marked as "watched" and added to the guard’s visibility area as a whole new polyomino. </li>
@@ -95,9 +95,9 @@
                       The squares connected to each others form independent polyominoes. The number of sub-polyominoes will determine our case in the algorithm. </li>
           <li><strong>Determine gates :</strong> a gate is the connection of  a sub-polyomino to the guard’s view area. The gate is composed of :
           <ol>
-            <li><strong> An entry(in green) : </strong> the set of edges shared between both areas, connecting them together. </li>
-            <li><strong> The two doors(in orange)  : </strong> edges starting from each extremity of the entry, they are not from the entry nor the sub-polyomino. 
-              They belong to the initial polyomino. They can be parallel (both doors are on the same axis, vertical or horizontal) or orthogonal (each door is on its own axis, vertical or horizontal). </li>
+            <li><strong> An entry : </strong> the set of edges shared between both areas, connecting them together. They are represented by a green line in the picture below. </li>
+            <li><strong> The two doors : </strong> edges starting from each extremity of the entry, they are not from the entry nor the sub-polyomino. 
+              They belong to the initial polyomino. They can be parallel (both doors are on the same axis, vertical or horizontal) or orthogonal (each door is on its own axis, vertical or horizontal). Represented by the orange lines in the picture below. </li>
               <li><strong> The orientation : </strong> direction of the gate, determined in the algorithm. </li>
             </ol>
           </li>
