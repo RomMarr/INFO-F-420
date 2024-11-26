@@ -3,7 +3,7 @@ function drawWindow(points, ears, resultMessage) {
     background(200);
     // Draw the title and button section
     fill("black");
-    text("Triangulation on simple polygon", 10, 40);
+    text(" geodesic distance and DAGP", 10, 40);
     // Draw the clickable area for new points
     fill(255); // White color for the clickable area
     rect(10, 75, width - 20, height - 200); // Draw a rectangle for the clickable area
@@ -31,8 +31,8 @@ function drawWindow(points, ears, resultMessage) {
         fill("black");
         ellipse(pointDist[i].x, pointDist[i].y, 10, 10);
       }
+    }
   }
-}
   
   
 function drawPath() {

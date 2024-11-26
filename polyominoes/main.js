@@ -1,13 +1,16 @@
 // Variables
 var polyomino = [];
+var polyominoObject = null;
 var guards = [];
 var entriess = [];
 var doorss = [];
 var gates = [];
+var pointDistance = [];
 var gridSize = 50; // Size of each square in the grid
 var resetClick = false;
 var validateClick = false;
 var end = false;
+var calculateClick = false;
 var resultMessage = ""; // Variable to hold the result message
 
 // Set up the window and its buttons
@@ -24,6 +27,11 @@ function setup() {
     const buttonValidate = createButton("Validate");
     buttonValidate.position(60, 50);
     buttonValidate.mousePressed(validate);
+
+
+    const buttonDistance = createButton("calculate distance");
+    buttonDistance.position(130, 50);
+    buttonDistance.mousePressed(l1geodesicDistance);
 }
 
 // Function to create a grid of squares
@@ -80,6 +88,15 @@ function mousePressed() {
       resetClick = false;
       return;
   }
+    if (calculateClick && mouseX > 10 && mouseY > 75 && mouseX < width - 20 && mouseY < height - 200) {
+        console.log("calculateClick");
+        pointDistance.push({ x: mouseX, y: mouseY });
+        if (pointDistance.length == 2) {
+            let path = bfsL1GeodesicDistance(pointDistance[0], pointDistance[1], polyominoObject);
+            let distance = path.length;
+            console.log("distance", distance);
+        }
+    }
   // Check if the point is inside any square
   for (let square of polyomino) {
       // Adjust the mouse position based on the button area offset

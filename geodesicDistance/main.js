@@ -48,7 +48,7 @@ function validate() {
     createPolygon = true;
     let pts = points.slice(); // Copie de la liste de points
     pts = ensureCounterClockWise(pts); // Vérification de l'ordre
-    triangulate(pts); // Calcul de la triangulation
+    ears = triangulate(pts); // Calcul de la triangulation
 
   }
 }
@@ -75,7 +75,7 @@ function mousePressed() {
     if (createPolygon == true) {
         pointDist.push(new Point(mouseX, mouseY));
         if (pointDist.length!=0 && (pointDist.length % 2)==0) {
-            calculateGeodesicDistance(pointDist[pointDist.length - 2], pointDist[pointDist.length - 1]);
+            calculateGeodesicDistance(pointDist[pointDist.length - 2], pointDist[pointDist.length - 1], ears);
             showPath = true;
         }
 
