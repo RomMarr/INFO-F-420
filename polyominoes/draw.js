@@ -1,6 +1,6 @@
 // Draw the view and the square
 function drawWindow(squares, resultMessage, guards) {
-  drawBase();
+  drawBase(squares);
 
   // Draw guards on the squares in blue
   if (guards.length > 0) {
