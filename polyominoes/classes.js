@@ -14,6 +14,7 @@ class Square {
         this.size = size;
         this.active = false; // To track if the square is active (clicked)
         this.watched = false; // To track if the square is covered by a guard
+        this.inPath = false; // To track if the square is in the path
         this.leftUpPt = new Point(x, y); // Top-left point
         this.rightUpPt = new Point(x + size, y); // Top-right point
         this.leftDownPt = new Point(x, y + size); // Bottom-left point
@@ -26,7 +27,7 @@ class Square {
   draw() {
       // Draw the square with default color white and black edges
       fill(this.active ? 'red' : 'white'); // Fill color changes to red when active
-      if (this.watched) fill("blue");
+      if (this.watched || this.inPath) fill("blue");
       stroke('black'); // Edge color
       rect(this.x, this.y, this.size, this.size);
   }
