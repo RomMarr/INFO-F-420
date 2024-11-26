@@ -29,7 +29,7 @@ function drawPoints(points) {
 
 // if searching for the geodesic distance, draw the points
 function drawPointForDistance(pointDist) {
-  if(createPolygon) {
+  if(createdPolygon) {
     for (let i = 0; i < pointDist.length; i++) {
       fill("black");
       ellipse(pointDist[i].x, pointDist[i].y, 10, 10);
@@ -41,7 +41,7 @@ function drawPointForDistance(pointDist) {
 // Draw the path between the two points
 function drawPath() {
   if (showPath) {
-      stroke("yellow"); 
+      stroke("red"); 
       for (let i = 1; i < path.length; i++) {
           line(path[i - 1].x, path[i - 1].y, path[i].x, path[i].y);
       }

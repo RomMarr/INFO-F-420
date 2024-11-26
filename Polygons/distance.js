@@ -1,3 +1,14 @@
+class Distance {
+    constructor(origin, end, path, distance) {
+        this.origin = origin;
+        this.end = end;
+        this.path = path;
+        this.distance = distance;
+        path.length ==2 ? this.isVisible = true : this.isVisible = false;  // if the path is a staight line inside the polygon, two point can see each other
+    }
+}
+
+
 // calculates the geodesic distance between two points in a polygon
 function calculateGeodesicDistance(p, q, ears) {
     path = funnelAlgorithm(p, q, ears);

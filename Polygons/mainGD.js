@@ -31,16 +31,8 @@ function setup() {
   buttonClear.position(10, 50);
   buttonClear.mousePressed(resetpoints);
 
-  const buttonAGP = createButton("AGP");
-  buttonAGP.position(60, 50);
-  buttonAGP.mousePressed(validate);
-
-  const buttonDAGP = createButton("DAGP");
-  buttonDAGP.position(110, 50);
-  buttonDAGP.mousePressed(solveDAGP);
-
-  const buttonGeodesicDist = createButton("Geodesic Distance");
-  buttonGeodesicDist.position(170, 50);
+  const buttonGeodesicDist = createButton("Find distance");
+  buttonGeodesicDist.position(70, 50);
   buttonGeodesicDist.mousePressed(creatingPolygon);
 
   // Set text properties
@@ -67,7 +59,6 @@ function creatingPolygon() {
     resultMessage = "COLLISION, create a simple polygon";
   } else {
     createdPolygon = true;
-    console.log("Creating polygon");
     let pts = points.slice(); // Copie de la liste de points
     pts = ensureCounterClockWise(pts); // Vérification de l'ordre
     ears = triangulate(pts); // Calcul de la triangulation
@@ -77,24 +68,12 @@ function creatingPolygon() {
 }
 
 
-function validate() {
-  if (checkCollision()) {
-    resultMessage = "COLLISION, create a simple polygon";
-  } else {
-    pts = points.slice(); // Copy the list of points
-    pts = ensureCounterClockWise(pts); // Check list order
-    ears = triangulate(pts); // Find the triangulation of the polygon
-
-    // Color vertices after triangulation
-    colorVerticesFromTriangles(ears);
-  }
-  validateClick = true;
-  end = true;
-}
 
 // Draw the view and the points/lines
 function draw() {
   drawWindow(points, ears, resultMessage);
+  drawPath();
+  drawPointForDistance(pointDist);
 }
 
 // Handle a click from the mouse
@@ -133,3 +112,5 @@ function addPoint() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight); // Redimensionne le canvas à la taille de la fenêtre
 }
+
+

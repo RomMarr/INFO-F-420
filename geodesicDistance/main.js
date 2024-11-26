@@ -5,7 +5,7 @@ var path = [];
 var pointDist = [];
 var resetClick = false;
 var validateClick = false;
-var createPolygon = false;
+var createdPolygon = false;
 var showPath = false;
 var end = false;
 var resultMessage = ""; // Variable to hold the result message
@@ -35,7 +35,7 @@ function resetpoints() {
   validateClick = false;
   path = [];
   pointDist = [];
-  createPolygon = false;
+  createdPolygon = false;
   showPath = false;
   resultMessage = ""; // Clear the result message when resetting
 }
@@ -45,7 +45,7 @@ function validate() {
   if (checkCollision()) {
     resultMessage = "COLLISION, create a simple polygon";
   } else {
-    createPolygon = true;
+    createdPolygon = true;
     let pts = points.slice(); // Copie de la liste de points
     pts = ensureCounterClockWise(pts); // Vérification de l'ordre
     ears = triangulate(pts); // Calcul de la triangulation
@@ -72,7 +72,7 @@ function mousePressed() {
     mouseX <= width - 20
   ) {
     // if polygon has been confirmed
-    if (createPolygon == true) {
+    if (createdPolygon == true) {
         pointDist.push(new Point(mouseX, mouseY));
         if (pointDist.length!=0 && (pointDist.length % 2)==0) {
             calculateGeodesicDistance(pointDist[pointDist.length - 2], pointDist[pointDist.length - 1], ears);

@@ -97,7 +97,7 @@ class DualGraph {
     }
 
 
-    
+
     setGuards(caterpillar, guards){
         let guardedTriangles = new Set();
         let path = caterpillar.path;
@@ -200,7 +200,7 @@ function solveDAGP(){
     if (checkCollision()) {
         resultMessage = "COLLISION, create a simple polygon";
       } else {
-        createPolygon = true;
+        createdPolygon = true;
         let pts = points.slice(); // copy of the list of points
         pts = ensureCounterClockWise(pts); // check the order
         let poly = new Polygon(pts);
@@ -237,15 +237,6 @@ function solveDAGP(){
 
 
 
-class Distance {
-    constructor(origin, end, path, distance) {
-        this.origin = origin;
-        this.end = end;
-        this.path = path;
-        this.distance = distance;
-        path.length ==2 ? this.isVisible = true : this.isVisible = false;  // if the path is a staight line inside the polygon, two point can see each other
-    }
-}
 
 
 class Polygon{
