@@ -4,16 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <title>Dispersive Art Gallery Problem</title>
+    <link rel="icon" type="images/png" href="../images/AGP.png">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.min.js"></script>
+
 
   </head>
   <body>
 
     <nav class="navbar">
-        <a class="widget" href="index.html">Introduction</a>
+        <a class="widget" href="../index.html">Introduction</a>
         <a class="widget" href="ArtGalleryProblem.html">Art Gallery Problem</a>
         <a class="widget" href="GeodisticDis.html">Geodistic Distance</a>
         <a class="widget" href="DAGPpolygon.html">Dispersive Art Gallery Distance in polygon</a>
@@ -37,16 +39,16 @@
       <section id= "Definition">
         <h6> Definition: </h6>
         <p>Given two points p,q in a polygon P of n vertices, the geodesic distance is the length of the shortest path between p and q within the polygon. 
-            Unlike the Euclidean distance, the geodesic distance doesn't have to be straight. It can be broken lines.</p>
+            Unlike the Euclidean distance, the geodesic distance doesn't have to be straight. It can be broken lines <a href="Bibliography.html#GeodesicHull">[6]</a>.</p>
             
-        <p>If a polygon is convex, then the geodesic distance is equal to the euclidean distance because there are no obstacle to avoid.</p>
+        <p>If a polygon is convex, then the geodesic distance is equal to the euclidean distance because there are no obstacle to avoid <a href="Bibliography.html#ComparativeSurvey">[7]</a>.</p>
 
 
 
         <p><i>There are two important concepts in geodesic distances:</i> </p>
         <ol>
         <li> <strong> Geodesic Center</strong> : the Geodesic Center is a point in the polygon that minimizes the maximum geodesic distance to any other point.</li>
-      <li><strong> Geodesic Diameter</strong>: It is the maximum geodesic distance between any two points in the polygon.</li>
+      <li><strong> Geodesic Diameter</strong>: It is the maximum geodesic distance between any two points in the polygon<a href="Bibliography.html#ER-Completeness">[4]</a>.</li>
       </ol>
       </section>
 
@@ -55,7 +57,7 @@
         <ol>
             <li> Given two points p,q in a polygon P, if P is a simple polygon, then it exists a geodesic path between them and it is unique.</li>
           <li>Given two points p,q in a polygon P, the geodesic path between p and q is always a polygonal chain whose vertices (other than the endpoints) are reflex vertices of P.</li>
-            <li>Given two points p,q in a polygon P, if the geodesic path between p and q is a straight line segment, we say that the points can "see" each other. </li>
+            <li>Given two points p,q in a polygon P, if the geodesic path between p and q is a straight line segment, we say that the points can "see" each other<a href="Bibliography.html#Visibility">[8]</a>. </li>
           </ol>
       </section>
 
@@ -72,13 +74,13 @@
       <li> Find the &tau;(&pi;(p,q)) (the set of diagonals that is crossed by the path between p and q) and sort them. (the i-th diagonal is the i-th diagonal we encounter on the path.)</li>
       <li> Initialize the funnel the first F_1 = \(&alpha;_1, p, &beta;_1\)  where &alpha;_1 and &beta;_1 are the vertices of the first diagonal intersected by the path. This funnel represents the shortest path from p to the first diagonal.</li>
       <li> For each subsequent triangle i along the path, form F_i by adjusting the vertices to keep the shortest path from p to the current diagonal. </li>
-      <li> Iterate until we reach q.</li>
+      <li> Iterate until we reach q <a href="Bibliography.html#Visibility">[5]</a> .</li>
       </ol>
       <p>It also exists approximation algorithms but we won't discuss them. </p>
       </section>
 
       <figure>
-        <img src="images/funnel.png" alt="Portalgon embedding"/>
+        <img src="../images/funnel.png" alt="Portalgon embedding"/>
         <figcaption>Figure 2. Geodesic Distance Illustration</figcaption>
       </figure>
 
@@ -96,44 +98,42 @@
 <div class="modal" id="modalWindow">
 <button class="close-modal-btn" id="closeModalBtn">X</button>
 <h2>Illustration</h2>
-<iframe src="Polygons/indexGD.html" width="80%" height="60vh" style="border: none;"></iframe>
-
-
+<iframe src="../Polygons/indexGD.html" width="80%" height="60vh" style="border: none;"></iframe>
 </div>
 
 <script>
-// Get modal elements
-const modal = document.getElementById("modalWindow");
-const backdrop = document.getElementById("modalBackdrop");
-const openModalBtn = document.querySelector(".open-modal-btn");
-const closeModalBtn = document.getElementById("closeModalBtn");
-const iframeContent = document.getElementById("iframeContent");
-
-// Adjust iframe size dynamically based on modal size
-function adjustIframeSize() {
-  iframeContent.style.width = "100%"; // Width of iframe takes full modal space
-  iframeContent.style.height = "80%"; // Set iframe height to 80% of modal
-}
-
-// Show the modal when button is clicked
-openModalBtn.addEventListener("click", () => {
-  modal.style.display = "block";
-  backdrop.style.display = "block";
-  adjustIframeSize(); // Ensure iframe adjusts when modal is opened
-});
-
-// Close the modal
-closeModalBtn.addEventListener("click", () => {
-  modal.style.display = "none";
-  backdrop.style.display = "none";
-});
-
-// Close modal when clicking on the backdrop
-backdrop.addEventListener("click", () => {
-  modal.style.display = "none";
-  backdrop.style.display = "none";
-});
-</script>
+  // Get modal elements
+  const modal = document.getElementById("modalWindow");
+  const backdrop = document.getElementById("modalBackdrop");
+  const openModalBtn = document.querySelector(".open-modal-btn");
+  const closeModalBtn = document.getElementById("closeModalBtn");
+  const iframeContent = document.getElementById("iframeContent");
+  
+  // Adjust iframe size dynamically based on modal size
+  function adjustIframeSize() {
+    iframeContent.style.width = "100%"; // Width of iframe takes full modal space
+    iframeContent.style.height = "80%"; // Set iframe height to 80% of modal
+  }
+  
+  // Show the modal when button is clicked
+  openModalBtn.addEventListener("click", () => {
+    modal.style.display = "block";
+    backdrop.style.display = "block";
+    adjustIframeSize(); // Ensure iframe adjusts when modal is opened
+  });
+  
+  // Close the modal
+  closeModalBtn.addEventListener("click", () => {
+    modal.style.display = "none";
+    backdrop.style.display = "none";
+  });
+  
+  // Close modal when clicking on the backdrop
+  backdrop.addEventListener("click", () => {
+    modal.style.display = "none";
+    backdrop.style.display = "none";
+  });
+  </script>
 
 
       <section id="L1 Geodesic Distance"></section>
@@ -155,21 +155,55 @@ backdrop.addEventListener("click", () => {
       <p>To test it, right click on the button :  
       
         <div class="button-container">
-          <button class="open-modal-btn">Toggle Illustration</button>
+          <button class="open-modal-btn2">Toggle Illustration</button>
         </div>
        </p>
 <!-- Structure du Modal avec iframe -->
 
 
 <!-- Modal structure -->
-<div class="backdrop" id="modalBackdrop"></div>
-<div class="modal" id="modalWindow">
-<button class="close-modal-btn" id="closeModalBtn">X</button>
+<div class="backdrop2" id="modalBackdrop2"></div>
+<div class="modal2" id="modalWindow2">
+<button class="close-modal-btn2" id="closeModalBtn2">X</button>
 <h2>Illustration</h2>
-<iframe src="polyominoes/indexL1Distance.html" width="80%" height="60vh" style="border: none;"></iframe>
-
-
+<iframe src="../polyominoes/indexL1Distance.html" width="80%" height="60vh" style="border: none;"></iframe>
 </div>
+
+<script>
+  // Get modal elements
+  const modal2 = document.getElementById("modalWindow2");
+  const backdrop2 = document.getElementById("modalBackdrop2");
+  const openModalBtn2 = document.querySelector(".open-modal-btn2");
+  const closeModalBtn2 = document.getElementById("closeModalBtn2");
+  const iframeContent2 = document.getElementById("iframeContent2");
+  
+  // Adjust iframe size dynamically based on modal size
+  function adjustIframeSize() {
+    iframeContent2.style.width = "100%"; // Width of iframe takes full modal space
+    iframeContent2.style.height = "80%"; // Set iframe height to 80% of modal
+  }
+  
+  // Show the modal when button is clicked
+  openModalBtn2.addEventListener("click", () => {
+    modal2.style.display = "block";
+    backdrop2.style.display = "block";
+    adjustIframeSize(); // Ensure iframe adjusts when modal is opened
+  });
+  
+  // Close the modal
+  closeModalBtn2.addEventListener("click", () => {
+    modal2.style.display = "none";
+    backdrop2.style.display = "none";
+  });
+  
+  // Close modal when clicking on the backdrop
+  backdrop2.addEventListener("click", () => {
+    modal2.style.display = "none";
+    backdrop2.style.display = "none";
+  });
+  </script>
+
+
       </section>
 
 

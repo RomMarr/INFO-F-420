@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="css/style.css">
     <title>Dispersive Art Gallery Problem</title>
+    <link rel="icon" type="images/png" href="images/AGP.png">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.min.js"></script>
 
@@ -14,13 +15,13 @@
 
     <nav class="navbar">
         <a class="widget" href="index.html">Introduction</a>
-        <a class="widget" href="ArtGalleryProblem.html">Art Gallery Problem</a>
-        <a class="widget" href="GeodisticDis.html">Geodistic Distance</a>
-        <a class="widget" href="DAGPpolygon.html">Dispersive Art Gallery Distance in polygon</a>
-        <a class="widget" href="DAGPpolimonies.html">Disruptive art gallery problem in polyominoes</a>   
-        <a class="widget" href="WorstCase.html">WorstCase</a>
-        <a class="widget" href="Contributors.html">Contributors</a>
-        <a class="widget" href="Bibliography.html">Bibliography</a>
+        <a class="widget" href="WebPage/ArtGalleryProblem.html">Art Gallery Problem</a>
+        <a class="widget" href="WebPage/GeodisticDis.html">Geodistic Distance</a>
+        <a class="widget" href="WebPage/DAGPpolygon.html">Dispersive Art Gallery Distance in polygon</a>
+        <a class="widget" href="WebPage/DAGPpolimonies.html">Disruptive art gallery problem in polyominoes</a>   
+        <a class="widget" href="WebPage/WorstCase.html">WorstCase</a>
+        <a class="widget" href="WebPage/Contributors.html">Contributors</a>
+        <a class="widget" href="WebPage/Bibliography.html">Bibliography</a>
 
         
       </nav>
@@ -36,7 +37,7 @@
              They want to hire the smallest number of guards possible but be sure that together they can observe the whole gallery. There must be no blind spot.
             In a more formal way we can express it in this way : given a polygon <strong>P</strong> and an integer <em>n</em>, give a set of k guards that sees every point of the polygon if it exists. </p>
             
-        <p> will address the original problem but our main focus will be on a modified version of it : <strong>The Dispersive Art Gallery Problem</strong>. In this problem we don’t try to minimize the amount of guards but we want to maximize the distance between each guard. Maximizing the distance can be more 
+        <p> will address the original problem but our main focus will be on a modified version of it : <strong>The Dispersive Art Gallery Problem</strong> <a href="Bibliography.html#Rieck">[1]</a>. In this problem we don’t try to minimize the amount of guards but we want to maximize the distance between each guard. Maximizing the distance can be more 
             efficient for the security of the gallery. In a more formal way, we obtain : given a polygon P and a distance l, give a set of any numbers of guards 
             such that the distance between each guard is at least l and they see every point of the polygon if it exists. We will also consider that guards are restricted 
             to being placed only at the vertices of the polygon. This means that while the entire interior must be visible, guards cannot be positioned arbitrarily within the polygon or along its edges. 

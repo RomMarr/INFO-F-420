@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" type="images/png" href="../images/AGP.png">
+    <title>Dispersive Art Gallery Problem</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.10.0/p5.min.js"></script>
+
+  </head>
+  <body>
+
+    <nav class="navbar">
+        <a class="widget" href="../index.html">Introduction</a>
+        <a class="widget" href="ArtGalleryProblem.html">Art Gallery Problem</a>
+        <a class="widget" href="GeodisticDis.html">Geodistic Distance</a>
+        <a class="widget" href="DAGPpolygon.html">Dispersive Art Gallery Distance in polygon</a>
+        <a class="widget" href="DAGPpolimonies.html">Disruptive art gallery problem in polyominoes</a>   
+        <a class="widget" href="WorstCase.html">WorstCase</a>
+        <a class="widget" href="Contributors.html">Contributors</a>
+        <a class="widget" href="Bibliography.html">Bibliography</a>
+
+        
+      </nav>
+
+    <header>
+        <h1>Dispersive Art Gallery Problem</h1>
+    </header>
+
+    <section id="DAGP in polyominoes">
+        <h2>DAGP in polyominoes</h2>
+
+        <section id="def">
+            <h6>Definitions</h6>
+            <p>Firstly, what is a polyomino :  it is a geometric figure composed of multiple squares connected to each other by their edges. 
+            For a polyomino to be valid, all the squares have to be connected to a set of the other squares by at least one edge. </p>
+
+            <p>A polyomino with hole(s) is a polyomino where a square or a set of squares that are not from the polyomino are surrounded by the squares of the polyomino. 
+              This definition will be useful in <a href="WorstCase.html"> WorstCase</a>. If the polyomino has no holes it is a simple polyomino.</p>
+        </section>
+
+        <div style="text-align: center;">
+            <div style="display: flex; justify-content: center; gap: 10px; align-items: center;">
+              <img src="../images/polywithHole.png" alt="Image 1" style="width: 200px;">
+              <img src="../images/Polyomino_hole1.png" alt="Image 2" style="width: 200px;">
+            </div>
+            <p style="margin-top: 10px; text-align: center; width: fit-content; margin-left: auto; margin-right: auto;">
+              <strong> Polynominoes with holes </strong></p>
+          </div>
+          
+
+        <section id="Theorem">
+            <h6>Theorem</h6>
+            <p>For every simple polyomino there exist a set of guard solving the Dispersive Art Gallery Problem where each guard is at least at a geodesic distance of 3 from the other guards. 
+              This is the theorem 1 from reference <a href="Bibliography.html#Rieck">[1]</a>. </p>
+            <p> To prove this theorem we have an algorithm that will generate a set of guards separated by at a distance of at least 3 and watching the whole polyomino. </p>
+        </section>
+        <section id="Preliminaries steps">
+            <h6>Preliminaries steps</h6>
+            <p>So now that we have defined a polyomino we will explore the disruptive art gallery problem for polyominoes. 
+            The goal is to maximize the distance between each guard. 
+            The guard will always be on a vertex. To do that we used the algorithm described in the article from <a href="Bibliography.html#Rieck">[1]</a>.</p>
+            <p><i>To implement it we first need to calculate different steps to be able to compute the algorithm. </i> </p>
+            <ol>
+            <li> <strong>if the polyomino is valid : </strong>  we go through each active square (square from the polyomino) and check if it is connected to another active one.  </li>
+          <li><strong>The boundaries :</strong> we calculate the boundaries (edges separating an active square from a not active one). </li>
+          <li><strong>The vertices :</strong> we get all the vertices from the boundaries. As they are from the boundaries, they will always be on a limit of the polyomino. 
+            They will be all the possible positions for the guards. </li>
+          <li><strong>First guard :</strong>  we randomly (or arbitrarily) place the first guard on any vertex from the vertices.  </li>
+          <li><strong>Calculate r-visibility of the first guard :</strong> Once the first guard is placed we need to calculate its r-visibility. 
+            It starts by determining all squares in the polyomino that are visible from the guard's position. 
+            The function iterates through each square, checking if a rectangular area (bounded by the guard’s position and the current square’s center point) is entirely contained within the polyomino. 
+            If so, the squares within this rectangle are marked as "watched" and added to the guard’s visibility area as a whole new polyomino. </li>
+
+            <div style="text-align: center;">
+              <div style="display: flex; justify-content: center; gap: 10px; align-items: center;">
+                <img src="../images/R-visibility1.png" alt="Image 1" style="width: 200px;">
+                <img src="../images/R-visibility2.png" alt="Image 2" style="width: 200px;">
+              </div>
+              <p style="margin-top: 10px; text-align: center; width: fit-content; margin-left: auto; margin-right: auto;">
+                <strong> guard visibility </strong></p>
+            </div>
+
+            
+          <li><strong>Determine the sub-polyominoes :</strong> the sub-polyominoes are the squares connected to the guard’s view area. 
+                      The squares connected to each others form independent polyominoes. The number of sub-polyominoes will determine our case in the algorithm. </li>
+          <li><strong>Determine gates :</strong> a gate is the connection of  a sub-polyomino to the guard’s view area. The gate is composed of :
+          <ol>
+            <li><strong> An entry : </strong> the set of edges shared between both areas, connecting them together. </li>
+            <li><strong> The two doors  : </strong> edges starting from each extremity of the entry, they are not from the entry nor the sub-polyomino. 
+              They belong to the initial polyomino. They can be parallel (both doors are on the same axis, vertical or horizontal) or orthogonal (each door is on its own axis, vertical or horizontal). </li>
+              <li><strong> The orientation : </strong> direction of the gate, determined in the algorithm. </li>
+            </ol>
+          </li>
+
+          <figure>
+            <img src="../images/Gate.png" alt="Portalgon embedding" style="width: 300px; height: auto;" />
+            <figcaption><strong> Figure 3: Gate</strong></figcaption>
+          </figure>
+          <li><strong>Alpha distance : </strong> number of boundaries browsed to go from the guard to the first gate encountered by going in a clockwise order.</li>
+          <li><strong>Beta distance : </strong> number of boundaries browsed to go from the guard to the first gate encountered by going in a counter-clockwise order.</li>
+          </ol>
+          </section>
+
+
+
+
+        </section>
+        <section id="The algorithm">
+            <h6>The Algorithm</h6>
+            <p>When all the preliminaries steps are done, we can now start with the algorithm. Its goal is to calculate and place the remaining guard in the polyomino. </p>
+
+            <p> The algorithm is composed of multiple recursion parts : recursive determination of the orientation, 
+              recursive call for a parallel gate and recursive call for an orthogonal gate.</p>
+            <section id="Recursive determination of the orientation">
+                <h7>Recursive determination of the orientation</h7>
+                <p>To determine the orientation of each gate, we need to check in which case we are. To do so, we calculate k, the number of sub-polyominoes. </p>
+               <p> <i> Then we determine in what situation we are : </i> </p>
+               <ol>
+                <li> <strong>If k = 0 :</strong> then the problem is solved, we do nothing. </li>
+                <li> <strong>If k = 1 :</strong> we calculate the distance alpha in <a href="DAGPpolimonies.html#Preliminaries steps">Preliminaries steps</a>. </li>
+                <ol>
+                  <li><strong>If &alpha; = 1</strong> then the gate's orientation is clockwise. </li>
+                  <li>Else it is counter-clockwise. </li>
+                </ol>
+                <li> <strong>If k = 2 :</strong> then the problem is solved, we do nothing. </li>
+                <ol>
+                  <li><strong>If &alpha; = 1 and &beta; > 1 </strong> then the first and second gates are clockwise. </li>
+                  <li><strong>If &alpha; > 1 and &beta; = 1 </strong>  then the first and second gates are counter-clockwise. </li>
+                  <li><strong>If &alpha &NotEqual; 1 and &beta ;&NotEqual; 1  </strong> hen the first gate is counter-clockwise and the second clockwise. </li>
+                </ol>
+                <li> <strong>If k &ge; 3 :</strong> while the gates are adjacent we declare them as clockwise. The rest is counter-clockwise. </li>
+                </section>
+
+                <section id="Recursive calls for the gates">
+                    <h7>Recursive calls for the gates</h7>
+                    <p>When the orientation of the gates is done, we can now have 2 types of gates : orthogonal and parallel 
+                      (see gates definition in section <a href="DAGPpolimonies.html#Preliminaries steps">Preliminaries steps</a>). 
+                      The following explanation concerns the sub-polyominoes that contains the gates.</p>
+                    
+                    <p><i>Parallel gates : </i></p>
+
+                    <p>We take the edges from the entry of the gate and create the biggest rectangle <strong>T</strong> from it. 
+                    To be an acceptable rectangle, each square must be active (from the sub-polyomino) and <strong>T</strong> must have all the edges from the entry as one of the sides (the base of the rectangle). 
+                    Then we place a guard at the top (opposite side from the base) of <strong>T</strong>. 
+                    If the gate is clockwise, the guard cannot be on the left side and if the gate is counter-clockwise, 
+                    the guard cannot be on the right side. A guard can never be on the entry (because the entry are edges from the r-visibility area of a guard previously placed).</p>
+
+                    <p>There will always be a place to put the guard for each gate because the gate's entry separate the sub-polyomino from the polyomino and so it always have at least a rectangle of height 1 and a width of the entry.</p>
+                    <p><i>Orthogonal gates :  </i></p>
+
+                    <p>This case is a little more complex, we need to apply the same principle as for the parallel gates but we need to determine if we do it with the horizontal entry or the vertical one, plus we have a special case, the endpoint.</p>
+                    <p>The endpoint is when the gate is orthogonal but either the horizontal axis or the vertical axis has no edges in the entry. In this case we calculate the furthermost point (point of an edge from the sub-polyomino) 
+                      we can access on the axis of the entry and in the direction of the other axed door.</p>
+
+                    <p>For the other cases, we need to determine the <strong>L</strong> segment (the horizontal or vertical part of the entry). 
+                      If the gate is clockwise, <strong>L</strong> will be the horizontal segment. If the gate is counter-clockwise, <strong>L</strong> will be the vertical segment.</p>
+
+                    <p>Now we need to recursively apply our 2 cases for the sub-polyominoes and recursively for their sub-polyominoes until all squares are watched by a guard. 
+                      Once its done we take all the guards, they make our proof that all the guards are at a geodesic distance of at least 3.
+                    </p>
+
+            </section>
+        </section>
+
+
+        <p>To test it, right click on the button :  
+      
+            <div class="button-container">
+              <button class="open-modal-btn">Toggle Illustration</button>
+            </div>
+           </p>
+    <!-- Structure du Modal avec iframe -->
+    
+    
+    <!-- Modal structure -->
+    <div class="backdrop" id="modalBackdrop"></div>
+    <div class="modal" id="modalWindow">
+    <button class="close-modal-btn" id="closeModalBtn">X</button>
+    <h2>Illustration</h2>
+    <iframe src="../polyominoes/index.html" width="80%" height="60vh" style="border: none;"></iframe>
+    
+    
+    </div>
+    
+    <script>
+    // Get modal elements
+    const modal = document.getElementById("modalWindow");
+    const backdrop = document.getElementById("modalBackdrop");
+    const openModalBtn = document.querySelector(".open-modal-btn");
+    const closeModalBtn = document.getElementById("closeModalBtn");
+    const iframeContent = document.getElementById("iframeContent");
+    
+    // Adjust iframe size dynamically based on modal size
+    function adjustIframeSize() {
+      iframeContent.style.width = "100%"; // Width of iframe takes full modal space
+      iframeContent.style.height = "80%"; // Set iframe height to 80% of modal
+    }
+    
+    // Show the modal when button is clicked
+    openModalBtn.addEventListener("click", () => {
+      modal.style.display = "block";
+      backdrop.style.display = "block";
+      adjustIframeSize(); // Ensure iframe adjusts when modal is opened
+    });
+    
+    // Close the modal
+    closeModalBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+      backdrop.style.display = "none";
+    });
+    
+    // Close modal when clicking on the backdrop
+    backdrop.addEventListener("click", () => {
+      modal.style.display = "none";
+      backdrop.style.display = "none";
+    });
+    </script> 
+    </section>

@@ -12,7 +12,13 @@ var resultMessage = ""; // Variable to hold the result message
 
 // Set up the window and its buttons
 function setup() {
-    createCanvas(windowWidth, windowHeight);
+    let canvasWidth = windowWidth * 0.8; // largeur du canvas (80% de la fenêtre)
+    let canvasHeight = windowHeight * 0.8; // hauteur du canvas (80% de la fenêtre)
+  
+    // Créer le canvas et le positionner au centre
+    let canvas = createCanvas(canvasWidth, canvasHeight);
+    canvas.position((windowWidth - canvasWidth) / 2, (windowHeight - canvasHeight) / 2);
+    windowResized();
     createGrid(); // Call the function to create the grid of squares
 
     // Create the clear button
@@ -159,6 +165,11 @@ function bfsL1GeodesicDistance(p1, p2, polyomino) {
     }
 
     return [];
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight); // Redimensionne le canvas à la taille de la fenêtre
+    createGrid();
 }
 
 

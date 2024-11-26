@@ -17,7 +17,6 @@ function setup() {
 
   // Créer le canvas et le positionner au centre
   let canvas = createCanvas(canvasWidth, canvasHeight);
-  background(255);
   canvas.position((windowWidth - canvasWidth) / 2, (windowHeight - canvasHeight) / 2);
   windowResized();
 
