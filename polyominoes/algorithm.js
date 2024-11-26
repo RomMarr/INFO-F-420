@@ -14,7 +14,7 @@ function disruptiveSolver(polyomino){
         }
         sub.guards.push(new Guard(guardPos)); // add the guard to the subPolyomino
         guards.push(new Guard(guardPos));  // add the guard to list to draw them
-        sub.start2(); // start the algorithm to prepare the subPolyomino
+        sub.start(false); // start the algorithm to prepare the subPolyomino
         disruptiveSolver(sub); // recursive call to solve the subPolyomino
     }
 }

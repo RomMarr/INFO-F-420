@@ -8,6 +8,16 @@ function compareEdges(edge1, edge2) {
   );
 }
 
+ // Get the edges of a square
+ function getEdgesFromSquare(square) {
+  let edges = [];
+  let corners = square.corners;
+  for (let i = 0; i < corners.length; i++) {
+      edges.push([corners[i], corners[(i + 1) % corners.length]]);
+  }
+  return edges;
+}
+
 // Compare two edges together and returns true if they are the same or in reverse
 function compareEdgesNonDirection(edge1, edge2) {
   return (
@@ -24,10 +34,10 @@ function compareEdgesNonDirection(edge1, edge2) {
 
 // Check if an edge is in the list of edges
 function compareEdgeList(edge,list){
-  let reverse_edge = [edge[1],edge[0]];
-  for (let edge_l of list){
+  let reverseEdge = [edge[1],edge[0]];
+  for (let edgeL of list){
     // if the edge is in the list
-    if (compareEdges(edge_l, edge)|| compareEdges(edge_l, reverse_edge)) return true;
+    if (compareEdges(edgeL, edge)|| compareEdges(edgeL, reverseEdge)) return true;
   }return false;
 }
 
@@ -57,11 +67,11 @@ function edgeAdjacent(edge1, edge2) {
 
 // Create a rectangle from 2 points
 function getRectangle(p,q){
-  const min_x = Math.min(p.x, q.x);
-  const max_x = Math.max(p.x, q.x);
-  const min_y = Math.min(p.y, q.y);
-  const max_y = Math.max(p.y, q.y);
-  return [min_x,min_y,max_x,max_y];
+  const minX = Math.min(p.x, q.x);
+  const maxX = Math.max(p.x, q.x);
+  const minY = Math.min(p.y, q.y);
+  const maxY = Math.max(p.y, q.y);
+  return [minX,minY,maxX,maxY];
 }
 
 // Check if 2 points are the same
@@ -77,17 +87,17 @@ function additionPoints(point1, point2){
 }
 
 // Check if the point is in the list of edges
-function isPointInEdges(point, list_edges){
-  for (let edge of list_edges){
-    for (let edge_point of edge){
-      if (comparePoints(point, edge_point)) return true; // if the point is in the list
+function isPointInEdges(point, listEdges){
+  for (let edge of listEdges){
+    for (let edgePoint of edge){
+      if (comparePoints(point, edgePoint)) return true; // if the point is in the list
     }
   } return false;
 }
 
 // Check if the point is in the list of points
-function commonCoordonate(point, list_points){
-  for (let p of list_points){
+function commonCoordonate(point, listPoints){
+  for (let p of listPoints){
     if (p.x == point.x || p.y == point.y) return true; // if the point is in the list
   } return false;
 }

@@ -365,3 +365,12 @@
 //   }
 //   return edges;
 // }
+
+// Function to start the subPolyomino and generate its information (first guard is not applicable here)
+    // start2(){
+    //     this.orderBoundariesFromGuard();
+    //     this.r_visibility(this.guards[0]);
+    //     this.generate_subpolyominoes();
+    //     this.generate_gates();
+    //     this.toDraw();
+    // }

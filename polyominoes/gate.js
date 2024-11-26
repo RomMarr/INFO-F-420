@@ -36,7 +36,7 @@ class Gate{
         return this.isHorizontal = false;
     }
 
-    // Return the interval of the entry of a parallel gate
+    //Return the interval of the entry of a parallel gate
     giveIntervalEntry(){
         let min = Infinity;
         let max = -Infinity;
@@ -64,6 +64,8 @@ class Gate{
             return [min,max,x]; // return the interval of the entry + the x coordinate
         }
     }
+
+
 
      // Return true if the doors are parallels (if all the points of the doors have the same x or y coordinates).
     areDoorsParallel(){

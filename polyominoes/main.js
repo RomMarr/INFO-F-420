@@ -64,7 +64,7 @@ function validate() {
         resultMessage = "The polyomino is invalid"; 
     }else{ resultMessage = ""; 
     polyomino = poly.getSquares();
-    poly.start(); // Prepare the main polyomino
+    poly.start(true); // Prepare the main polyomino
     guards.push(poly.guards[0]); // Add the first guard
     disruptiveSolver(poly);
     }

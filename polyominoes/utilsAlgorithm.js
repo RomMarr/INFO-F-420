@@ -3,14 +3,14 @@ function computeGatesOrientation(polyomino) {
     let k = polyomino.getNbSubPolyominoes();
     if (k == 0) return true;
     else if (k==1){
-        let alpha = polyomino.calculate_distance_alpha();
+        let alpha = polyomino.calculateDistanceAlpha();
         if (alpha == 1)polyomino.subPolyominoes[0].gate.changeOrientation(true); // declare G1 to be clockwise
         else polyomino.subPolyominoes[0].gate.changeOrientation(false); // declare G1 to be counterclockwise.
     }else if (k == 2){
         let gates = [];
         for (sub of polyomino.subPolyominoes) gates.push(sub.gate) // get the gates of the subpolyominoes
-        let alpha = polyomino.calculate_distance_alpha();
-        let beta = polyomino.calculate_distance_beta();
+        let alpha = polyomino.calculateDistanceAlpha();
+        let beta = polyomino.calculateDistanceBeta();
         if (alpha == 1 && beta == 1){
             // declare G1 to be clockwise and G2 to be counterclockwise
             gates[0].changeOrientation(true);
