@@ -38,6 +38,12 @@
             <p>Firstly, what is a polyomino :  it is a geometric figure composed of multiple squares connected to each other by their edges. 
             For a polyomino to be valid, all the squares have to be connected to a set of the other squares by at least one edge. </p>
 
+
+          <figure>
+            <img src="../images/PolyNoHole.png" alt="Portalgon embedding" style="width: 300px; height: auto;" />
+            <figcaption><strong> Figure 3: Gate</strong></figcaption>
+          </figure>
+
             <p>A polyomino with hole(s) is a polyomino where a square or a set of squares that are not from the polyomino are surrounded by the squares of the polyomino. 
               This definition will be useful in <a href="WorstCase.html"> WorstCase</a>. If the polyomino has no holes it is a simple polyomino.</p>
         </section>
@@ -81,7 +87,7 @@
                 <img src="../images/R-visibility2.png" alt="Image 2" style="width: 200px;">
               </div>
               <p style="margin-top: 10px; text-align: center; width: fit-content; margin-left: auto; margin-right: auto;">
-                <strong> guard visibility </strong></p>
+                <strong> R-Visibility </strong></p>
             </div>
 
             
@@ -130,7 +136,7 @@
                 <ol>
                   <li><strong>If &alpha; = 1 and &beta; > 1 </strong> then the first and second gates are clockwise. </li>
                   <li><strong>If &alpha; > 1 and &beta; = 1 </strong>  then the first and second gates are counter-clockwise. </li>
-                  <li><strong>If &alpha &NotEqual; 1 and &beta ;&NotEqual; 1  </strong> hen the first gate is counter-clockwise and the second clockwise. </li>
+                  <li><strong>If &alpha; &NotEqual; 1 and &beta; &NotEqual; 1  </strong> hen the first gate is counter-clockwise and the second clockwise. </li>
                 </ol>
                 <li> <strong>If k &ge; 3 :</strong> while the gates are adjacent we declare them as clockwise. The rest is counter-clockwise. </li>
                 </section>
