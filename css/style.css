@@ -244,6 +244,12 @@
   
   }
 
+  iframe {
+    border: none;
+    width: 100%; /* Ajuste selon tes besoins */
+    height: 500px; /* Ajuste selon tes besoins */
+  }
+
  
 
   .toc h1, h2,  h3, h4, h5{
