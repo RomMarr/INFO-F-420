@@ -1,16 +1,7 @@
 // Draw the view and the square
 function drawWindow(squares, resultMessage, guards, showDetails) {
-  background(200);
-
-  // Draw the title and button section
-  fill("black");
-  textSize(24);
-  text("Dispersive Art Gallery in polyominoes", 10, 30); // Title of the window
-
-  // Draw the clickable area for the square
-  fill(255); // White color for the clickable area
-  rect(10, 75, width - 20, height - 200); // Draw a rectangle for the clickable area
-
+  drawBackground("Dispersive Art Gallery in polyominoes", resultMessage);
+  
   // draw the information for polyominoes
   drawGrid(squares); // Draw the grid of squares
   if (showDetails){
@@ -18,16 +9,32 @@ function drawWindow(squares, resultMessage, guards, showDetails) {
     drawEntry();
   } drawGuards(guards);
 
-  // Draw the result message section
-  fill("black");
-  textSize(20);
-  text(resultMessage, 30, height - 70); // Draw the result message at the bottom
 }
 
 
 // Draw the squares (currently only one)
 function drawGrid(squares){
   for (let square of squares)  square.draw(); // Call the draw method of each square
+}
+
+
+function drawBackground(title, resultMessage){
+  background(200);
+
+  // Draw the title and button section
+  fill("black");
+  textSize(24);
+  text(title, 10, 30); // Title of the window
+
+  // Draw the clickable area for the square
+  fill(255); // White color for the clickable area
+  rect(10, 75, width - 20, height - 200); // Draw a rectangle for the clickable area
+
+  // Draw the result message section
+  fill("black");
+  textSize(20);
+  text(resultMessage, 30, height - 70); // Draw the result message at the bottom
+
 }
 
 

@@ -8,7 +8,6 @@ var resetClick = false;
 var validateClick = false;
 var end = false;
 var calculateClick = false;
-var showPath = false;
 var resultMessage = ""; // Variable to hold the result message
 
 // Set up the window and its buttons
@@ -56,19 +55,18 @@ function reset() {
 
 // Draw the view and the grid
 function draw() {
-    background(200);
-
-    // Draw the title and button section
-    fill("black");
-    textSize(24);
-    text("L1 geodesic distance", 10, 30); // Title of the window
-
+    drawBackground("L1 Geodesic Distance", resultMessage);
     drawGrid(polyomino); // Draw the grid of squares
-    for (let i = 0; i < pointDistance.length; i++) {
-        fill("black");
-        ellipse(pointDistance[i].x, pointDistance[i].y, 10, 10);
+    if (pointDistance.length % 2 == 0 && pointDistance.length > 0) {
+        for (let i = pointDistance.length-2; i < pointDistance.length; i++) {
+            fill("black");
+            ellipse(pointDistance[i].x, pointDistance[i].y, 10, 10);
+        }
     }
-    resultMessage = "Choose two points to calculate the distance";
+    else if (pointDistance.length % 2 == 1) {
+        fill("black");
+        ellipse(pointDistance[pointDistance.length-1].x, pointDistance[pointDistance.length-1].y, 10, 10);
+    }
 }
 
 
@@ -80,7 +78,7 @@ function mousePressed() {
   }
     if (calculateClick && mouseX > 10 && mouseY > 75 && mouseX < width - 20 && mouseY < height - 200) {
         pointDistance.push({ x: mouseX, y: mouseY });
-        if (pointDistance.length == 2) {
+        if (pointDistance.length %2==0) {
             calculateDistance();
         }
     }
@@ -101,6 +99,7 @@ function windowResized() {
 
 
 function calculateDistance() {
+    resultMessage = "Choose two points to calculate the distance";
     path = bfsL1GeodesicDistance(pointDistance[pointDistance.length-2], pointDistance[pointDistance.length-1], polyominoObject);
     showPath = true;
     let distance = path.length;
