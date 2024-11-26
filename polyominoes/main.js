@@ -85,6 +85,7 @@ function validate() {
     poly.start(true); // Prepare the main polyomino
     guards.push(poly.guards[0]); // Add the first guard to guards to draw
     disruptiveSolver(poly);
+    poly.guards = guards;
     }
 }
 
