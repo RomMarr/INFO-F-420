@@ -51,13 +51,8 @@ class Polyomino {
     // set the mandatory elements to draw the polyomino and the gates
     toDraw(){
         for (let sub of this.subPolyominoes) {
-            gates.push(sub.gate);
-            for (let ent of sub.gate.entry){
-                entriess.push(ent);
-            }
-            for (let dor of sub.gate.doors){
-                doorss.push(dor);
-            }
+            for (let ent of sub.gate.entry) entriess.push(ent);
+            for (let dor of sub.gate.doors) doorss.push(dor);
         }
     }
     
