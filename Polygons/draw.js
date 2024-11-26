@@ -11,19 +11,14 @@ function drawWindow(points, ears, resultMessage) {
   drawPoints(points);
   drawPolygon(points);
   drawEars(ears);
+  drawPath();
+  drawPointForDistance(pointDist);
   // Draw the result message section
   fill("black");
   textSize(20);
   text(resultMessage, 30, height - 70); // Draw the result message at the bottom
 }
 
-// Draw the points and change their color if they are extreme points
-// function drawPoints(points) {
-//   for (let i = 0; i < points.length; i++) {
-//     fill("black"); // other points are in black
-//     ellipse(points[i].x, points[i].y, 10, 10);
-//   }
-// }
 
 
 // Draw the points and color each vertex based on the assigned color
@@ -34,6 +29,30 @@ function drawPoints(points) {
   }
 }
 
+// if searching for the geodesic distance, draw the points
+function drawPointForDistance(pointDist) {
+  if(createPolygon) {
+    for (let i = 0; i < pointDist.length; i++) {
+      fill("black");
+      ellipse(pointDist[i].x, pointDist[i].y, 10, 10);
+    }
+  }
+}
+
+
+// Draw the path between the two points
+function drawPath() {
+  if (showPath) {
+      stroke("yellow"); 
+      for (let i = 1; i < path.length; i++) {
+          line(path[i - 1].x, path[i - 1].y, path[i].x, path[i].y);
+      }
+      stroke("black"); 
+  }
+}
+
+
+// Draw the polygon based on the points
 function drawPolygon(points) {
   if (points.length > 1) {
     for (let i = 1; i < points.length; i++) {
@@ -50,17 +69,6 @@ function drawPolygon(points) {
   }
 }
 
-// function drawEars(ears) {
-//   let n = ears.length;
-//   for (let i = 0; i < n; i++) {
-//     fill(ears[i].color); // Use the triangle's assigned color
-//     beginShape();
-//     for (let j = 0; j < 3; j++) {
-//       vertex(ears[i][j].x, ears[i][j].y);
-//     }
-//     endShape(CLOSE);
-//   }
-// }
 
 // Draw the lines to create the triangulation of the simple polygon
 function drawEars(ears) {

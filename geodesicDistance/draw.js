@@ -31,8 +31,8 @@ function drawWindow(points, ears, resultMessage) {
         fill("black");
         ellipse(pointDist[i].x, pointDist[i].y, 10, 10);
       }
+    }
   }
-}
   
   
 function drawPath() {
