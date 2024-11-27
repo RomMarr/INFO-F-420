@@ -85,6 +85,8 @@ function validate() {
     guards.push(poly.guards[0]); // Add the first guard to guards to draw
     disruptiveSolver(poly);
     poly.guards = guards;
+    if (guards.length == 1) resultMessage = guards.length + " guard has been placed to cover the polyomino with a minimal geodesic distance";
+    else resultMessage = guards.length + " guards have been placed to cover the polyomino with a minimal geodesic distance";
     }
 }
 
