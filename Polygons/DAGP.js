@@ -216,6 +216,7 @@ function solveDAGP(){
             if (uncoveredTriangles.length === 0) break; // All triangles are guarded
     
             let subregions = dualGraph.partitionSubregions(uncoveredTriangles);
+            let guards = [];
             for (let subregion of subregions) {  // solve every subregion
                 let trianglePath = [];
                 if (subregion.size == 1) {
