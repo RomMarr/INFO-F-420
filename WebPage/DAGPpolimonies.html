@@ -19,7 +19,6 @@
         <a class="widget" href="GeodisticDis.html">Geodistic Distance</a>
         <a class="widget" href="DAGPpolygon.html">Dispersive Art Gallery Distance in polygon</a>
         <a class="widget" href="DAGPpolimonies.html">Dispersive art gallery problem in polyominoes</a>   
-        <a class="widget" href="WorstCase.html">WorstCase</a>
         <a class="widget" href="Contributors.html">Contributors</a>
         <a class="widget" href="Bibliography.html">Bibliography</a>
 
@@ -197,19 +196,13 @@
     const backdrop = document.getElementById("modalBackdrop");
     const openModalBtn = document.querySelector(".open-modal-btn");
     const closeModalBtn = document.getElementById("closeModalBtn");
-    const iframeContent = document.getElementById("iframeContent");
     
-    // Adjust iframe size dynamically based on modal size
-    function adjustIframeSize() {
-      iframeContent.style.width = "100%"; // Width of iframe takes full modal space
-      iframeContent.style.height = "80%"; // Set iframe height to 80% of modal
-    }
+
     
     // Show the modal when button is clicked
     openModalBtn.addEventListener("click", () => {
       modal.style.display = "block";
       backdrop.style.display = "block";
-      adjustIframeSize(); // Ensure iframe adjusts when modal is opened
     });
     
     // Close the modal
@@ -224,4 +217,95 @@
       backdrop.style.display = "none";
     });
     </script> 
+
+    <section id="NP-Hardness">
+      <h6>NP-hardness in Polyominoes</h6>
+      <p>NP-hardness has been proved for a distance of at least 5. 
+        The proof is using a reduction of this problem to the problem of Planar Monotone 3Sat that has been shown to be NP-complet.</p>
+
+      <p>To show the reduction, we need to describe different sub-polyominoes called gadget, that will represent variables and clauses. 
+        We also need to describe connector between the different part and duplicator to fill the case where variables are connected to different clauses. </p>
+
+        <p>Here we will only describe these gadgets and explain their function. The proof in depth can be found here : <a href="Bibliography.html#Rieck">[1]</a></p>
+
+      <section id="Variables">
+        <h7>Variables</h7>
+        <figure>
+          <img src="../images/Variable.jpg" style="width: 500px; height: auto;" />
+        </figure>
+
+        <p>Variables are represented by this configuration. We can see that there are only 2 ways of filling these with guard set of dispersion 5, (a) or (b). 
+        (a) represent a variable in a true state. We can see that the line connecting the rest of the polyominoes on the top is watched by a guard inside the variables, but not the one at the bottom. 
+        In the case of (b) the variables are in a false state, and on the opposite, the upper connector is not being watched and the lower one is.</p>
+
+      </section>
+
+      <section id="Clauses">
+        <h7>Clauses</h7>
+        <figure>
+          <img src="../images/Clauses.jpg" style="width: 500px; height: auto;" />
+        </figure>
+
+        <p>This gadget will represent clauses. Clauses can have a smaller number of connected variables or a bigger number, using the same pattern as the one in the figure. 
+          The part label by &pi; can only be watched by a guard inside the gadget, while part label by &zeta; can be partially watched by a guard outside, coming from a variable.</p>
+
+          <p>An observation we can make is that there is no guard set of a dispersion distance of at least 5 with guard only placed in vertices inside the gadget. 
+            But if only one of the &zeta; is partially watched by a guard outside, then a guard set of dispersion distance of at least 5 can be found.</p>
+
+        <p>The behavior of this shape give us a clause because a guard set of distance 5 can only be found if one of the variables connected is in the corresponding state of the connection. </p>
+      </section>
+
+
+      <section id="Duplicators">
+        <h7>Duplicators</h7>
+        <figure>
+          <img src="../images/Duplicators.jpg" style="width: 500px; height: auto;" />
+        </figure>
+
+        <p>Duplicator are needed when a variable is connected to multiple clauses. 
+          Stacking multiple duplicator on top of each other permit a variable to connect the amount needed of clauses.</p>
+
+        <p>We can observe that the guard set of a dispersion distance of at least 5 in a duplicator is entirely defined if the signal is true or false. 
+          If it's false, a guard must be placed on the lowest vertices. Because of this guard, the position of the guard in &pi;_0 is entirely defined and all the position of the other guard are as well. 
+          The signal sent to the clauses (or other duplicator), is false, as it was needed.
+          The same thing happens for a true signal.</p>
+      </section>
+      
+      <section id="Connectors">
+        <h7>Connectors</h7>
+        <figure>
+          <img src="../images/Connectors.jpg" style="width: 500px; height: auto;" />
+        </figure>
+
+        <p>Connectors are represented by the previous configuration. The point in red are the guard set if the signal is false, and in green for a true signal.</p>
+
+      </section>
+
+      <section id="Proof">
+        <h7>Proof</h7>
+
+        <p>Using these building blocks, we can construct a polyominoes where if a guard set of a dispersion distance of at least 5 exists, 
+          then a formula of Planar Monotone 3Sat is true and vice versa. 
+          This construction gives us the reduction and assures the NP-complete for the decision of the existence of a guard set with a dispersion distance of 5 in a simple polyominoes.
+           We can see an example of this polyominoes in the figure below :</p>
+
+        <figure>
+          <img src="../images/Construction.jpg" style="width: 500px; height: auto;" />
+        </figure>
+
+ <p> The figure represent the polyominoes for the formula :
+  (x<sub>1</sub> ∨ x<sub>2</sub> ∨ x<sub>4</sub>) ∧ 
+  (x<sub>2</sub> ∨ x<sub>4</sub>) ∧ 
+  (x<sub>1</sub> ∨ x<sub>4</sub> ∨ x<sub>5</sub>) ∧ 
+  (¬x<sub>1</sub> ∨ ¬x<sub>2</sub>) ∧ 
+  (¬x<sub>3</sub> ∨ ¬x<sub>4</sub> ∨ ¬x<sub>5</sub>)
+</p>
+        <p>The part in purple represent the clauses, in cyan the variables, in yellow the duplicator and the ones in black the connector.</p>
+
+      </section>
+
+
+      
     </section>
+  </body>
+  </html>

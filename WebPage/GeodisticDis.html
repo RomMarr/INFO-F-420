@@ -20,7 +20,6 @@
         <a class="widget" href="GeodisticDis.html">Geodistic Distance</a>
         <a class="widget" href="DAGPpolygon.html">Dispersive Art Gallery Distance in polygon</a>
         <a class="widget" href="DAGPpolimonies.html">Dispersive art gallery problem in polyominoes</a>   
-        <a class="widget" href="WorstCase.html">WorstCase</a>
         <a class="widget" href="Contributors.html">Contributors</a>
         <a class="widget" href="Bibliography.html">Bibliography</a>
 
@@ -108,19 +107,13 @@
   const backdrop = document.getElementById("modalBackdrop");
   const openModalBtn = document.querySelector(".open-modal-btn");
   const closeModalBtn = document.getElementById("closeModalBtn");
-  const iframeContent = document.getElementById("iframeContent");
   
-  // Adjust iframe size dynamically based on modal size
-  function adjustIframeSize() {
-    iframeContent.style.width = "100%"; // Width of iframe takes full modal space
-    iframeContent.style.height = "80%"; // Set iframe height to 80% of modal
-  }
+
   
   // Show the modal when button is clicked
   openModalBtn.addEventListener("click", () => {
     modal.style.display = "block";
     backdrop.style.display = "block";
-    adjustIframeSize(); // Ensure iframe adjusts when modal is opened
   });
   
   // Close the modal
@@ -182,19 +175,12 @@
   const backdrop2 = document.getElementById("modalBackdrop2");
   const openModalBtn2 = document.querySelector(".open-modal-btn2");
   const closeModalBtn2 = document.getElementById("closeModalBtn2");
-  const iframeContent2 = document.getElementById("iframeContent2");
-  
-  // Adjust iframe size dynamically based on modal size
-  function adjustIframeSize() {
-    iframeContent2.style.width = "100%"; // Width of iframe takes full modal space
-    iframeContent2.style.height = "80%"; // Set iframe height to 80% of modal
-  }
+
   
   // Show the modal when button is clicked
   openModalBtn2.addEventListener("click", () => {
     modal2.style.display = "block";
     backdrop2.style.display = "block";
-    adjustIframeSize(); // Ensure iframe adjusts when modal is opened
   });
   
   // Close the modal
@@ -218,3 +204,4 @@
       
   </body>
 </html>
+
