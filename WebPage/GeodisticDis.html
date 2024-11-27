@@ -19,7 +19,7 @@
         <a class="widget" href="ArtGalleryProblem.html">Art Gallery Problem</a>
         <a class="widget" href="GeodisticDis.html">Geodistic Distance</a>
         <a class="widget" href="DAGPpolygon.html">Dispersive Art Gallery Distance in polygon</a>
-        <a class="widget" href="DAGPpolimonies.html">Disruptive art gallery problem in polyominoes</a>   
+        <a class="widget" href="DAGPpolimonies.html">Dispersive art gallery problem in polyominoes</a>   
         <a class="widget" href="WorstCase.html">WorstCase</a>
         <a class="widget" href="Contributors.html">Contributors</a>
         <a class="widget" href="Bibliography.html">Bibliography</a>
@@ -71,9 +71,10 @@
         <ol>
         <li> Triangulate the polygon. It can be done in linear tine.</li>
       <li> Find the &tau;(p) et &tau;(q)(the triangle in which p and q are contained).</li>
-      <li> Find the &tau;(&pi;(p,q)) (the set of diagonals that is crossed by the path between p and q) and sort them. (the i-th diagonal is the i-th diagonal we encounter on the path.)</li>
-      <li> Initialize the funnel the first F_1 = \(&alpha;_1, p, &beta;_1\)  where &alpha;_1 and &beta;_1 are the vertices of the first diagonal intersected by the path. This funnel represents the shortest path from p to the first diagonal.</li>
-      <li> For each subsequent triangle i along the path, form F_i by adjusting the vertices to keep the shortest path from p to the current diagonal. </li>
+      <li> ind the &tau;(&pi;(p,q)), the path of triangles between p and q and find the set of diagonals that is crossed by the path between p and q. The diagonals must be sorted (the i-th diagonal is the i-th diagonal we encounter on the path).
+      </li>
+      <li> Initialize the funnel the first F_1 = &alpha;_1, p, &beta;_1  where &alpha;_1 and &beta;_1 are the vertices of the first diagonal intersected by the path. This funnel represents the shortest path from p to the first diagonal.</li>
+      <li> For each subsequent triangle i along the path, form F_i by adjusting the vertices to keep the shortest path from p to the current diagonal and adjust the apex if the funnel crosses itself. </li>
       <li> Iterate until we reach q <a href="Bibliography.html#Visibility">[4]</a> .</li>
       </ol>
       <p>It also exists approximation algorithms but we won't discuss them. </p>
@@ -84,10 +85,10 @@
         <figcaption>Figure 2. Geodesic Distance Illustration</figcaption>
       </figure>
 
-      <p>To test it, right click on the button :  
+      <p>To test the algorithm, create a simple polygon without collision and choose two points:  
       
         <div class="button-container">
-          <button class="open-modal-btn">Toggle Illustration</button>
+          <button class="open-modal-btn">Geodesic Distance Illustration</button>
         </div>
        </p>
 <!-- Structure du Modal avec iframe -->
@@ -158,10 +159,10 @@
       </section>
 
 
-      <p>To test it, right click on the button :  
+      <p>To test the algorithm, create a polyomino without hole <a href="DAGPpolimonies.html#def"></a>  and put two points:  
       
         <div class="button-container">
-          <button class="open-modal-btn2">Toggle Illustration</button>
+          <button class="open-modal-btn2">L1 Geodesic Distance Illustration</button>
         </div>
        </p>
 <!-- Structure du Modal avec iframe -->

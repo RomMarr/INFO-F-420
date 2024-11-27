@@ -19,8 +19,7 @@ function drawGrid(squares){
 
 
 function drawBackground(title, resultMessage){
-  background(200);
-
+  background(129);
   // Draw the title and button section
   fill("black");
   textSize(24);
