@@ -34,13 +34,34 @@
         <h3>notitiae supplementariae</h3>
         <p> This part is based from <a href="Bibliography.html#Fekete">[2]</a> and the implementation of the problem will be based on Theorem 10 from  <a href="Bibliography.html#Fekete">[2]</a>.</p>
         <p>For every simple polygon <em>P</em> with a pairwise geodesic distance between vertices of at least 1, there exists a guard set with a dispersion distance of at least 2.</p>
+        <p>As mentioned earlier, the Dispersive Art Gallery Problem involves maximizing the minimum distance between guards while still ensuring full visibility of the gallery. In this section, we focus on a dispersion distance of 2.
+
+          Contrary to intuition, the shortest edge of the polygon does not necessarily serve as a lower bound for the dispersion distance. 
+          The shape of the polygon and visibility constraints can force guards to be placed closer together, even in polygons with longer edges. 
+          Furthermore, achieving the dispersion constraint typically requires more guards than the classic Art Gallery Problem, where the upper bound for the number of guards is &lfloor; n / 3 &rfloor; (for n vertices). 
+          In the DAGP, ensuring both complete coverage and a dispersion distance of l=2 often demands additional guards.</p>
     </section>
+
 
     <section id="Dispersive Art Gallery Problem">
       <h2>The DAGP Algorithm </h2>
-      
-    </section>
 
+      <p>Here, we will describe the algorithm for constructing a guard set in a simple polygon P based on Theorem 10 from <a href="Bibliography.html#Fekete">[2]</a>. 
+      This algorithm ensures that the guard set achieves a dispersion distance of at least 2, while satisfying the condition that the pairwise geodesic distance between vertices is at least 1. </p>
+
+    <ol>
+      <li>First of all, we check whether the polygon is valid. A polygon is valid if each pair of vertices has a distance of at least one.</li>
+      <li>Then, we need to triangulate the polygon. This can be done in linear time, but in our case, we used a simple algorithm in O(n^3).</li>
+      <li>After that, we construct the dual graph <strong>T</strong> of the triangulation. Each triangle of the polygon is a node with a list of adjacent nodes.
+      </li>
+      <li>We search in the dual graph for two leaves and find the path of triangles between those two leaves.</li>
+      <li>After finding the path between the two leaves, we create a caterpillar. A caterpillar is composed of the path between the two leaves and feet. 
+        A foot in a caterpillar is a adjacent node to the path but is not a part of it.  </li>
+      <li>Start at the beginning of the path and place a guard on a vertex of the first triangle of the path of the caterpillar and mark every node this guard can see. We do that until all the nodes from the caterpillar is covered. 
+        Every time we add a guard, we verify that the distance between him and every other guard is at least 2.</li>
+      <li>Finally, we remove all the covered nodes and find in the remaining ones the connected components. We re-executes the steps 3-6 on them until there are none left.</li>
+    </ol>
+    </section>
 
     <p>To test it, right click on the button :  
       
@@ -95,5 +116,141 @@ backdrop.style.display = "none";
 });
 </script>
 
+<section id="NP-completeness">
+<h2>NP-completeness</h2>
+  <section id="gadgets needed">
+    <h6>Gadgets needed</h6>
+    <p>Although it has not been formally proven, it can be inferred from the proof of the NP-completeness of deciding whether there exists a vertex guard set with a dispersion distance of 2,
+     that for sufficiently large dispersion distances <em>l</em> > 2, the problem of determining whether a simple polygon admits a set of vertex guards with a dispersion distance of at least <em>l</em> is also NP-complete. </p>
+
+<p>The NP-completeness of the problem of polygon with holes has been proven by using a reduction from Planar Monotone 3-SAT. 
+First of all, it must be proven that the problem is NP.  Given a set of guards G, we verify whether the distance between every pair of guards is greater than 2. This can be done in polynomial time. 
+If the geodesic path has a length of 2, the distance is guaranteed to be greater than 2, as each pairs of vertices are at a distance of at least 1. 
+If the length of the path is 1, it suffices to calculate the Euclidean distance. </p>
+
+<p>Next, it must be shown that the problem is NP-hard. As mentioned earlier, this is done via a reduction from Planar Monotone 3-SAT. 
+  The Planar Monotone 3-SAT problem involves satisfying a 3-CNF formula in which all the literals in each clause are either all true or all false.
+   The variable-clause incidence graph of this formula is planar.</p>
+
+  <p><i>To reduce the problem, multiple gadgets are used, each serving a specific purpose in the construction:</i></p>
+  <ol>
+    <li><strong>Clause Gadget: </strong> Represents a clause in the Planar Monotone 3-SAT formula. </li>
+    <li><strong>Variable Gadget: </strong> Represents a variable and its possible truth assignments. </li>
+    <li><strong>Splitting Gadget: </strong> Splits the respective truth assignment into multiple components for further propagation. </li>
+    <li><strong>Connector Gadgets: </strong> Link subpolygons while preserving the given truth assignments. </li>
+  </ol>
+
+  <p>The variable gadget, illustrated in the diagram below, is based on a diamond shape and consists of four main vertices located at the corners of the diamond. 
+    Two additional "spikes" are added:</p>
+
+    <ul>
+      <li>Vertex v_5 is connected to v_1 and V_3.</li>
+      <li>Vertex v_6 is connected to v_3 and V_4.</li>
+    </ul>
+
+  <p>The new edges (v_3, v_5) and (v_2, v_6) have unit length, ensuring that the maximum distance between any two vertices in the gadget is at most 2.</p>  
+
+  <p>Two narrow corridors are attached to the gadget to allow connections to other parts of the construction:</p>
+  <ul>
+    <li> A <strong>green corridor</strong> connects  v_1 and  v_2 .</li>
+    <li> A <strong>red corridor</strong> connects v_3  and  v_4 .</li>
+  </ul>
+
+  <p>These corridors are designed with a maximum width of 1 at their far ends, facilitating connections to other gadgets. 
+    The gadget strictly enforces distance constraints among its vertices while providing a mechanism for integration with the rest of the structure through the corridors.
+  </p>
+
+  <p>There exists a lemma stating that exactly four vertex guard sets realize a dispersion distance of 2 to guard the subpolygon  P_v = (v_1, v_2, v_6, v_4, v_3, v_5, v_1) of a variable gadget. 
+    This result is proven in <a href="Bibliography.html#Rieck">[1]</a>.</p>
+
+    <figure>
+      <img src="../images/VariableGAd.png" alt="Portalgon embedding"/>
+      <figcaption>Figure 3. Variable Gadget </figcaption>
+    </figure>
+
+  <p>A clause gadget is an equilateral triangle with side length 1, with a vertex placed at each corner of the triangle. From each side of the triangle, a narrow polygonal corridor extends outward. 
+    These corridors are nearly parallel to the triangle's edges and use two vertices of the triangle as their endpoints.</p>
+
+  <p>At their far ends, the corridors are designed with a width of up to 1, allowing them to connect to other gadgets in the construction.</p>
+
+  <figure>
+    <img src="../images/ClauseGad.png" alt="Portalgon embedding"/>
+    <figcaption>Figure 4. Clause Gadget </figcaption>
+  </figure>
+
+
+    It can be observed that since the vertices  v_1 ,  v_2 , and  v_3  have pairwise distances of 1, it is impossible to place more than one guard at these vertices if we require the dispersion distance (the minimum distance between guards) to be at least 2. 
+    This means that only two adjacent corridors can be guarded within this triangle, 
+    and the third corridor must be guarded by a guard from another gadget to satisfy the clause.</p>
+
+    <p>The <strong>split gadget</strong> consists of an incoming horizontal polygonal corridor that ends at vertices  v_1  and  v_2 , which are separated by a vertical distance of 1. 
+      These two vertices form an equilateral triangle with a third vertex  v_4 .</p>
+
+
+    <p>This incoming corridor then splits into two outgoing corridors originating from vertices  v_3 ,  v_6 , and  v_7 . The vertices  v_1 ,  v_3 ,  v_4 , and  v_6  form slightly deformed equilateral triangles.
+       Vertices  v_3  and  v_4  are slightly displaced upward, such that:</p>
+
+    <ul>
+      <li>The edges  {v_1, v_3}  and  {v_4, v_6}  remain of length 1.</li>
+      <li>The distances between v_1  and  v_4 , and between  v_3  and  v_6 , also remain equal to 1.</li>
+      <li>The distance between  v_3  and v_4  is increased to  1 + \epsilon  (a small gap).</li>
+    </ul>
+
+    <p>A similar construction is used for the lower outgoing corridor.</p>
+
+    <p>The outgoing corridors have an initial height of less than 1, but they can reach a height of 1 or slightly smaller at their far end.</p>
+
+    <figure>
+      <img src="../images/NP1.png" alt="Portalgon embedding"/>
+      <figcaption>Figure 5. Splitting Gadget </figcaption>
+    </figure>
+
+    <p>There is lemma stating that the split gadget correctly forwards the respective variable assignment. The proof can be found in  <a href="Bibliography.html#Rieck">[1]</a>.</p>
+
+    The <strong>connector gadget</strong> is designed so that the distance between all pairs of vertices lies between 1 and 2. Additionally:
+
+    <ul>
+      <li> A guard placed on either  v_1  or  v_2  cannot see the horizontal corridor.</li>
+      <li>A guard placed on  v_3  or  v_4  cannot see the vertical corridor.</li>
+    </ul>
+
+
+  <p>This gadget is designed to allow only one guard to be placed within it while maintaining a dispersive distance. 
+    If a previously placed guard already sees the vertical corridor, another guard can be placed to cover the horizontal corridor. 
+    However, no single guard can see both corridors at the same time.</p>
+
+    <p>Thus, the gadget ensures the propagation of a truth assignment.</p>
+
+    <figure>
+      <img src="../images/NP2.png" alt="Portalgon embedding"/>
+      <figcaption>Figure 6. Connector Gadgets </figcaption>
+    </figure>
+
+
+  </section>
+
+  <section id="Reduction"></section>
+  <h6>Reduction</h6>
+  <p>Now that we have all the necessary gadgets, we can do the construction of the polygon for the reduction, and finish the proof.</p>
+
+  <p><strong>Theorem 1</strong> It is NP-complete to decide whether a polygon with holes and geodesic vertex distance of at least 1 allows a set of vertex guards with dispersion distance 2.
+  </p>
+
+  <p>Initially, we have a Boolean formula &phi; and its planar incidence graph. We start by placing the variable gadgets in a row, with clause gadgets for non-negated literals above and those for negated literals below the row. 
+    Connector and split gadgets are used to link variables to clauses and represent logical dependencies.</p>
+
+    <figure>
+      <img src="../images/Claim.png" alt="Portalgon embedding"/>
+      <figcaption>Figure 7. Connector Gadgets </figcaption>
+    </figure>
+
+    <h2>Claim : If &phi; is satisfiable, P_&phi; has a guard set with a dispersion distance of 2.</h2>
+
+    <h2>Claim : If P_&phi; has a guard set with a dispersion distance of 2, &phi; is satisfiable.</h2>
+
+  <p>This concludes the proof that Planar Monotone 3-SAT can be reduced to the Dispersive Art Gallery Problem for a polygon with holes for <em>l</em> &GreaterEqual; 1,
+     and therefore, the problem is NP-complete.<a href="Bibliography.html#Rieck">[1]</a></p>
+
+</section>
     </body>
 </html>
