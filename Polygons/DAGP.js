@@ -104,15 +104,9 @@ class DualGraph {
         for(let node of path){
             let triangle = node.triangle;
             if(!guardedTriangles.has(node)){
-                let isGuarded = false;
-                for(let guard of guards){
-                    if(this.isGuarded(triangle, guard)){
-                        guardedTriangles.add(triangle);
-                        isGuarded = true;
-                        break;
-                    }
-                }
-                if(!isGuarded){
+                let isGuarded = guards.some(guard => this.isGuarded(triangle, guard));
+                if(isGuarded) guardedTriangles.add(node);
+                else if(!isGuarded){
                     for(let vertex of triangle){
                         if(this.checkDistanceGuards(vertex, guards)){
                             guards.push(vertex);
@@ -123,7 +117,7 @@ class DualGraph {
                     }
                     for(let neighbor of node.neighbors){
                         if(!guardedTriangles.has(neighbor)){
-                            if(this.isGuarded(neighbor.triangle, guards[guards.length-1])){
+                            if(this.isGuarded(neighbor.triangle, guards[guards.length-1])){  // check if the neighbor is guarded by the new guard
                                 guardedTriangles.add(neighbor);
                             }
                         }
@@ -133,14 +127,8 @@ class DualGraph {
         }
         for(let foot of caterpillar.feet){
             if(!guardedTriangles.has(foot)){
-                let isGuarded = false;
-                for(let guard of guards){
-                    if(this.isGuarded(foot.triangle, guard)){
-                        guardedTriangles.add(foot);
-                        isGuarded = true;
-                        break;
-                    }
-                }
+                let isGuarded = guards.some(guard => this.isGuarded(foot.triangle, guard));
+                if(isGuarded) guardedTriangles.add(foot);
                 if(!isGuarded){
                     let triangle = foot.triangle;
                     for(let vertex of triangle){
@@ -216,7 +204,6 @@ function solveDAGP(){
             if (uncoveredTriangles.length === 0) break; // All triangles are guarded
     
             let subregions = dualGraph.partitionSubregions(uncoveredTriangles);
-            let guards = [];
             for (let subregion of subregions) {  // solve every subregion
                 let trianglePath = [];
                 if (subregion.size == 1) {
