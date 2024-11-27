@@ -128,7 +128,7 @@ function funnelAlgorithm(p, q, ears) {
             (lastEdgeR === null && lastEdgeL === null && ccw(path[path.length - 1], p2, p1))) {
             [p1, p2] = [p2, p1];
         }
-
+        // updating the left path
         if (left.length == 0 && p1 != path[path.length - 1]) {
             left = [p1];
         } else if (left.length > 0 && left[left.length - 1] != p1) {
@@ -150,7 +150,7 @@ function funnelAlgorithm(p, q, ears) {
                 left.push(p1);
             }
         }
-
+        // updating the right path
         if (right.length === 0 && p2 !== path[path.length - 1]) {
             right = [p2];
         } else if (right.length > 0 && right[right.length - 1] !== p2) {
