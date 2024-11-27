@@ -204,6 +204,7 @@ function solveDAGP(){
         let pts = points.slice(); // copy of the list of points
         pts = ensureCounterClockWise(pts); // check the order
         let poly = new Polygon(pts);
+        resultMessage = "";
         if(!poly.checkPolygonValid()){
             resultMessage = "Distance between vertices too small. It must be greater than 1";
             return;
@@ -214,8 +215,7 @@ function solveDAGP(){
             let uncoveredTriangles = dualGraph.unguardedNodes;
             if (uncoveredTriangles.length === 0) break; // All triangles are guarded
     
-            let subregions = dualGraph.partitionSubregions(uncoveredTriangles);  // partition the unguarded triangles into subregions (connected components)
-            let guards = [];
+            let subregions = dualGraph.partitionSubregions(uncoveredTriangles);
             for (let subregion of subregions) {  // solve every subregion
                 let trianglePath = [];
                 if (subregion.size == 1) {
@@ -228,7 +228,6 @@ function solveDAGP(){
                 }
                 let caterpillar = dualGraph.constructCaterpillar(trianglePath, subregion);
                 guards = dualGraph.setGuards(caterpillar, guards);
-                console.log(guards);
             }
         }
       }

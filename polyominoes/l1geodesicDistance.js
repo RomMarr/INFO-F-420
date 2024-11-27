@@ -108,7 +108,6 @@ function calculateDistance() {
     path = bfsL1GeodesicDistance(pointDistance[pointDistance.length-2], pointDistance[pointDistance.length-1], polyominoObject);
     showPath = true;
     let distance = path.length;
-    console.log(distance);
     for (let square of polyomino) {
         if (path.includes(square)) {
             square.inPath = true;
