@@ -148,7 +148,13 @@
 
       <section id= "L1 Geodesic Distance algorithm">
         <h7>L1 Geodesic Distance Algorithm</h7>
-        <p></p>
+        <p>It is simple to find the L_1 geodesic distance between two points in a polyominoes. The algorithm is based on the concept of breadth-first-search.</p>
+        <p>First, we identify the cells in the polyomino where the two points are. Then, we perform a breadth-first search (BFS) starting from the cell of the initial point. 
+          The first encounter with the target cell provides the shortest geodesic distance. During the BFS, 
+          we maintain a queue of cells to explore, marking each visited cell to avoid revisiting the same cells multiple times. The geodesic  L_1-distance is then calculated 
+          as the sum of the horizontal and vertical steps along the shortest path found by the BFS.  </p>
+
+        <p>This method ensures an efficient computation of  L_1-geodesic distances in polyominoes, as described in <a href="Bibliography.html#ER-Completeness">[3]</a>.</p>
       </section>
 
 
