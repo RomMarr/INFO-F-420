@@ -96,6 +96,27 @@ class DualGraph {
         return this.polygon.seeEachOther(triangle[0], guard) && this.polygon.seeEachOther(triangle[1], guard) && this.polygon.seeEachOther(triangle[2], guard)
     }
 
+    greatestDistance(triangle, guards){
+        let bestVertex = null;
+        let maxDistanceSum = -Infinity;
+
+        for (let vertex of triangle) {
+            let distanceSum = 0;
+            if (this.checkDistanceGuards(vertex, guards)) {
+                for(let guard of guards){
+                    if(guard == vertex) continue;
+                    distanceSum += this.polygon.getDistances(vertex, guard).distance;
+                }
+                if (distanceSum > maxDistanceSum) {
+                    maxDistanceSum = distanceSum;
+                    bestVertex = vertex;
+                }
+            }
+        }
+        return bestVertex;
+    }
+
+
 
 
     setGuards(caterpillar, guards){
@@ -107,14 +128,10 @@ class DualGraph {
                 let isGuarded = guards.some(guard => this.isGuarded(triangle, guard));
                 if(isGuarded) guardedTriangles.add(node);
                 else if(!isGuarded){
-                    for(let vertex of triangle){
-                        if(this.checkDistanceGuards(vertex, guards)){
-                            guards.push(vertex);
-                            guardedTriangles.add(node);
-                            vertex.color = "red";
-                            break;
-                        }
-                    }
+                    let vertex = this.greatestDistance(triangle, guards);
+                    guards.push(vertex);
+                    vertex.color = "red";
+                    guardedTriangles.add(node);
                     for(let neighbor of node.neighbors){
                         if(!guardedTriangles.has(neighbor)){
                             if(this.isGuarded(neighbor.triangle, guards[guards.length-1])){  // check if the neighbor is guarded by the new guard
@@ -131,13 +148,9 @@ class DualGraph {
                 if(isGuarded) guardedTriangles.add(foot);
                 if(!isGuarded){
                     let triangle = foot.triangle;
-                    for(let vertex of triangle){
-                        if(this.checkDistanceGuards(vertex, guards)){
-                            guards.push(vertex);
-                            vertex.color = "red";
-                            break;
-                        }
-                    }
+                    let vertex = this.greatestDistance(triangle, guards);
+                    guards.push(vertex);
+                    vertex.color = "red";
                 }
             }
         }
