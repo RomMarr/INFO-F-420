@@ -368,3 +368,17 @@
     padding-left: 8px;
   }
 
+  #Bibliography ol {
+    list-style-type: none; /* Supprime la numérotation par défaut */
+    counter-reset: item; /* Initialise un compteur */
+  }
+  
+  #Bibliography ol li {
+    counter-increment: item; /* Incrémente le compteur pour chaque élément */
+  }
+  
+  #Bibliography ol li::before {
+    content: "[" counter(item) "] "; /* Ajoute les crochets autour du numéro */
+    font-weight: bold; /* Optionnel */
+  }
+

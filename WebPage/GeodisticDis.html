@@ -39,16 +39,16 @@
       <section id= "Definition">
         <h6> Definition: </h6>
         <p>Given two points p,q in a polygon P of n vertices, the geodesic distance is the length of the shortest path between p and q within the polygon. 
-            Unlike the Euclidean distance, the geodesic distance doesn't have to be straight. It can be broken lines <a href="Bibliography.html#GeodesicHull">[6]</a>.</p>
+            Unlike the Euclidean distance, the geodesic distance doesn't have to be straight. It can be broken lines <a href="Bibliography.html#GeodesicHull">[5]</a>.</p>
             
-        <p>If a polygon is convex, then the geodesic distance is equal to the euclidean distance because there are no obstacle to avoid <a href="Bibliography.html#ComparativeSurvey">[7]</a>.</p>
+        <p>If a polygon is convex, then the geodesic distance is equal to the euclidean distance because there are no obstacle to avoid <a href="Bibliography.html#ComparativeSurvey">[6]</a>.</p>
 
 
 
         <p><i>There are two important concepts in geodesic distances:</i> </p>
         <ol>
         <li> <strong> Geodesic Center</strong> : the Geodesic Center is a point in the polygon that minimizes the maximum geodesic distance to any other point.</li>
-      <li><strong> Geodesic Diameter</strong>: It is the maximum geodesic distance between any two points in the polygon<a href="Bibliography.html#ER-Completeness">[4]</a>.</li>
+      <li><strong> Geodesic Diameter</strong>: It is the maximum geodesic distance between any two points in the polygon<a href="Bibliography.html#ER-Completeness">[3]</a>.</li>
       </ol>
       </section>
 
@@ -57,7 +57,7 @@
         <ol>
             <li> Given two points p,q in a polygon P, if P is a simple polygon, then it exists a geodesic path between them and it is unique.</li>
           <li>Given two points p,q in a polygon P, the geodesic path between p and q is always a polygonal chain whose vertices (other than the endpoints) are reflex vertices of P.</li>
-            <li>Given two points p,q in a polygon P, if the geodesic path between p and q is a straight line segment, we say that the points can "see" each other<a href="Bibliography.html#Visibility">[8]</a>. </li>
+            <li>Given two points p,q in a polygon P, if the geodesic path between p and q is a straight line segment, we say that the points can "see" each other<a href="Bibliography.html#Visibility">[7]</a>. </li>
           </ol>
       </section>
 
@@ -74,7 +74,7 @@
       <li> Find the &tau;(&pi;(p,q)) (the set of diagonals that is crossed by the path between p and q) and sort them. (the i-th diagonal is the i-th diagonal we encounter on the path.)</li>
       <li> Initialize the funnel the first F_1 = \(&alpha;_1, p, &beta;_1\)  where &alpha;_1 and &beta;_1 are the vertices of the first diagonal intersected by the path. This funnel represents the shortest path from p to the first diagonal.</li>
       <li> For each subsequent triangle i along the path, form F_i by adjusting the vertices to keep the shortest path from p to the current diagonal. </li>
-      <li> Iterate until we reach q <a href="Bibliography.html#Visibility">[5]</a> .</li>
+      <li> Iterate until we reach q <a href="Bibliography.html#Visibility">[4]</a> .</li>
       </ol>
       <p>It also exists approximation algorithms but we won't discuss them. </p>
       </section>
