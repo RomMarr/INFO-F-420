@@ -1,12 +1,9 @@
 :root {
-    --canvas-width: 750px;
-    --text-width: calc(var(--canvas-width) - 5px);
-    --image-max-width: 100%; /* Maximum width of images */
-    --image-max-height: 400px; /* Optional max height for images */
+    --canvas-width: 1000px;
   }
   
 
-
+  /*rendre le scroll smooth*/
   html {
     scroll-behavior: smooth;
   }
@@ -21,11 +18,11 @@
     align-items: center;
     justify-content: flex-start;
     line-height: 1.6;
-    background-color: #0c7886; /* Bleu clair */
+    background-color: #0c7886; 
     animation: glow 3s infinite; /* Animation appliquée */
   }
   
-  @keyframes glow {
+  @keyframes glow {  /*animation*/
     0% {
       box-shadow: 0 0 10px #3a86ff, 0 0 20px #3a86ff;
     }
@@ -97,20 +94,9 @@
     margin-left: 60px; /* Décale le texte sous le titre */
   }
   
-  .button-container {
-    display: flex;
-    justify-content: center;  /* Center the button horizontally */
-    align-items: center;      /* Center the button vertically */
-    height: 100px;            /* Adjust the height of the container */
-  }
+
   
-  /* Optional: Adjust the button style */
-  .open-modal-btn {
-    padding: 10px 20px;
-    font-size: 16px;
-  }
-  
-  header, footer {
+  header {
     margin-top: 20px; /* Espace au-dessus du header */
     margin-bottom: 20px; /* Espace en dessous du header */
     width: var(--canvas-width);
@@ -118,74 +104,41 @@
     text-align: center;
     padding: 10px;
     background-color: #948aa3;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for separation */
+    box-shadow: 0 2px 4px rgba(5, 5, 5, 0.4);
   }
   
-  #Authors, #References {
-    font-size: 0.9em; /* Slightly smaller font size */
-    line-height: 1.5; /* Adjusted line height for readability */
-  }
   
-  canvas {
-    border: 2px solid #ccc; /* Add a subtle border */
-    background-color: #f9f9f9; /* Light background for contrast */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Drop shadow for depth */
-    display: block; /* Prevent inline styling issues */
-    margin: 20px auto; /* Center canvas with spacing */
-  }
+
   
-  main {
-    flex: 1;
-    width: var(--text-width); /* Match canvas width */
-    padding: 20px;
-    box-sizing: border-box; /* Ensures padding doesn't overflow the width */
-  }
+ 
   
-  section {
+  section {  
     width: 100%;
     max-width: var(--canvas-width);
-    margin: 20px auto; /* Center sections and add spacing */
+    margin: 20px auto; 
     padding: 10px;
-    box-sizing: border-box; /* Include padding in width calculation */
+    box-sizing: border-box; 
   }
   
   h1 {
-    margin: 10px 0;
+    margin: 5px ;
   }
   
   h2 {
-    margin: 10px 0;
+    margin: 5px;
     text-align: left; /* Align section titles to the left */
   }
   
-  ul {
-    margin: 10px 20px; /* Add space around lists */
-    padding: 0;
-    list-style-position: inside; /* Keep list items aligned with text */
-  }
-  
-  li {
-    margin-bottom: 8px; /* Add spacing between list items */
-  }
-  
-  p {
-    margin: 20px 0;
-    text-align: justify;
-    max-width: var(--text-width);
-    word-wrap: break-word; /* Prevent text from overflowing */
-  }
+
   
   img {
-    max-width: var(--image-max-width); /* Images scale to fit container */
-    max-height: var(--image-max-height); /* Restrict height (optional) */
-    width: auto; /* Maintain aspect ratio */
-    height: auto; /* Maintain aspect ratio */
-    display: block; /* Center block images by default */
-    margin: 20px auto; /* Add space around images */
-    border: 2px solid rgba(129, 129, 129); /* Optional border for images */
-    border-radius: 8px; /* Optional rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for images */
+    max-width: var(--image-max-width); 
+    max-height: var(--image-max-height); 
+    display: block; 
+    margin: 20px auto; 
+    border: 2px solid rgba(129, 129, 129); 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   }
   
   figcaption {
@@ -195,48 +148,22 @@
     padding: 2px;
     text-align: center;
   }
-  
-  #zone-one, #zone-two, #zone-three {
-    width: var(--canvas-width);
-    margin: 20px auto;
-  }
-  
-  
-
-  
-  @media (max-width: 600px) {
-    :root {
-      --canvas-width: 95%; /* Reduce width for smaller screens */
-      --text-width: calc(var(--canvas-width) - 10px);
-    }
-  
-    main {
-      width: 100%;
-      padding: 10px;
-    }
-  
-    p, ul, section {
-      width: 100%;
-      padding: 0 5%; /* Add padding inside sections for small screens */
-    }
-  
-    h2 {
-      font-size: 1.2em; /* Adjust heading sizes for smaller screens */
-      text-align: left; /* Maintain left alignment for smaller screens */
-    }
-  
-    img {
-      max-height: 300px; /* Adjust image height for smaller screens */
-    }
-  
-    button {
-      font-size: 1.125rem;
-      padding: 1rem 2rem;
-    }
-  
-  }
-
  
+
+  .button-container {
+    display: flex;
+    justify-content: center;  /* Center the button horizontally */
+    align-items: center;      /* Center the button vertically */
+    height: 100px;            /* Adjust the height of the container */
+  }
+  
+  /* Optional: Adjust the button style */
+  .open-modal-btn, .open-modal-btn2 {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+ 
+
   .backdrop, .backdrop2{
     position: fixed;
     top: 0;
@@ -289,46 +216,43 @@
     border: none;
     cursor: pointer;
   }
-  .toc h1, h2,  h3, h4, h5{
+
+
+
+  .toc h1, h2,  h3{
     text-align: center;
   }
 
 
-  #Abstract {
+  #notitiae_supplementariae {
     font-size: 12px;
     margin: 20px auto;
     padding: 20px;
-    max-width: var(--canvas-width); /* Limit width for readability */
-    background-color: #39728f; /* Light background for emphasis */
-    border: 1px solid #cccccc; /* Subtle border */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
-    border-radius: 8px; /* Rounded corners */
+    max-width: var(--canvas-width); 
+    background-color: #39728f; 
+    border: 1px solid #ffffff; 
+    box-shadow: 0 2px 4px rgba(5, 5, 5, 0.4);
+    border-radius: 15px; 
   }
   
-  /* Title styling */
-  #Abstract h3 {
+
+  #notitiae_supplementariae h3 {
     font-size: 1.8em;
-    font-weight: bold;
     text-align: center;
     margin-bottom: 10px;
-    text-transform: uppercase; /* Make the title uppercase */
-    color: #000000; /* Darker text for contrast */
+    text-transform: uppercase; 
+    color: #000000; 
   }
   
-  /* Paragraph styling */
-  #Abstract p {
+
+  #notitiae_supplementariae p {
     font-size: 1.6em;
-    line-height: 1.6;
+    line-height: 2;
     text-align: justify;
-    margin: 0;
-    padding: 10px 0;
-    color: #1f1e1e; /* Softer text color for readability */
+    color: #1f1e1e; 
   }
   
-  /* Emphasize the first line of the paragraph */
-  #Abstract p:first-child {
-    font-weight: bold;
-  }
+
  
 
   #Bibliography li:target {
@@ -371,9 +295,10 @@
   }
   
   .profile-card img {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
+    width: 300px; /* Taille fixe */
+    height: 300px; /* Taille fixe pour un carré */
+    object-fit: cover; /* Centre l'image et la découpe si nécessaire */
+    border-radius: 8px; /* Arrondit légèrement les coins */
     margin-bottom: 10px;
   }
   
