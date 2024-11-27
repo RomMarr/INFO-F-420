@@ -1,2 +1,2 @@
 # INFO-F-420
-Created with CodeSandbox
+Dispersive Art Gallery problem, project for INFO-F420 : computational geometry
