@@ -105,10 +105,10 @@ function windowResized() {
 
 
 function calculateDistance() {
-    resultMessage = "Choose two points to calculate the distance";
     path = bfsL1GeodesicDistance(pointDistance[pointDistance.length-2], pointDistance[pointDistance.length-1], polyominoObject);
     showPath = true;
     let distance = path.length;
+    console.log(distance);
     for (let square of polyomino) {
         if (path.includes(square)) {
             square.inPath = true;
@@ -117,6 +117,7 @@ function calculateDistance() {
             square.inPath = false;
         }
     }
+    resultMessage = `The L1 distance is ${+ distance -1}`;
 }
 
 
@@ -127,7 +128,8 @@ function l1geodesicDistance() {
     polyominoObject = new Polyomino(polyomino);
     if (!polyominoObject.isValid()) {
         resultMessage = "Polyomino: invalid "; 
-    }else{ resultMessage = "Polyomino: valid"; }
+    }else{ resultMessage = "Choose two points to calculate the distance";
+    }
     polyomino = polyominoObject.getSquares();  // for the drawing
     calculateClick = true;
 }

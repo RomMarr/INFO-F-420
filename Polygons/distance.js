@@ -114,24 +114,24 @@ function funnelAlgorithm(p, q, ears) {
     // find the path of triangles and the diagonals between the two points
     let trianglePath = trianglePathFromPoints(p, q, ears);
     let diagonals = findDiagonals(trianglePath);
-
+    // following code by https://github.com/margaeor/map-shortest-path/blob/master/pathfinder/pathfinder.py
     const path = [p];
     let left = [];
     let right = [];
     let lastEdgeL = null;
     let lastEdgeR = null;
 
-    for (let i = 0; i < diagonals.length; i++) {
-        let [p1, p2] = [diagonals[i][0], diagonals[i][1]];
+    for (let diagonal of diagonals) {
+        let [p1, p2] = [diagonal[0], diagonal[1]];
 
-        if (p2 === lastEdgeL || p1 === lastEdgeR || 
+        if (p2 == lastEdgeL || p1 == lastEdgeR || 
             (lastEdgeR === null && lastEdgeL === null && ccw(path[path.length - 1], p2, p1))) {
             [p1, p2] = [p2, p1];
         }
 
-        if (left.length === 0 && p1 !== path[path.length - 1]) {
+        if (left.length == 0 && p1 != path[path.length - 1]) {
             left = [p1];
-        } else if (left.length > 0 && left[left.length - 1] !== p1) {
+        } else if (left.length > 0 && left[left.length - 1] != p1) {
             if (!ccw(path[path.length - 1], p1, left[left.length - 1])) {
                 let lastCollision = -1;
                 for (let j = 0; j < right.length; j++) {
