@@ -25,8 +25,8 @@ function computeGatesOrientation(polyomino) {
             gates[1].changeOrientation(false);
         }
         else {
-            // declare G1 to be counterclockwise and G2 to be clockwise
-            gates[0].changeOrientation(false);
+            // G1 and G2 can be any orientation they juste need to be the same
+            gates[0].changeOrientation(true);
             gates[1].changeOrientation(true);
         }
     }// k >= 3 : all the succesive adjacent gates are clockwise and the rest counterclockwise
