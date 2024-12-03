@@ -119,8 +119,8 @@
 
             <p> The algorithm is composed of multiple recursion parts : recursive determination of the orientation, 
               recursive call for a parallel gate and recursive call for an orthogonal gate.</p>
-            <section id="Recursive determination of the orientation">
-                <h7>Recursive determination of the orientation</h7>
+            <section id="Determination of the orientation">
+                <h7>Determination of the orientation</h7>
                 <p>To determine the orientation of each gate, we need to check in which case we are. To do so, we calculate k, the number of sub-polyominoes. </p>
                <p> <i> Then we determine in what situation we are : </i> </p>
                <ol>
@@ -134,7 +134,7 @@
                 <ol>
                   <li><strong>If &alpha; = 1 and &beta; > 1 </strong> then the first and second gates are clockwise. </li>
                   <li><strong>If &alpha; > 1 and &beta; = 1 </strong>  then the first and second gates are counter-clockwise. </li>
-                  <li><strong>If &alpha; &NotEqual; 1 and &beta; &NotEqual; 1  </strong> hen the first gate is counter-clockwise and the second clockwise. </li>
+                  <li><strong>If &alpha; = 1 and &beta; = 1  </strong> then the first gate is clockwise and the second counter-clockwise. </li>
                 </ol>
                 <li> <strong>If k &ge; 3 :</strong> while the gates are adjacent we declare them as clockwise. The rest is counter-clockwise. </li>
                 </section>
