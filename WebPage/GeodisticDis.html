@@ -68,7 +68,7 @@
 
     <p><i>Here are the step of the algorithm :</i> </p>
         <ol>
-        <li> Triangulate the polygon. It can be done in linear tine.</li>
+        <li> Triangulate the polygon. It can be done in linear time.</li>
       <li> Find the &tau;(p) et &tau;(q)(the triangle in which p and q are contained).</li>
       <li> ind the &tau;(&pi;(p,q)), the path of triangles between p and q and find the set of diagonals that is crossed by the path between p and q. The diagonals must be sorted (the i-th diagonal is the i-th diagonal we encounter on the path).
       </li>
@@ -139,6 +139,8 @@
       <li> The farthest-neighbor Voronoi diagram under L1 geodesic distance can be constructed efficiently.</li>
       <li> There are at most four extreme points of any compact subset S in the polygon that respects the L1 geodesic distance unlike in the Euclidean metric where we can have a lot more. </li>
       </ol>
+      <p>In this project, we will describe an algorithm to find the L1 Geodesic Distance in polyominoes but it can easily be adapted to a simple polygon by decomposing the polygon into cells and applying the algorithm on the decomposition.</p>
+
 
       <section id= "L1 Geodesic Distance algorithm">
         <h7>L1 Geodesic Distance Algorithm</h7>

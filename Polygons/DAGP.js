@@ -93,7 +93,7 @@ class DualGraph {
 
     // check if the triangle is guarded by the guard. A triangle is guarded if all its vertices can be seen by guard
     isGuarded(triangle, guard){
-        return this.polygon.seeEachOther(triangle[0], guard) && this.polygon.seeEachOther(triangle[1], guard) && this.polygon.seeEachOther(triangle[2], guard)
+        return triangle.includes(guard) || this.polygon.seeEachOther(triangle[0], guard) && this.polygon.seeEachOther(triangle[1], guard) && this.polygon.seeEachOther(triangle[2], guard)
     }
 
     greatestDistance(triangle, guards){

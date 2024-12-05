@@ -113,7 +113,7 @@ backdrop.style.display = "none";
 <h2>NP-completeness</h2>
   <section id="gadgets needed">
     <h6>Gadgets needed</h6>
-    <p>Although it has not been formally proven, it can be inferred from the proof of the NP-completeness of deciding whether there exists a vertex guard set with a dispersion distance of 2,
+    <p>Although it has not been formally proven, it can be inferred from the proof of the NP-completeness of deciding whether there exists a vertex guard set with a dispersion distance of 2 in a polygon with holes,
      that for sufficiently large dispersion distances <em>l</em> > 2, the problem of determining whether a simple polygon admits a set of vertex guards with a dispersion distance of at least <em>l</em> is also NP-complete. </p>
 
 <p>The NP-completeness of the problem of polygon with holes has been proven by using a reduction from Planar Monotone 3-SAT. 
@@ -230,7 +230,7 @@ If the length of the path is 1, it suffices to calculate the Euclidean distance.
   </p>
 
   <p>Initially, we have a Boolean formula &phi; and its planar incidence graph. We start by placing the variable gadgets in a row, with clause gadgets for non-negated literals above and those for negated literals below the row. 
-    Connector and split gadgets are used to link variables to clauses and represent logical dependencies.</p>
+    Connector and split gadgets are used to link variables to clauses and represent logical dependencies. Once the polygon is created we use our algorithm to find a guard set that covers it.</p>
 
     <figure>
       <img src="../images/Claim.png"/>
